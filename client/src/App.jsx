@@ -6,10 +6,10 @@ function App() {
 	return (
 		<>
 			<Navbar />
-			{/* <div className="container">
-      <SideBar />
-      </div> */}
-			
+			<div className="container">
+				<SideBar />
+				
+			</div>
 		</>
 	);
 }

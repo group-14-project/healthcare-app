@@ -1,4 +1,21 @@
-/* .sidebar{
+.sidebar{
     height: 100vh;
-    width: 30%;
-} */
+    width: 23%;
+    border: 2px solid black;
+}
+.list-items{
+    list-style: none;
+    padding: 15px 0 0 0;
+}
+li{
+    height: 50px;
+    border:2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+li:hover{
+    background-color: lightgrey;
+}

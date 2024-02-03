@@ -9,6 +9,8 @@
     top:0;
     z-index: 2;
     box-sizing: border-box;
+    /* background-color: blue; */
+    max-width: 100%;
 }
 .nav-divs{
     /* border:2px solid orange; */
