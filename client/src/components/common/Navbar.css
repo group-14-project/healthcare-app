@@ -1,0 +1,65 @@
+.nav{
+    width: 100vw;
+    height: 10%;
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+}
+.nav-divs{
+    /* border:2px solid orange; */
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.left{
+    margin-left: 2%;
+    width: 15%;
+}
+.logo{
+    height: 80%;
+    width: 52px;
+    border:2px solid black;
+}
+.logo img{
+    height: 100%;
+    width: 100%;
+}
+.app-name{
+    border:2px solid black;
+    height: 80%;
+    width: auto;
+    margin-left: 3%;
+    display: flex;
+    align-items: center;
+}
+
+.right{
+    margin-right: 2%;
+    justify-content: space-between;
+    width: 30%;
+}
+
+.right > div{
+    margin-right:6%;
+    height: 100%;
+
+}
+.fa-envelope,.profile{
+    font-size: 2rem;
+}
+.mail-box{
+    position: relative;
+}
+
+
+.count{
+    background-color: red;
+    position:absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    top:-7px;
+    right: -12px;
+}
