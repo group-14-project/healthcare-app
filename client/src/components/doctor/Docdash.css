@@ -1,0 +1,48 @@
+.doc-dash{
+    width: 50%;
+    height: 100vh;
+    border: 2px solid green;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    padding-top: 25px;
+    box-sizing: border-box;
+}
+.greeting{
+    width: 100%;
+    height: 25%;
+    border: 2px solid orange;
+    border-radius: 2rem;
+    box-sizing: border-box;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.doctor-details,.doctor-image{
+    /* border:2px solid black; */
+    height: 100%;
+    width: 50%;
+}
+.details{
+    font-size: 1.5rem;
+    /* border: 2px solid black; */
+    margin-bottom:2%;
+    display: inline-block;
+
+}
+.doctor-details{
+    display: flex;
+    flex-direction: column;
+}
+.line{
+    font-size: 1rem;
+}
+.doctor-image{
+    width: 25%;
+    height: 160%;
+}
+.doctor-image img{
+    height: 100%;
+    width: 100%;
+}

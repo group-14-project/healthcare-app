@@ -1,6 +1,5 @@
 import React from "react";
-import { Navbar } from "./components";
-import SideBar from "./components/common/SideBar";
+import { Docdash, Navbar,SideBar } from "./components";
 
 function App() {
 	return (
@@ -8,7 +7,8 @@ function App() {
 			<Navbar />
 			<div className="container">
 				<SideBar />
-				
+				<Docdash/>
+
 			</div>
 		</>
 	);
