@@ -1,10 +1,17 @@
-function App() {
+import React from "react";
+import { Docdash, Navbar,SideBar } from "./components";
 
-  return (
-    <>
-      <h1>Hello World ..</h1>
-    </>
-  )
+function App() {
+	return (
+		<>
+			<Navbar />
+			<div className="container">
+				<SideBar />
+				<Docdash/>
+
+			</div>
+		</>
+	);
 }
 
-export default App
+export default App;
