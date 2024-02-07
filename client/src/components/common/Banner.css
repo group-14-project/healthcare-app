@@ -1,0 +1,38 @@
+.banner-box{
+    display: flex;
+    /* border:2px solid green; */
+    justify-content: space-between;
+    /* margin-top: 2%; */
+    border-radius: 25px;
+    background-color: #FFFFFF;
+}
+.banner-sub-box{
+    flex: 1;
+    /* border: 2px solid black; */
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.greeting{
+    color: #555555;
+}
+
+.doctor-name{
+    color: #3F50B5;
+}
+
+.nice-day{
+    color: #BFBFBF;
+}
+
+.right-side{
+    position: relative;
+}
+
+.right-side img{
+    width: 70%;
+    height: 144%;
+    position: absolute;
+    top: -34px;
+    right: 19px;
+}
