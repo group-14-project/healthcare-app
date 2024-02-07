@@ -1,5 +1,5 @@
-import Navbar from "./common/Navbar";
+import MidNavbar from "./common/MidNavbar";
 import SideBar from "./common/SideBar";
 import Docdash from "./doctor/Docdash";
 
-export {Navbar,SideBar,Docdash}
+export {MidNavbar,SideBar,Docdash}

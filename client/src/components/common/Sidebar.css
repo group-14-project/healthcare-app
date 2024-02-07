@@ -1,4 +1,4 @@
-.sidebar{
+/* .sidebar{
     height: 100vh;
     width: 23%;
     border: 2px solid black;
@@ -20,4 +20,24 @@ li{
 
 li:hover{
     background-color: lightgrey;
+}
+
+*/
+
+.sidebar-parent{
+    display: 'flex';
+}
+
+.burger-btn{
+    
+}
+
+.sidebar-btn{
+    padding-left: 2.5;
+    padding-right: 2.5;
+    min-height: 48;
+}
+
+.siderbar-list-item{
+    display: 'block';
 }
