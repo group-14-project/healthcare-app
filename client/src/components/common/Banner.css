@@ -5,24 +5,30 @@
     /* margin-top: 2%; */
     border-radius: 25px;
     background-color: #FFFFFF;
+    height: 140px;
 }
 .banner-sub-box{
     flex: 1;
-    /* border: 2px solid black; */
     box-sizing: border-box;
     padding: 15px;
+    padding-left: 30px;
+    padding-top: 25px;
+    align-items: center;
 }
 
 .greeting{
     color: #555555;
+    font-weight: 450;
 }
 
 .doctor-name{
     color: #3F50B5;
+    font-weight: 450;
 }
 
 .nice-day{
-    color: #BFBFBF;
+    color: #b6b3b3;
+    font-weight: 450;
 }
 
 .right-side{
