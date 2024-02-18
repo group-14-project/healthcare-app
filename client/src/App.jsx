@@ -1,5 +1,5 @@
 import React from "react";
-import { Docdash, MidNavbar,SideBar } from "./components";
+import {DoctorDashboard, MidNavbar,SideBar } from "./components";
 import PatientDashboard from "./components/Patient/PatientDashboard";
 
 
@@ -8,7 +8,8 @@ function App() {
 		<>
 			{/* <div className="container"> */}
 				<SideBar />
-				<PatientDashboard/>
+				{/* <PatientDashboard/> */}
+				<DoctorDashboard/>
 				
 			{/* </div> */}
 		</>

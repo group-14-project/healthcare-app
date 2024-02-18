@@ -1,7 +1,5 @@
 import React from "react";
 import "./Navbar.css";
-// import { AppBar, Box, Button } from '@mui/material';
-import logo from "../../assets/logo.png";
 import { styled, useTheme } from '@mui/material/styles';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
