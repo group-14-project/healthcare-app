@@ -1,21 +1,14 @@
 import React from "react";
-import { Banner, Graph, MidNavbar, RightNavbar } from "../index";
-import { Box, Button } from "@mui/material";
+import { Banner, Graph} from "../index";
+import { Box } from "@mui/material";
 import patient from "../../assets/patient.png";
-import { LineChart } from "@mui/x-charts";
+import appointments from "../../assets/appointments.png";
+import next_app from "../../assets/next_app.png";
+import prescription from "../../assets/prescription.png";
 import "./DoctorDashboard.css";
 function DoctorDashboard() {
 	return (
 		<>
-			<Box sx={{ display: "flex", marginLeft: "60px" }}>
-				<Box sx={{ flex: 2 }}>
-					<MidNavbar />
-				</Box>
-				<Box sx={{ flex: 1, backgroundColor: "white" }}>
-					<RightNavbar />
-				</Box>
-			</Box>
-
 			<Box sx={{ display: "flex", marginLeft: "60px" }}>
 				<Box className="main-box" sx={{ width: "66.6%" }}>
 					<Banner />
@@ -35,33 +28,53 @@ function DoctorDashboard() {
 							<Box className="btn-div">192</Box>
 						</Box>
 						<Box className="action-btn action-btn-2">
-							{/* <Box className="patient-icon">
-								<img src={prescription} alt="patient" />
+							<Box className="patient-icon">
+								<img src={prescription} alt="prescription" />
 							</Box>
 							<Box
 								sx={{
 									fontWeight: 600,
 									marginBottom: "6px",
-									fontSize: "0.9rem",
 								}}
 							>
 								Write Prescription
 							</Box>
-							<Box  className="btn-div">Template</Box> */}
-							<Box className=" x pencil-icon">
-								<i className="fa-solid fa-pencil"></i>
-							</Box>
-							<Box sx={{ fontWeight: 700 }} className="x text">
-								Prescription
-							</Box>
-							<Box className="x template">
-								<span className="template-text">Template</span>
+							<Box className="btn-div">
+								Template &nbsp;
 								<span className="template-icon">
-									<i className="fa-solid fa-circle-arrow-right"></i>{" "}
+									<i className="fa-solid fa-circle-arrow-right"></i>
 								</span>
 							</Box>
 						</Box>
-						<Box className="action-btn action-btn-3"></Box>
+
+						<Box className="action-btn action-btn-3">
+							<Box className="patient-icon">
+								<img src={appointments} alt="appointments" />
+							</Box>
+							<Box
+								sx={{
+									fontWeight: 600,
+									marginBottom: "6px",
+								}}
+							>
+								Appointments
+							</Box>
+							<Box className="quick-btn-font">192</Box>
+						</Box>
+						<Box className="action-btn action-btn-4">
+							<Box className="patient-icon">
+								<img src={next_app} alt="next_app" />
+							</Box>
+							<Box
+								sx={{
+									fontWeight: 600,
+									marginBottom: "6px",
+								}}
+							>
+								Clock
+							</Box>
+							<Box className="btn-div">Join Now</Box>
+						</Box>
 					</Box>
 
 					<Box className="graph">
@@ -71,7 +84,7 @@ function DoctorDashboard() {
 				<Box className="side-box">
 					<Box className="side-divs">Calender</Box>
 					<Box className="side-divs">Recent Appointments</Box>
-					<Box className="side-divs">Recent Patients</Box>
+					<Box className="side-divs">Quote</Box>
 				</Box>
 			</Box>
 		</>
