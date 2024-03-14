@@ -4,5 +4,9 @@ import DoctorDashboard from "./doctor/DoctorDashboard";
 import RightNavbar from './common/RightNavbar'
 import Banner from "./common/Banner";
 import Graph from "./common/Graph";
-
-export {MidNavbar,SideBar,DoctorDashboard,RightNavbar,Banner,Graph}
+import DocPatients from "./doctor/DocPatients";
+import Feedback from "./doctor/Feedback";
+import Refer from "./doctor/Refer"
+import Login from "./common/Login";
+import Landing from "./landing/Landing";
+export {MidNavbar,SideBar,DoctorDashboard,RightNavbar,Banner,Graph,DocPatients,Feedback,Refer,Login,Landing}

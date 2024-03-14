@@ -1,17 +1,35 @@
 import React from "react";
-import {DoctorDashboard, MidNavbar,SideBar } from "./components";
+import {
+	DocPatients,
+	DoctorDashboard,
+	SideBar,
+	MidNavbar,
+	RightNavbar,
+	Feedback,
+	Refer,
+	Login,
+	Landing,
+} from "./components";
 import PatientDashboard from "./components/Patient/PatientDashboard";
-
-
+import Box from "@mui/material/Box";
 function App() {
 	return (
 		<>
-			{/* <div className="container"> */}
-				<SideBar />
-				{/* <PatientDashboard/> */}
-				<DoctorDashboard/>
-				
-			{/* </div> */}
+			{/* <SideBar />
+			<Box sx={{ display: "flex", marginLeft: "60px" }}>
+				<Box sx={{ flex: 2 }}>
+					<MidNavbar />
+				</Box>
+				<Box sx={{ flex: 1, backgroundColor: "white" }}>
+					<RightNavbar />
+				</Box>
+			</Box> */}
+			{/* <DoctorDashboard /> */}
+			{/* <DocPatients /> */}
+			{/* <Feedback /> */}
+			{/* <Refer/> */}
+			{/* <Login /> */}
+			<Landing />
 		</>
 	);
 }
