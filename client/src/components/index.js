@@ -8,4 +8,5 @@ import DocPatients from "./doctor/DocPatients";
 import Feedback from "./doctor/Feedback";
 import Refer from "./doctor/Refer"
 import Login from "./common/Login";
-export {MidNavbar,SideBar,DoctorDashboard,RightNavbar,Banner,Graph,DocPatients,Feedback,Refer,Login}
+import Landing from "./landing/Landing";
+export {MidNavbar,SideBar,DoctorDashboard,RightNavbar,Banner,Graph,DocPatients,Feedback,Refer,Login,Landing}

@@ -8,6 +8,7 @@ import {
 	Feedback,
 	Refer,
 	Login,
+	Landing,
 } from "./components";
 import PatientDashboard from "./components/Patient/PatientDashboard";
 import Box from "@mui/material/Box";
@@ -27,7 +28,8 @@ function App() {
 			{/* <DocPatients /> */}
 			{/* <Feedback /> */}
 			{/* <Refer/> */}
-			<Login />
+			{/* <Login /> */}
+			<Landing />
 		</>
 	);
 }

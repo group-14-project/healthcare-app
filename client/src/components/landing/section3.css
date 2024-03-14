@@ -1,0 +1,13 @@
+.dcar{
+    border:2px solid black; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.head {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
