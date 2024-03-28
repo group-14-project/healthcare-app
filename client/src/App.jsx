@@ -9,13 +9,16 @@ import {
 	Refer,
 	Login,
 	Landing,
+	PatientConsultation
 } from "./components";
 import PatientDashboard from "./components/Patient/PatientDashboard";
 import Box from "@mui/material/Box";
+
+
 function App() {
 	return (
 		<>
-			{/* <SideBar />
+			<SideBar />
 			<Box sx={{ display: "flex", marginLeft: "60px" }}>
 				<Box sx={{ flex: 2 }}>
 					<MidNavbar />
@@ -23,13 +26,14 @@ function App() {
 				<Box sx={{ flex: 1, backgroundColor: "white" }}>
 					<RightNavbar />
 				</Box>
-			</Box> */}
+			</Box>
+			<PatientConsultation/>
 			{/* <DoctorDashboard /> */}
 			{/* <DocPatients /> */}
 			{/* <Feedback /> */}
 			{/* <Refer/> */}
 			{/* <Login /> */}
-			<Landing />
+			{/* <Landing /> */}
 		</>
 	);
 }
