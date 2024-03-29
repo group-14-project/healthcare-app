@@ -11,6 +11,7 @@ import Login from "./common/Login";
 import Landing from "./landing/Landing";
 import PatientConsultation from "./Patient/PatientConsultation";
 import MainSymptoms from "./chatbot widgets/MainSymptoms";
+import SecSymptoms from "./chatbot widgets/SecSymptoms"
 export {
 	MidNavbar,
 	SideBar,
@@ -25,4 +26,5 @@ export {
 	Landing,
 	PatientConsultation,
 	MainSymptoms,
+	SecSymptoms
 };

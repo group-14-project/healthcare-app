@@ -12,13 +12,13 @@ const MainSymptoms = (props) => {
 	const options = [
 		{
 			text: "Headache",
-			handler: props.actionProvider.handleheadAche,
+			handler: props.actionProvider.handleheadache,
 			id: 1,
 			image: headache,
 		},
 		{
 			text: "Backache",
-			handler: props.actionProvider.handleBackache,
+			handler: props.actionProvider.handlebackache,
 			id: 2,
 			image: backache,
 		},

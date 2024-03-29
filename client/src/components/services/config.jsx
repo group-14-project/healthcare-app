@@ -1,11 +1,9 @@
 import { createChatBotMessage } from "react-chatbot-kit";
-import { MainSymptoms } from "../index";
+import { MainSymptoms, SecSymptoms } from "../index";
 const botName = "Proton";
 
 const config = {
-	initialMessages: [
-		createChatBotMessage(`Hello I'm ${botName}`),
-	],
+	initialMessages: [createChatBotMessage(`Hello I'm ${botName}`)],
 	botName: "Proton",
 	customStyles: {
 		botMessageBox: {
@@ -19,6 +17,11 @@ const config = {
 		{
 			widgetName: "mainsymptoms",
 			widgetFunc: (props) => <MainSymptoms {...props} />,
+		},
+		{
+			widgetName: "secsymptoms",
+			widgetFunc: (props) => <SecSymptoms {...props} />,
+			mapStateToProps: ['options'],
 		},
 	],
 	customComponents: {
