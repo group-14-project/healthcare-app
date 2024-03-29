@@ -12,6 +12,9 @@ import Landing from "./landing/Landing";
 import PatientConsultation from "./Patient/PatientConsultation";
 import MainSymptoms from "./chatbot widgets/MainSymptoms";
 import SecSymptoms from "./chatbot widgets/SecSymptoms"
+import Nav from "./common/Nav";
+import Consult from "./Patient/Consult";
+import PatientDashboard from "./Patient/PatientDashboard";
 export {
 	MidNavbar,
 	SideBar,
@@ -26,5 +29,6 @@ export {
 	Landing,
 	PatientConsultation,
 	MainSymptoms,
-	SecSymptoms
+	SecSymptoms,
+  Nav,Consult,PatientDashboard
 };

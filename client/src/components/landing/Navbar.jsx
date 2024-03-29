@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "./navbar.css";
 import Applogo from "../../assets/logo_full.png";
 function Navbar() {
@@ -12,22 +12,22 @@ function Navbar() {
 				<div className="a1">
 					<ul>
 						<li>
-							<NavLink to="/">Home</NavLink>
+							<Link to="/">Home</Link>
 						</li>
 						<li>
-							<NavLink to="/">About us</NavLink>
+							<NavLink to="/about-us">About us</NavLink>
 						</li>
 						<li>
-							<NavLink to="/">Get Started</NavLink>
+							<NavLink to="/login">Get Started</NavLink>
 						</li>
 						<li>
-							<NavLink to="/">OPD Timings</NavLink>
+							<NavLink to="/opt-timings">OPD Timings</NavLink>
 						</li>
 						<li>
-							<NavLink to="/">FAQ</NavLink>
+							<NavLink to="/faq">FAQ</NavLink>
 						</li>
 						<li>
-							<NavLink to="/">Contact us</NavLink>
+							<NavLink to="/contact-s">Contact us</NavLink>
 						</li>
 					</ul>
 				</div>

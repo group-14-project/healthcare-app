@@ -22,6 +22,9 @@ import UndoSharpIcon from "@mui/icons-material/UndoSharp";
 import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import logo from "../../assets/logo.png";
+import Consult from "../Patient/Consult";
+import { Link } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -119,12 +122,14 @@ function SideBar() {
 							"Upcoming Appointments",
 							"Logout",
 						].map((text, index) => (
-							<ListItem key={text} disablePadding className="sidebar-list-item">
+							<ListItem key={text}  disablePadding className="sidebar-list-item">
 								<ListItemButton
 									className="sidebar-btn"
 									sx={{
 										justifyContent: open ? "initial" : "center",
 									}}
+									component={Link}
+									to={"patient/"+text.toLowerCase()}
 								>
 									<ListItemIcon
 										sx={{
