@@ -1,0 +1,19 @@
+.patient-consultation{
+    margin-left: 66px;
+    box-sizing: border-box;
+    display: flex;
+    padding: 10px;
+    border: 2px solid black;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.react-chatbot-kit-chat-container {
+    width: 900px;
+}
+
+.react-chatbot-kit-chat-bot-message{
+    margin-left: 2px;
+    width: auto;
+}
