@@ -31,14 +31,6 @@ const router = createBrowserRouter([
 		element: <Login />,
 	},
 	{
-		path: "/",
-		element: <Landing />,
-	},
-	{
-		path: "login",
-		element: <Login />,
-	},
-	{
 		element: <Common />,
 		children: [
 			{
@@ -74,6 +66,10 @@ const router = createBrowserRouter([
 		element: <OtpInputPage />,
 	},
 	{
+		path: "patient/details",
+		element: <PatientDetails />,
+	},
+	{
 		element: <Common />,
 		children: [
 			{
@@ -87,10 +83,6 @@ const router = createBrowserRouter([
 			{
 				path: "patient/consultation",
 				element: <PatientConsultation />,
-			},
-			{
-				path: "patient/details",
-				element: <PatientDetails />,
 			},
 		],
 	},

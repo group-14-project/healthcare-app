@@ -15,8 +15,25 @@ function Login() {
 			lastName: "",
 		},
 	});
+	const [loginData, setLoginData] = useState({
+		user: {
+			email: "",
+			password: "",
+		},
+	});
 
-	const handleChange = (e) => {
+	const handleSignInChange = (e) => {
+		const { name, value } = e.target;
+		setLoginData((prevState) => ({
+			...prevState,
+			user: {
+				...prevState.user,
+				[name]: value,
+			},
+		}));
+	};
+
+	const handleSignUpChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prevState) => ({
 			...prevState,
@@ -25,19 +42,10 @@ function Login() {
 				[name]: value,
 			},
 		}));
-
-		// setLoginData((prevState) => ({
-		// 	...prevState,
-		// 	user: {
-		// 		...prevState.user,
-		// 		[name]: value,
-		// 	},
-		// }));
 	};
 
-	const handleSubmit = async (e) => {
+	const handleSignUp = async (e) => {
 		e.preventDefault();
-		console.log("Form data:", formData);
 		try {
 			const response = await axios.post(
 				"http://localhost:9090/patient/signupotp",
@@ -57,15 +65,43 @@ function Login() {
 			);
 			console.log("User signed up:", response);
 			const data = JSON.parse(response.config.data);
-			navigate("/verify-otp", { state: { email: formData.patient.email } });
-			// Optionally, handle successful signup (e.g., redirect to login page)
+			navigate("/verify-otp", {
+				state: { email: formData.patient.email, type: "signUp" },
+			});
 		} catch (error) {
 			console.error("Error signing up:", error);
-			// Optionally, handle signup error (e.g., display error message to user)
 		}
 	};
 
-	// Function to toggle between 'sign-in' and 'sign-up' classes
+	const handleSignIn = async (e) => {
+		e.preventDefault();
+		try {
+			const response = await axios.post(
+				"http://localhost:9090/patient/loginotp",
+				loginData,
+				{
+					Authorization: {
+						Type: "Basic Auth",
+						Username: "user",
+						Password: "password",
+					},
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			console.log("User Verification:", response);
+			const data = JSON.parse(response.config.data);
+			navigate("/verify-otp", {
+				state: { email: loginData.user.email, type: "login" },
+			});
+		} catch (error) {
+			console.error("Error signing up:", error);
+		}
+	};
+
 	const toggle = () => {
 		setContainerClass(containerClass === "sign-in" ? "sign-up" : "sign-in");
 	};
@@ -94,7 +130,7 @@ function Login() {
 									name="firstName"
 									type="text"
 									value={formData.firstname}
-									onChange={handleChange}
+									onChange={handleSignUpChange}
 									placeholder="First Name"
 								/>
 							</div>
@@ -104,7 +140,7 @@ function Login() {
 									name="lastName"
 									type="text"
 									value={formData.lastname}
-									onChange={handleChange}
+									onChange={handleSignUpChange}
 									placeholder="Last Name"
 								/>
 							</div>
@@ -114,7 +150,7 @@ function Login() {
 									name="email"
 									type="email"
 									value={formData.email}
-									onChange={handleChange}
+									onChange={handleSignUpChange}
 									placeholder="Email"
 								/>
 							</div>
@@ -124,7 +160,7 @@ function Login() {
 									name="password"
 									type="password"
 									value={formData.password}
-									onChange={handleChange}
+									onChange={handleSignUpChange}
 									placeholder="Password"
 								/>
 							</div>
@@ -132,7 +168,7 @@ function Login() {
 								<i className="bx bxs-lock-alt"></i>
 								<input type="password" placeholder="Confirm password" />
 							</div>
-							<button onClick={handleSubmit}>Sign up</button>
+							<button onClick={handleSignUp}>Sign up</button>
 							<p>
 								<span>Already have an account?</span>
 								<b onClick={toggle} className="pointer">
@@ -158,7 +194,7 @@ function Login() {
 									name="email"
 									type="text"
 									placeholder="Username"
-									onChange={handleChange}
+									onChange={handleSignInChange}
 								/>
 							</div>
 							<div className="input-group">
@@ -167,10 +203,10 @@ function Login() {
 									name="password"
 									type="password"
 									placeholder="Password"
-									onChange={handleChange}
+									onChange={handleSignInChange}
 								/>
 							</div>
-							<button>Sign in</button>
+							<button onClick={handleSignIn}>Sign in</button>
 							<p>
 								<b>Forgot password?</b>
 							</p>

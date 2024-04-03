@@ -12,13 +12,15 @@ import {
 	MenuItem,
 	Button,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const PatientDetails = () => {
+const PatientDetails = (props) => {
 	const navigate = useNavigate();
+	const location = useLocation();
+	console.log(location.state);
 	const [formData, setFormData] = useState({
 		patient: {
-			firstName: "Deep",
+			firstName: "",
 			lastName: "",
 			email: "",
 			phoneNumber: "",
@@ -66,31 +68,17 @@ const PatientDetails = () => {
 			},
 		}));
 	};
-	// useEffect(async () => {
-	// 	try {
-	// 		const response = await axios.post(
-	// 			"",
-	// 			formData,
-	// 			{
-	// 				Authorization: {
-	// 					Type: "Basic Auth",
-	// 					Username: "user",
-	// 					Password: "password",
-	// 				},
-	// 				headers: {
-	// 					"Access-Control-Allow-Origin": "*",
-	// 					"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-	// 					"Content-Type": "application/json",
-	// 				},
-	// 			}
-	// 		);
-	// 		console.log("User signed up:", response.data);
-	// 		// Optionally, handle successful signup (e.g., redirect to login page)
-	// 	} catch (error) {
-	// 		console.error("Error signing up:", error);
-	// 		// Optionally, handle signup error (e.g., display error message to user)
-	// 	}
-	// }, []);
+	useEffect(() => {
+		setFormData((prevState) => ({
+			...prevState,
+			patient: {
+				...prevState.patient,
+				email: location.state.patient.email,
+				firstName: location.state.patient.firstName,
+				lastName: location.state.patient.lastName,
+			},
+		}));
+	}, []);
 
 	return (
 		<Container className={styles.main_div} maxWidth="md">
@@ -110,6 +98,7 @@ const PatientDetails = () => {
 							value={formData.patient.firstName}
 							onChange={handleChange}
 							required
+							disabled
 						/>
 					</Grid>
 					<Grid item xs={6}>
@@ -122,6 +111,7 @@ const PatientDetails = () => {
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
+							disabled
 							required
 						/>
 					</Grid>
@@ -136,6 +126,7 @@ const PatientDetails = () => {
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
+							disabled
 							required
 						/>
 					</Grid>

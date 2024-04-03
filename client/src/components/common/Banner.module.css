@@ -1,4 +1,4 @@
-.banner-box{
+.banner_box{
     display: flex;
     /* border:2px solid green; */
     justify-content: space-between;
@@ -7,7 +7,7 @@
     background-color: #FFFFFF;
     height: 150px;
 }
-.banner-sub-box{
+.banner_sub_box{
     flex: 1;
     box-sizing: border-box;
     padding: 15px;
@@ -21,21 +21,21 @@
     font-weight: 450;
 }
 
-.doctor-name{
+.doctor_name{
     color: #3F50B5;
     font-weight: 450;
 }
 
-.nice-day{
+.nice_day{
     color: #b6b3b3;
     font-weight: 450;
 }
 
-.right-side{
+.right_side{
     position: relative;
 }
 
-.right-side img{
+.right_side img{
     width: 70%;
     height: 144%;
     position: absolute;

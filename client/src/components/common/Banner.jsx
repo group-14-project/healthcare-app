@@ -1,20 +1,20 @@
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
-import "./Banner.css";
-import doctorImage from '../../assets/doctor.png'
+import doctorImage from "../../assets/doctor.png";
+import styles from "./Banner.module.css";
 
 function Banner() {
 	return (
-		<Box className="banner-box">
-			<Box className="banner-sub-box left-side">
-				<h3 className="greeting">Good Morning,</h3>
-				<h2 className="doctor-name">Dr. Abhishek Sharma</h2>
-                <h6 className="nice-day">Have a nice day at work</h6>
+		<Box className={styles.banner_box}>
+			<Box className={`${styles.banner_sub_box} ${styles.left_side}`}>
+				<h3 className={styles.greeting}>Good Morning,</h3>
+				<h2 className={styles.doctor_name}>Dr. Abhishek Sharma</h2>
+				<h6 className={styles.nice_day}>Have a nice day at work</h6>
 			</Box>
 
-			<Box className="banner-sub-box right-side">
-                <img src={doctorImage} alt="doctor-image" />
-            </Box>
+			<Box className={`${styles.banner_sub_box} ${styles.right_side}`}>
+				<img src={doctorImage} alt="doctor_image" />
+			</Box>
 		</Box>
 	);
 }
