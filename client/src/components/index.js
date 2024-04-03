@@ -15,7 +15,11 @@ import SecSymptoms from "./chatbot widgets/SecSymptoms";
 import Nav from "./common/Nav";
 import Consult from "./Patient/Consult";
 import PatientDashboard from "./Patient/PatientDashboard";
+<<<<<<< HEAD
 import PatientDetails from "./Patient/PatientDetails";
+=======
+import OtpInputPage from "./common/OtpInputPage";
+>>>>>>> route
 export {
 	MidNavbar,
 	SideBar,
@@ -31,8 +35,13 @@ export {
 	PatientConsultation,
 	MainSymptoms,
 	SecSymptoms,
+<<<<<<< HEAD
 	Nav,
 	Consult,
 	PatientDashboard,
 	PatientDetails,
+=======
+	Nav, Consult, PatientDashboard,
+	OtpInputPage
+>>>>>>> route
 };

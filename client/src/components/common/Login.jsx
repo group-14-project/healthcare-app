@@ -1,17 +1,29 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+
+	const navigate = useNavigate();
+
 	const [containerClass, setContainerClass] = useState("sign-in");
 	const [roleName, setRole] = useState("");
 	const [formData, setFormData] = useState({
 		patient: {
 			email: "",
-			name: "",
 			password: "",
+			firstName: "",
+			lastName: ""
 		},
 	});
+
+	const [loginData, setLoginData] = useState({
+		user: {
+			email: "",
+			password: ""
+		}
+	})
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -22,6 +34,16 @@ function Login() {
 				[name]: value,
 			},
 		}));
+
+		setLoginData((prevState) => ({
+			...prevState,
+			user: {
+				...prevState.user,
+				[name]: value,
+			},
+		}));
+
+
 	};
 	const handleRole = (e) => {
 		console.log(e);
@@ -35,11 +57,43 @@ function Login() {
 		// 	console.log(formData);
 	};
 
+	const handleSignIn = async (e) => {
+		e.preventDefault();
+
+		try {
+			const response = await axios.post(
+				"http://localhost:9090/patient/loginotp",
+				loginData,
+				{
+					Authorization: {
+						Type: "Basic Auth",
+						Username: "user",
+						Password: "password",
+					},
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			console.log("User signed up:", response);
+			const data = JSON.parse(response.config.data)
+			navigate('/verify-otp', { state: { email: formData.patient.email } });
+			// Optionally, handle successful signup (e.g., redirect to login page)
+		} catch (error) {
+			console.error("Error signing up:", error);
+			// Optionally, handle signup error (e.g., display error message to user)
+		}
+
+	}
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		try {
 			const response = await axios.post(
+<<<<<<< HEAD
 				"http://localhost:9191/patient/loginotp",
 				formData,
 				{
@@ -66,6 +120,9 @@ function Login() {
 		try {
 			const response = await axios.post(
 				"http://localhost:9191/patient/email",
+=======
+				"http://localhost:9090/patient/signupotp",
+>>>>>>> route
 				formData,
 				{
 					Authorization: {
@@ -80,7 +137,9 @@ function Login() {
 					},
 				}
 			);
-			console.log("User signed up:", response.data);
+			console.log("User signed up:", response);
+			const data = JSON.parse(response.config.data)
+			navigate('/verify-otp', { state: { email: formData.patient.email } });
 			// Optionally, handle successful signup (e.g., redirect to login page)
 		} catch (error) {
 			console.error("Error signing up:", error);
@@ -129,11 +188,21 @@ function Login() {
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input
-									name="name"
+									name="firstName"
 									type="text"
-									value={formData.username}
+									value={formData.firstname}
 									onChange={handleChange}
-									placeholder="Username"
+									placeholder="First Name"
+								/>
+							</div>
+							<div className="input-group">
+								<i className="bx bxs-user"></i>
+								<input
+									name="lastName"
+									type="text"
+									value={formData.lastname}
+									onChange={handleChange}
+									placeholder="Last Name"
 								/>
 							</div>
 							<div className="input-group">
@@ -188,11 +257,11 @@ function Login() {
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
-								<input type="text" placeholder="Username" />
+								<input name="email" type="text" placeholder="Username" onChange={handleChange}/>
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-lock-alt"></i>
-								<input type="password" placeholder="Password" />
+								<input name="password" type="password" placeholder="Password" onChange={handleChange}/>
 							</div>
 							<button onClick={handleSignIn}>Sign in</button>
 							<p>
