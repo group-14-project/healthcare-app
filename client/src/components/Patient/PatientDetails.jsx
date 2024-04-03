@@ -53,7 +53,8 @@ const PatientDetails = (props) => {
 				}
 			);
 			console.log("details added", response.data);
-			navigate("/patient/dashboard");
+			navigate("/patient/dashboard", {
+				state: {patient: response.data},});
 		} catch (error) {
 			console.error("Error adding details", error);
 		}

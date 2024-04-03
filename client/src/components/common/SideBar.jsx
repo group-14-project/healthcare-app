@@ -22,7 +22,6 @@ import UndoSharpIcon from "@mui/icons-material/UndoSharp";
 import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import logo from "../../assets/logo.png";
-import Consult from "../Patient/Consult";
 import { Link } from "react-router-dom";
 
 const drawerWidth = 240;

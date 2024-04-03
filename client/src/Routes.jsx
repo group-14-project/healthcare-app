@@ -6,7 +6,6 @@ import {
 	Feedback,
 	Refer,
 	PatientDashboard,
-	Consult,
 	PatientConsultation,
 	PatientDetails,
 	OtpInputPage,
@@ -31,6 +30,14 @@ const router = createBrowserRouter([
 		element: <Login />,
 	},
 	{
+		path: "/verify-otp",
+		element: <OtpInputPage />,
+	},
+	{
+		path: "patient/details",
+		element: <PatientDetails />,
+	},
+	{
 		element: <Common />,
 		children: [
 			{
@@ -47,7 +54,6 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-
 	{
 		element: <Common />,
 		children: [
@@ -57,31 +63,6 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "patient/consult",
-				element: <Consult />,
-			},
-		],
-	},
-	{
-		path: "/verify-otp",
-		element: <OtpInputPage />,
-	},
-	{
-		path: "patient/details",
-		element: <PatientDetails />,
-	},
-	{
-		element: <Common />,
-		children: [
-			{
-				path: "patient/dashboard",
-				element: <PatientDashboard />,
-			},
-			{
-				path: "patient/consult",
-				element: <Consult />,
-			},
-			{
-				path: "patient/consultation",
 				element: <PatientConsultation />,
 			},
 		],

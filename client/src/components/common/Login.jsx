@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
 	const navigate = useNavigate();
-
 	const [containerClass, setContainerClass] = useState("sign-in");
+	const [role, setRole] = useState("patient");
 	const [formData, setFormData] = useState({
 		patient: {
 			email: "",
@@ -48,7 +48,7 @@ function Login() {
 		e.preventDefault();
 		try {
 			const response = await axios.post(
-				"http://localhost:9090/patient/signupotp",
+				`http://localhost:9090/patient/signupotp`,
 				formData,
 				{
 					Authorization: {
@@ -75,9 +75,10 @@ function Login() {
 
 	const handleSignIn = async (e) => {
 		e.preventDefault();
+		console.log("Role:", role)
 		try {
 			const response = await axios.post(
-				"http://localhost:9090/patient/loginotp",
+				`http://localhost:9090/${role}/loginotp`,
 				loginData,
 				{
 					Authorization: {
@@ -95,7 +96,7 @@ function Login() {
 			console.log("User Verification:", response);
 			const data = JSON.parse(response.config.data);
 			navigate("/verify-otp", {
-				state: { email: loginData.user.email, type: "login" },
+				state: { email: loginData.user.email, type: "login",role:role },
 			});
 		} catch (error) {
 			console.error("Error signing up:", error);
@@ -184,9 +185,24 @@ function Login() {
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-in">
 							<div className="role-group">
-								<div className="roles">Admin</div>
-								<div className="roles">Doctor</div>
-								<div className="roles">Patient</div>
+								<div
+									className="roles"
+									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+								>
+									Admin
+								</div>
+								<div
+									className="roles"
+									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+								>
+									Doctor
+								</div>
+								<div
+									className="roles"
+									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+								>
+									Patient
+								</div>
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>

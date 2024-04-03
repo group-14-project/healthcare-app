@@ -8,7 +8,6 @@ const OtpInputPage = () => {
 	const location = useLocation();
 	const [otp, setOtp] = useState(new Array(6).fill(""));
 	const inputRefs = useRef([]);
-	const [combinedOtp, setCombinedOtp] = useState("");
 
 	useEffect(() => {
 		if (inputRefs.current[0]) {
@@ -51,7 +50,7 @@ const OtpInputPage = () => {
 	const fetchData = async () => {
 		try {
 			const response = await axios.post(
-				`http://localhost:9090/patient/${location.state.type}`,
+				`http://localhost:9090/${location.state.role}/${location.state.type}`,
 				{ user: { email: location.state.email, otp: otp.join("") } },
 				{
 					headers: {
@@ -63,16 +62,17 @@ const OtpInputPage = () => {
 				}
 			);
 			console.log(
-				`User ${location.state.type === "signIp" ? "Signed Up" : "Logged In"}:`,
+				`User ${location.state.type === "signIn" ? "Signed Up" : "Logged In"}:`,
 				response
 			);
 			navigate(
-				location.state.type === "signUp"
+				location.state.role === "patient"?
+				(location.state.type === "signUp"
 				  ? "/login"
 				  : !response.data.firstTimeLogin
 				  ? "/patient/details"
-				  : "/patient/dashboard",
-				{ state: { patient: response.data } }
+				  : "/patient/dashboard"):`/${location.state.role}/dashboard`,
+				{ state: { [location.state.role]: response.data } }
 			  );
 		} catch (error) {
 			console.error(`Error verifying:`, error);

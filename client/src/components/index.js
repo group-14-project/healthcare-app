@@ -13,7 +13,6 @@ import PatientConsultation from "./Patient/PatientConsultation";
 import MainSymptoms from "./chatbot widgets/MainSymptoms";
 import SecSymptoms from "./chatbot widgets/SecSymptoms";
 import Nav from "./common/Nav";
-import Consult from "./Patient/Consult";
 import PatientDashboard from "./Patient/PatientDashboard";
 import PatientDetails from "./Patient/PatientDetails";
 import OtpInputPage from "./common/OtpInputPage";
@@ -34,9 +33,7 @@ export {
 	MainSymptoms,
 	SecSymptoms,
 	Nav,
-	Consult,
 	PatientDashboard,
 	PatientDetails,
-	OtpInputPage
-
+	OtpInputPage,
 };
