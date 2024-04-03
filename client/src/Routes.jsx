@@ -1,4 +1,5 @@
-import { Nav,Landing,Login,DoctorDashboard,Feedback,Refer,PatientDashboard,Consult} from "./components/index";
+// import OtpInput from "./components/common/OtpInput";
+import { Nav,Landing,Login,DoctorDashboard,Feedback,Refer,PatientDashboard,Consult, OtpInputPage} from "./components/index";
 
 
 import {
@@ -6,7 +7,7 @@ import {
      RouterProvider,
      Outlet
    } from "react-router-dom";
-
+ 
 const PvtLayout = () => (
      <>
           <Nav />
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
                     element: <Consult />
                }
           ]
+     },
+     {
+          path: "/verify-otp",
+          element: <OtpInputPage/>
      }
 
 ]);
