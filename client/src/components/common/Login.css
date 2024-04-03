@@ -346,3 +346,19 @@ right: 50%;
     font-size: 2rem;
 }
 }
+
+.role-group{
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+    background-color: var(--gray);
+}
+.roles{
+    border:2px solid black;
+    width: 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}

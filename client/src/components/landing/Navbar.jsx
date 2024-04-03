@@ -24,6 +24,9 @@ function Navbar() {
 							<NavLink to="/opt-timings">OPD Timings</NavLink>
 						</li>
 						<li>
+							<NavLink to="/login">Login</NavLink>
+						</li>
+						<li>
 							<NavLink to="/faq">FAQ</NavLink>
 						</li>
 						<li>

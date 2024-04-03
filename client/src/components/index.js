@@ -11,10 +11,11 @@ import Login from "./common/Login";
 import Landing from "./landing/Landing";
 import PatientConsultation from "./Patient/PatientConsultation";
 import MainSymptoms from "./chatbot widgets/MainSymptoms";
-import SecSymptoms from "./chatbot widgets/SecSymptoms"
+import SecSymptoms from "./chatbot widgets/SecSymptoms";
 import Nav from "./common/Nav";
 import Consult from "./Patient/Consult";
 import PatientDashboard from "./Patient/PatientDashboard";
+import PatientDetails from "./Patient/PatientDetails";
 export {
 	MidNavbar,
 	SideBar,
@@ -30,5 +31,8 @@ export {
 	PatientConsultation,
 	MainSymptoms,
 	SecSymptoms,
-  Nav,Consult,PatientDashboard
+	Nav,
+	Consult,
+	PatientDashboard,
+	PatientDetails,
 };

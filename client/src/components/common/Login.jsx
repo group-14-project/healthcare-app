@@ -4,6 +4,7 @@ import "./Login.css";
 
 function Login() {
 	const [containerClass, setContainerClass] = useState("sign-in");
+	const [roleName, setRole] = useState("");
 	const [formData, setFormData] = useState({
 		patient: {
 			email: "",
@@ -16,16 +17,52 @@ function Login() {
 		const { name, value } = e.target;
 		setFormData((prevState) => ({
 			...prevState,
-			patient: {
-				...prevState.patient,
+			[roleName]: {
+				...prevState.role,
 				[name]: value,
 			},
 		}));
+	};
+	const handleRole = (e) => {
+		console.log(e);
+		setRole(toString(e.target.innerText));
+		// console.log(roleName);
+		// 	setFormData((prevState) => ({
+		// 		[roleName]: {
+		// 			...prevState.roleName,
+		// 		},
+		// 	}));
+		// 	console.log(formData);
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		try {
+			const response = await axios.post(
+				"http://localhost:9191/patient/loginotp",
+				formData,
+				{
+					Authorization: {
+						Type: "Basic Auth",
+						Username: "user",
+						Password: "password",
+					},
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			console.log("User signed up:", response.data);
+			// Optionally, handle successful signup (e.g., redirect to login page)
+		} catch (error) {
+			console.error("Error signing up:", error);
+			// Optionally, handle signup error (e.g., display error message to user)
+		}
+	};
+	const handleSignIn = async (e) => {
 		try {
 			const response = await axios.post(
 				"http://localhost:9191/patient/email",
@@ -74,6 +111,21 @@ function Login() {
 				<div className="col align-items-center flex-col sign-up">
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-up">
+							<div className="role-group">
+								<div onClick={handleRole} data-value="admin" className="roles">
+									Admin
+								</div>
+								<div onClick={handleRole} data-value="doctor" className="roles">
+									Doctor
+								</div>
+								<div
+									onClick={handleRole}
+									data-value="patient"
+									className="roles"
+								>
+									Patient
+								</div>
+							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input
@@ -123,6 +175,17 @@ function Login() {
 				<div className="col align-items-center flex-col sign-in">
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-in">
+							<div className="role-group">
+								<div onClick={handleRole} className="roles">
+									Admin
+								</div>
+								<div onClick={handleRole} className="roles">
+									Doctor
+								</div>
+								<div onClick={handleRole} className="roles">
+									Patient
+								</div>
+							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input type="text" placeholder="Username" />
@@ -131,7 +194,7 @@ function Login() {
 								<i className="bx bxs-lock-alt"></i>
 								<input type="password" placeholder="Password" />
 							</div>
-							<button>Sign in</button>
+							<button onClick={handleSignIn}>Sign in</button>
 							<p>
 								<b>Forgot password?</b>
 							</p>

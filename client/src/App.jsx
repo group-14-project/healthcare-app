@@ -9,11 +9,10 @@ import {
 	Refer,
 	Login,
 	Landing,
-	PatientConsultation
+	PatientConsultation,
 } from "./components";
 import PatientDashboard from "./components/Patient/PatientDashboard";
 import Box from "@mui/material/Box";
-
 
 function App() {
 	return (
@@ -27,7 +26,7 @@ function App() {
 					<RightNavbar />
 				</Box>
 			</Box>
-			<PatientConsultation/>
+			<PatientConsultation />
 			{/* <DoctorDashboard /> */}
 			{/* <DocPatients /> */}
 			{/* <Feedback /> */}

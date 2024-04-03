@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import "./section3.css";
 import Doctor from "./Card";
+import axios from "axios";
 function Section3() {
 	const responsive = {
 		superLargeDesktop: {
-			breakpoint: { max: 4000, min: 1024 },
+			breakpoint: { max: 4000, min: 3000 },
 			items: 5,
 		},
 		desktop: {
-			breakpoint: { max: 1024, min: 800 },
-			items: 5,
+			breakpoint: { max: 3000, min: 1024 },
+			items: 4,
 		},
 		tablet: {
 			breakpoint: { max: 1024, min: 464 },
@@ -23,65 +24,51 @@ function Section3() {
 		},
 	};
 
-	const DoctorData = [
-		{
-			id: 1,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Ravi",
-			rating: "4.5",
-		},
-		{
-			id: 2,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Kabir",
-			rating: "4.5",
-		},
-		{
-			id: 3,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Rahul",
-			rating: "4.5",
-		},
-		{
-			id: 4,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Amit",
-			rating: "4.5",
-		},
-		{
-			id: 5,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Kiran",
-			rating: "4.5",
-		},
-		{
-			id: 6,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Aaqib",
-			rating: "4.5",
-		},
-		{
-			id: 7,
-			imageUrl: "https://cdn-icons-png.flaticon.com/512/3774/3774299.png",
-			name: "Mr Murtasim",
-			rating: "4.5",
-		},
-	];
+	const [DoctorData, setDoctorData] = useState([]);
 
-	const doc = DoctorData.map((item) => (
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(
+					"http://localhost:9090/doctor/landingPage",
+					{
+						Authorization: {
+							Type: "Basic Auth",
+							Username: "user",
+							Password: "password",
+						},
+						headers: {
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods":
+								"GET,PUT,POST,DELETE,PATCH,OPTIONS",
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				console.log("Doctor Detils fetched", response.data);
+				setDoctorData(response.data);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			}
+		};
+		fetchData();
+	}, []);
+
+	const doc = DoctorData.map((item, index) => (
 		<Doctor
-			key={item.id}
-			name={item.name}
+			key={index}
+			fname={item.firstName}
+			lname={item.lastName}
 			url={item.imageUrl}
-			rating={item.rating}
+			qual={item.degree}
 		/>
 	));
 
 	return (
 		<div className="dcar">
 			<div className="head"> Top Doctors</div>
-			<div>
-			<Carousel responsive={responsive}>{doc}</Carousel>
+			<div className="carousel-div">
+				<Carousel responsive={responsive}>{doc}</Carousel>
 			</div>
 		</div>
 	);
