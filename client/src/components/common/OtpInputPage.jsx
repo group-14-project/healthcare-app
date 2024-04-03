@@ -44,7 +44,7 @@ const OtpInputPage = () => {
         }
       );
       console.log("User signed up:", response);
-      navigate('/patient/dashboard');
+      navigate('/login');
       // Optionally, handle successful signup (e.g., redirect to login page)
     } catch (error) {
       console.error("Error signing up:", error);

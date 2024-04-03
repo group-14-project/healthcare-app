@@ -4,125 +4,43 @@ import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-
 	const navigate = useNavigate();
 
 	const [containerClass, setContainerClass] = useState("sign-in");
-	const [roleName, setRole] = useState("");
 	const [formData, setFormData] = useState({
 		patient: {
 			email: "",
 			password: "",
 			firstName: "",
-			lastName: ""
+			lastName: "",
 		},
 	});
-
-	const [loginData, setLoginData] = useState({
-		user: {
-			email: "",
-			password: ""
-		}
-	})
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prevState) => ({
 			...prevState,
-			[roleName]: {
-				...prevState.role,
+			patient: {
+				...prevState.patient,
 				[name]: value,
 			},
 		}));
 
-		setLoginData((prevState) => ({
-			...prevState,
-			user: {
-				...prevState.user,
-				[name]: value,
-			},
-		}));
-
-
+		// setLoginData((prevState) => ({
+		// 	...prevState,
+		// 	user: {
+		// 		...prevState.user,
+		// 		[name]: value,
+		// 	},
+		// }));
 	};
-	const handleRole = (e) => {
-		console.log(e);
-		setRole(toString(e.target.innerText));
-		// console.log(roleName);
-		// 	setFormData((prevState) => ({
-		// 		[roleName]: {
-		// 			...prevState.roleName,
-		// 		},
-		// 	}));
-		// 	console.log(formData);
-	};
-
-	const handleSignIn = async (e) => {
-		e.preventDefault();
-
-		try {
-			const response = await axios.post(
-				"http://localhost:9090/patient/loginotp",
-				loginData,
-				{
-					Authorization: {
-						Type: "Basic Auth",
-						Username: "user",
-						Password: "password",
-					},
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log("User signed up:", response);
-			const data = JSON.parse(response.config.data)
-			navigate('/verify-otp', { state: { email: formData.patient.email } });
-			// Optionally, handle successful signup (e.g., redirect to login page)
-		} catch (error) {
-			console.error("Error signing up:", error);
-			// Optionally, handle signup error (e.g., display error message to user)
-		}
-
-	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
+		console.log("Form data:", formData);
 		try {
 			const response = await axios.post(
-<<<<<<< HEAD
-				"http://localhost:9191/patient/loginotp",
-				formData,
-				{
-					Authorization: {
-						Type: "Basic Auth",
-						Username: "user",
-						Password: "password",
-					},
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log("User signed up:", response.data);
-			// Optionally, handle successful signup (e.g., redirect to login page)
-		} catch (error) {
-			console.error("Error signing up:", error);
-			// Optionally, handle signup error (e.g., display error message to user)
-		}
-	};
-	const handleSignIn = async (e) => {
-		try {
-			const response = await axios.post(
-				"http://localhost:9191/patient/email",
-=======
 				"http://localhost:9090/patient/signupotp",
->>>>>>> route
 				formData,
 				{
 					Authorization: {
@@ -138,8 +56,8 @@ function Login() {
 				}
 			);
 			console.log("User signed up:", response);
-			const data = JSON.parse(response.config.data)
-			navigate('/verify-otp', { state: { email: formData.patient.email } });
+			const data = JSON.parse(response.config.data);
+			navigate("/verify-otp", { state: { email: formData.patient.email } });
 			// Optionally, handle successful signup (e.g., redirect to login page)
 		} catch (error) {
 			console.error("Error signing up:", error);
@@ -170,21 +88,6 @@ function Login() {
 				<div className="col align-items-center flex-col sign-up">
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-up">
-							<div className="role-group">
-								<div onClick={handleRole} data-value="admin" className="roles">
-									Admin
-								</div>
-								<div onClick={handleRole} data-value="doctor" className="roles">
-									Doctor
-								</div>
-								<div
-									onClick={handleRole}
-									data-value="patient"
-									className="roles"
-								>
-									Patient
-								</div>
-							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input
@@ -245,25 +148,29 @@ function Login() {
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-in">
 							<div className="role-group">
-								<div onClick={handleRole} className="roles">
-									Admin
-								</div>
-								<div onClick={handleRole} className="roles">
-									Doctor
-								</div>
-								<div onClick={handleRole} className="roles">
-									Patient
-								</div>
+								<div className="roles">Admin</div>
+								<div className="roles">Doctor</div>
+								<div className="roles">Patient</div>
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
-								<input name="email" type="text" placeholder="Username" onChange={handleChange}/>
+								<input
+									name="email"
+									type="text"
+									placeholder="Username"
+									onChange={handleChange}
+								/>
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-lock-alt"></i>
-								<input name="password" type="password" placeholder="Password" onChange={handleChange}/>
+								<input
+									name="password"
+									type="password"
+									placeholder="Password"
+									onChange={handleChange}
+								/>
 							</div>
-							<button onClick={handleSignIn}>Sign in</button>
+							<button>Sign in</button>
 							<p>
 								<b>Forgot password?</b>
 							</p>
