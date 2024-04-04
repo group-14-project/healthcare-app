@@ -11,4 +11,5 @@ html::-webkit-scrollbar {
 
 canvas{
     width: 100% !important;
+    /* height: 90% !important; */
 }

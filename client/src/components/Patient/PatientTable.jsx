@@ -34,15 +34,14 @@ export default function PatientTable(props) {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					<TableRow>
-						<TableCell align="center">2021-10-10</TableCell>
-						<TableCell align="center">Nabarun</TableCell>
+					{props.pastApp.map((App,index) => (
+						<TableRow key = {index}>
+							<TableCell align="center">{App.appointmentDateAndTime.split("T")[0]}</TableCell>
+							<TableCell align="center">{App.doctorFirstName +" "+App.doctorLastName}</TableCell>
 
-						<TableCell align="center">Fever</TableCell>
-						{/* {props.pastApp.map((App) => (
-							<TableCell align="center" key={App}>{App}</TableCell>
-						))} */}
-					</TableRow>
+							<TableCell align="center">{App.mainSymptom}</TableCell>
+						</TableRow>
+					))}
 				</TableBody>
 			</Table>
 		</TableContainer>

@@ -12,7 +12,6 @@ function DoctorDashboard() {
 	const location = useLocation();
 	const d = location.state.doctor;
 	var category = "health";
-	console.log(d);
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -38,7 +37,10 @@ function DoctorDashboard() {
 	}, []);
 	return (
 		<>
-			<Box sx={{ display: "flex", marginLeft: "60px" }}>
+			<Box
+				className={styles.outer_div}
+				sx={{ display: "flex", marginLeft: "60px" }}
+			>
 				<Box className={styles.main_box} sx={{ width: "66.6%" }}>
 					<Banner doctor={d} />
 					<Box className={styles.quick_actions}>
@@ -106,18 +108,18 @@ function DoctorDashboard() {
 						</Box>
 					</Box>
 
-					<Box className="graph">
-						<Graph />
+					<Box className={styles.graph}>
+						<Graph data={d.eachDayCounts} />
 					</Box>
 				</Box>
 				<Box className={styles.side_box}>
 					<Box className={styles.side_divs}>Calender</Box>
-					<div
+					<Box
 						className={`${styles.appointments_container} ${styles.side_divs}`}
 					>
 						<h2 className={styles.appointments_title}>Recent Appointments</h2>
 						<ul className={styles.appointments_list}>
-							{d.pastAppointments.map((appointment,index) => (
+							{d.pastAppointments.map((appointment, index) => (
 								<li key={index} className={styles.appointment_item}>
 									<div className={styles.patient_name}>
 										{appointment.patientFirstName}&nbsp;
@@ -129,7 +131,7 @@ function DoctorDashboard() {
 								</li>
 							))}
 						</ul>
-					</div>
+					</Box>
 
 					<Box className={styles.quote_box}>
 						<div

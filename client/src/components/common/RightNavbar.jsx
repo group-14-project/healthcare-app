@@ -78,7 +78,7 @@ const RightNavbar = () => {
 <Toolbar>
      <Box>
           <Typography noWrap component="p" className="rgt-navbar-name">
-               {location.state[location.state.role].firstName + " " + location.state[location.state.role].lastName}
+               {/* {location.state[location.state.role].firstName + " " + location.state[location.state.role].lastName} */}
           </Typography>
           <Link href="#" underline="none" className="rgt-navbar-view-label">
                {"View Profile"}

@@ -11,14 +11,18 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
-function Graph() {
+function Graph(props) {
+	console.log(props);
+	// Extract dates and counts into separate arrays
+	const dates = props.data.map((item) => item.date);
+	const counts = props.data.map((item) => item.count);
 	const data = {
-		labels: ["March 12", "March 13", "March 14", "March 15", "March 16"],
+		labels: dates,
 		datasets: [
 			{
-				data: [8, 7, 6, 4, 3],
+				data: counts,
 				backgroundColor: "white",
-				borderColor: "#009FAE",
+				borderColor: "#009FAE " ,
 				pointBorderWidth: 3,
 				borderWidth: 2,
 			},
@@ -32,6 +36,11 @@ function Graph() {
 				},
 			},
 			y: {
+				suggestedMin: 0,
+				suggestedMax: 10,
+				ticks: {
+					stepSize: 2
+				},
 				grid: {
 					display: false, // Hides the grid lines on the y-axis
 				},
@@ -39,7 +48,14 @@ function Graph() {
 		},
 	};
 	return (
-		<div style={{ height: "100%", width: "100%" , boxStyle:"border-box",padding:"2%" }}>
+		<div
+			style={{
+				height: "100%",
+				width: "100%",
+				boxStyle: "border-box",
+				padding: "2%",
+			}}
+		>
 			<Line data={data} options={options}></Line>
 		</div>
 	);
