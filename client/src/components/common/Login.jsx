@@ -33,6 +33,28 @@ function Login() {
 		}));
 	};
 
+	const handleRoleChange = (e) =>{
+		setRole(e.target.innerText.toLowerCase());
+		document.getElementById(e.target.id).style.backgroundColor = "#4FA786";
+		if(e.target.id === "admin"){
+			document.getElementById("doctor").style.backgroundColor = "#efefef";
+			document.getElementById("patient").style.backgroundColor = "#efefef";
+		}
+		if(e.target.id === "doctor"){
+			document.getElementById("admin").style.backgroundColor = "#efefef";
+			document.getElementById("patient").style.backgroundColor = "#efefef";
+		}
+		if(e.target.id === "patient"){
+			document.getElementById("admin").style.backgroundColor = "#efefef";
+			document.getElementById("doctor").style.backgroundColor = "#efefef";
+		}
+
+
+	}
+	useEffect(() => {
+		document.getElementById("patient").style.backgroundColor = "#4FA786";
+	}, []);
+
 	const handleSignUpChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prevState) => ({
@@ -186,20 +208,23 @@ function Login() {
 						<div className="form sign-in">
 							<div className="role-group">
 								<div
+									id = "admin"
 									className="roles"
-									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+									onClick={handleRoleChange}
 								>
 									Admin
 								</div>
 								<div
+									id="doctor"
 									className="roles"
-									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+									onClick={handleRoleChange}
 								>
 									Doctor
 								</div>
 								<div
+									id = "patient"
 									className="roles"
-									onClick={(e) => setRole(e.target.innerText.toLowerCase())}
+									onClick={handleRoleChange}
 								>
 									Patient
 								</div>

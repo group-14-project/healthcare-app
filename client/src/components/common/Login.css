@@ -350,15 +350,15 @@ right: 50%;
 .role-group{
     display: flex;
     flex-direction: row;
-    height: 50px;
+    height: 40px;
     background-color: var(--gray);
 }
 .roles{
-    border:2px solid black;
-    width: 33%;
+    width: 33.33%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border-right:1px solid var(--gray-2);
 
 }

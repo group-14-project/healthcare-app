@@ -5,7 +5,7 @@ import patient from "../../assets/patient.png";
 import appointments from "../../assets/appointments.png";
 import next_app from "../../assets/next_app.png";
 import prescription from "../../assets/prescription.png";
-import "./DoctorDashboard.css";
+import styles from "./DoctorDashboard.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 function DoctorDashboard() {
@@ -39,11 +39,11 @@ function DoctorDashboard() {
 	return (
 		<>
 			<Box sx={{ display: "flex", marginLeft: "60px" }}>
-				<Box className="main-box" sx={{ width: "66.6%" }}>
+				<Box className={styles.main_box} sx={{ width: "66.6%" }}>
 					<Banner doctor={d} />
-					<Box className="quick-actions">
-						<Box className="action-btn action-btn-1">
-							<Box className="patient-icon">
+					<Box className={styles.quick-actions}>
+						<Box className={`${styles.action_btn} ${styles.action_btn_1}`}>
+							<Box className={styles.patient_icon}>
 								<img src={patient} alt="patient" />
 							</Box>
 							<Box
@@ -54,10 +54,10 @@ function DoctorDashboard() {
 							>
 								Total Patients
 							</Box>
-							<Box className="btn-div">{d.totalPatients}</Box>
+							<Box className={btn_div}>{d.totalPatients}</Box>
 						</Box>
-						<Box className="action-btn action-btn-2">
-							<Box className="patient-icon">
+						<Box className={`${styles.action_btn} ${styles.action_btn_2}`}>
+							<Box className={styles.patient_icon}>
 								<img src={prescription} alt="prescription" />
 							</Box>
 							<Box
@@ -68,16 +68,16 @@ function DoctorDashboard() {
 							>
 								Prescription
 							</Box>
-							<Box className="btn-div">
+							<Box className={styles.btn_div}>
 								Template &nbsp;
-								<span className="template-icon">
+								<span className={styles.template_icon}>
 									<i className="fa-solid fa-circle-arrow-right"></i>
 								</span>
 							</Box>
 						</Box>
 
-						<Box className="action-btn action-btn-3">
-							<Box className="patient-icon">
+						<Box className={`${styles.action_btn} ${styles.action_btn_3}`}>
+							<Box className={styles.patient_icon}>
 								<img src={appointments} alt="appointments" />
 							</Box>
 							<Box
@@ -88,10 +88,10 @@ function DoctorDashboard() {
 							>
 								Appointments
 							</Box>
-							<Box className="quick-btn-font">{d.totalAppointments}</Box>
+							<Box className={styles.quick_btn_font}>{d.totalAppointments}</Box>
 						</Box>
-						<Box className="action-btn action-btn-4">
-							<Box className="patient-icon">
+						<Box className={`${styles.action_btn} ${styles.action_btn_4}`}>
+							<Box className={styles.patient_icon}>
 								<img src={next_app} alt="next_app" />
 							</Box>
 							<Box
@@ -102,7 +102,7 @@ function DoctorDashboard() {
 							>
 								Clock
 							</Box>
-							<Box className="btn-div">Join Now</Box>
+							<Box className={styles.btn_div}>Join Now</Box>
 						</Box>
 					</Box>
 
@@ -110,15 +110,15 @@ function DoctorDashboard() {
 						<Graph />
 					</Box>
 				</Box>
-				<Box className="side-box">
-					<Box className="side-divs">Calender</Box>
-					<Box className="side-divs">
-						<h4>Recent Appointments</h4>
+				<Box className={styles.side_box}>
+					<Box className={styles.side_divs}>Calender</Box>
+					<Box className={styles.side_divs}>
+						<h4 className="land-head">Recent Appointments</h4>
 						<br />
-						<ul className="appointment-list">
+						<ul className={styles.appointment_list}>
 							{d.pastAppointments.map((appointment, index) => {
 								return (
-									<li className="recent-appointments" key={index}>
+									<li className={styles.recent_appointments} key={index}>
 										<p>
 											{appointment.patientFirstName}&nbsp;
 											{appointment.patientLastName}
@@ -129,7 +129,7 @@ function DoctorDashboard() {
 							})}
 						</ul>
 					</Box>
-					<Box className=" quote-box">
+					<Box className={styles.quote_box}>
 						<div
 							className="card text-white height"
 							style={{ backgroundColor: "#009AAA", borderRadius: "15px" }}

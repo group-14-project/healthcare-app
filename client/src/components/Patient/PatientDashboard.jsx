@@ -103,7 +103,7 @@ const PatientDashboard = () => {
 										borderRadius: "5px",
 									}}
 								>
-									{p.height}
+									{p.height} cm
 								</Typography>
 							</Box>
 						</Box>
