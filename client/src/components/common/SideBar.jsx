@@ -69,7 +69,9 @@ const Drawer = styled(MuiDrawer, {
 	}),
 }));
 
-function SideBar() {
+function SideBar(props) {
+	console.log("in sidebar: ",props.content);
+	const sidebarContent = props.content.sidebarContent.sidebar.content;
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 
@@ -113,14 +115,7 @@ function SideBar() {
 					</DrawerHeader>
 					<Divider />
 					<List>
-						{[
-							"Consult",
-							"Reports",
-							"Prescriptions",
-							"Past Appointments",
-							"Upcoming Appointments",
-							"Logout",
-						].map((text, index) => (
+						{sidebarContent.map((text, index) => (
 							<ListItem key={text}  disablePadding className="sidebar-list-item">
 								<ListItemButton
 									className="sidebar-btn"

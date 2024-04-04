@@ -10,7 +10,7 @@ import weight from "../../assets/weight.png";
 import PatientTable from "./PatientTable";
 import { useLocation } from "react-router-dom";
 
-const PatientDashboard = () => {
+const PatientDashboard = (props) => {
 	const location = useLocation();
 	const p = location.state.patient;
 	console.log(p);

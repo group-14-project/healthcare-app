@@ -5,11 +5,14 @@ import RightNavbar from '../common/RightNavbar'
 import SideBar from './SideBar'
 import { Outlet } from 'react-router-dom'
 
-const Nav = () => {
+const Nav = (props) => {
+
+     console.log(props)
+     const sidebarContent = props.sidebar;
      return (
           <>
 
-               <SideBar />
+               <SideBar content={{sidebarContent}}/>
                <Box sx={{ display: "flex", marginLeft: "60px" }}>
                     <Box sx={{ flex: 2 }}>
                          <MidNavbar />
