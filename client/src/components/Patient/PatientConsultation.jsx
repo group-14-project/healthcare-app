@@ -12,21 +12,11 @@ function PatientConsultation() {
 	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
-		const createWebSocket =  () => {
+		const createWebSocket = () => {
 			const newSocket = new WebSocket("ws://localhost:9090/doctor-status");
 
 			newSocket.onopen = () => {
 				console.log("WebSocket connection established");
-			};
-
-			newSocket.onmessage = (event) => {
-				const message = JSON.parse(event.data);
-				setMessages((ps) => [...ps, message]);
-				console.log("MESSAGE",message);
-			};
-
-			newSocket.onclose = () => {
-				console.log("WebSocket connection closed");
 			};
 
 			setSocket(newSocket);
@@ -41,6 +31,18 @@ function PatientConsultation() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (socket) {
+			socket.onmessage = (event) => {
+				const message = JSON.parse(event.data);
+				setMessages(message);
+			};
+			socket.onclose = () => {
+				console.log("WebSocket connection closed");
+			};
+		}
+	}, [messages, socket, setMessages]);
+
 	return (
 		<Box className="patient-consultation">
 			<Chatbot
@@ -48,16 +50,27 @@ function PatientConsultation() {
 				messageParser={MessageParser}
 				actionProvider={ActionProvider}
 			/>
-			<Box>
-				<ul>
-					{messages.map((message, index) => (
-						<li key={index}>
-							<p>Email: {message.email}</p>
-							<p>Status: {message.status}</p>
-							<p>First Name: {message.firstName}</p>
-						</li>
-					))}
-				</ul>
+			<Box className="active-docs">
+				<table className="avail-docs">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Degree</th>
+							<th>Hospital</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						{messages.map((message, index) => (
+							<tr key={index}>
+								<td>Dr. {message.firstName}</td>
+								<td>{message.degree}</td>
+								<td>{message.hospitalName}</td>
+								<td>{message.status}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
 			</Box>
 		</Box>
 	);

@@ -18,7 +18,7 @@ function Navbar() {
 							<NavLink to="/about-us">About us</NavLink>
 						</li>
 						<li>
-							<NavLink to="/opt-timings">OPD Timings</NavLink>
+							<NavLink to="/opd-timings">OPD Timings</NavLink>
 						</li>
 						<li>
 							<NavLink to="/login">Login</NavLink>

@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import logo from "../../assets/logo_full.png";
 
-const OPDTimingsPage = () => {
+const OPDTimings = () => {
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
           backgroundColor: 'rgb(38, 122, 107)',
@@ -95,4 +95,4 @@ const OPDTimingsPage = () => {
 	);
 };
 
-export default OPDTimingsPage;
+export default OPDTimings;

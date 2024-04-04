@@ -16,6 +16,9 @@ import Nav from "./common/Nav";
 import PatientDashboard from "./Patient/PatientDashboard";
 import PatientDetails from "./Patient/PatientDetails";
 import OtpInputPage from "./common/OtpInputPage";
+import Navbar from "./landing/Navbar";
+import Faq from "./landing/Faq";
+import OPDTimings from "./landing/OPDtimings";
 
 export {
 	MidNavbar,
@@ -36,4 +39,7 @@ export {
 	PatientDashboard,
 	PatientDetails,
 	OtpInputPage,
+	Navbar,
+	Faq,
+	OPDTimings,
 };

@@ -9,7 +9,6 @@ import { Outlet } from "react-router-dom";
 function Landing(props) {
 	return (
 		<>
-			<Navbar />
 			<Section1 />
 			<Section2 />
 			<Section3 />
