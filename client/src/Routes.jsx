@@ -16,10 +16,11 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 const Common = (props) => {
 	console.log(props);
 	const sidebar = props.sidebar;
+	const user = props.user;
 	return (
 		<>
-			<Nav sidebar={{sidebar}}/>
-			<Outlet />
+			<Nav sidebar={{sidebar}} user={{user}}/>
+			<Outlet/>
 		</>
 	);
 }
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
 		element: <PatientDetails />,
 	},
 	{
-		element: <Common sidebar={{ content: ["Patients", "Calendar", "Departments","Feedback", "Refer", "Logout"] }} />,
+		element: <Common sidebar={{ content: ["Patients", "Calendar", "Departments","Feedback", "Refer", "Logout"] }} user={{type: "doctor"}}/>,
 		children: [
 			{
 				path: "/doctor/dashboard",
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
 		],
 	},
 	{
-		element: <Common sidebar={{ content: ["Consult",  "Reports",  "Prescriptions", "Past Appointments",  "Upcoming Appointments",  "Logout"] }} />,
+		element: <Common sidebar={{ content: ["Consult",  "Reports",  "Prescriptions", "Past Appointments",  "Upcoming Appointments",  "Logout"] }} user={{type: "patient"}}/>,
 		children: [
 			{
 				path: "patient/dashboard",

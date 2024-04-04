@@ -1,17 +1,36 @@
-.sidebar-parent{
+.sidebar-parent {
     display: 'flex';
 }
 
-.burger-btn{
-    
+.logo{
+    padding: 0!important;
+    justify-content: center!important;
 }
 
-.sidebar-btn{
+.burger-btn {
+    padding-right: 0!important;
+    justify-content: center!important;
+}
+
+.sidebar-btn {
     padding-left: 2.5;
     padding-right: 2.5;
     min-height: 48;
 }
 
-.siderbar-list-item{
+.siderbar-list-item {
     display: 'block';
 }
+
+.css-1xwrmxo-MuiListItemIcon-root {
+    margin-right: 0!important;
+}
+
+.small_logo_img{
+    width: 60px;
+    height: 60px;
+}
+
+/* .large_logo_img{
+    width: ;
+} */

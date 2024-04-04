@@ -9,10 +9,11 @@ const Nav = (props) => {
 
      console.log(props)
      const sidebarContent = props.sidebar;
+     const user = props.user
      return (
           <>
 
-               <SideBar content={{sidebarContent}}/>
+               <SideBar content={{sidebarContent}} type={{user}}/>
                <Box sx={{ display: "flex", marginLeft: "60px" }}>
                     <Box sx={{ flex: 2 }}>
                          <MidNavbar />

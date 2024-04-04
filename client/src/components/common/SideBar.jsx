@@ -21,8 +21,11 @@ import MedicationSharpIcon from "@mui/icons-material/MedicationSharp";
 import UndoSharpIcon from "@mui/icons-material/UndoSharp";
 import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
-import logo from "../../assets/logo.png";
+import smallLogo from "../../assets/logo.png";
+import largeLogo from "../../assets/logo_full.png";
 import { Link } from "react-router-dom";
+import './Sidebar.css';
+
 
 const drawerWidth = 240;
 
@@ -70,83 +73,95 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function SideBar(props) {
-	console.log("in sidebar: ",props.content);
+	const sidebarRef = React.useRef(null);
+	console.log("in sidebar: ", props);
 	const sidebarContent = props.content.sidebarContent.sidebar.content;
+	const userType = props.type.user.user.type;
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
+	const [logo,setLogo] = React.useState(smallLogo);
+
+	React.useEffect(() => {
+		function handleClickOutside(event) {
+			if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+				setOpen(false);
+				setLogo(smallLogo);
+			}
+		}
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [sidebarRef]);
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
+		setLogo(largeLogo);
 	};
 
 	return (
-		<Box className="sidebar-parent">
+		<Box className="sidebar-parent" ref={sidebarRef}>
 			<CssBaseline />
-      
+
 			<ThemeProvider theme={SidebarTheme}>
 				<Drawer variant="permanent" open={open}>
-					<DrawerHeader>
+					<DrawerHeader className="logo">
+						<IconButton>
+							<img src={logo} alt="logo" className={logo===smallLogo ? "small_logo_img": "large_logo_img"}/>
+						</IconButton>
+					</DrawerHeader>
+
+					<DrawerHeader className="burger-btn">
+
 						<IconButton
-							color="inherit"
+							color="#fff"
 							aria-label="open drawer"
 							onClick={handleDrawerOpen}
 							edge="start"
-							className="burger-btn"
 							sx={{
-								...(open && { display: "none", color: "black" }),
+								...(open && { display: "none", color: "#fff" }),
 							}}
 						>
-							<MenuIcon />
+							<MenuIcon style={{ color: "#fff" }} />
 						</IconButton>
-						
-					</DrawerHeader>
-					<DrawerHeader>
-						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === "rtl" ? (
-								<ChevronRightIcon />
-							) : (
-								<ChevronLeftIcon />
-							)}
-						</IconButton>
+
 					</DrawerHeader>
 					<Divider />
 					<List>
 						{sidebarContent.map((text, index) => (
-							<ListItem key={text}  disablePadding className="sidebar-list-item">
+							<ListItem key={text} disablePadding className="sidebar-list-item">
 								<ListItemButton
 									className="sidebar-btn"
 									sx={{
 										justifyContent: open ? "initial" : "center",
+										marginBottom: "10px"
 									}}
 									component={Link}
-									to={"patient/"+text.toLowerCase()}
+									to={`${userType}/${text.toLowerCase()}`}
 								>
 									<ListItemIcon
 										sx={{
 											minWidth: 0,
 											mr: open ? 3 : "auto",
 											justifyContent: "center",
+											color: "#fff"
 										}}
 									>
 										{index == 0 ? (
-											<DuoSharpIcon />
+											<DuoSharpIcon style={{ color: "#fff" }} />
 										) : index == 1 ? (
-											<SummarizeSharpIcon />
+											<SummarizeSharpIcon style={{ color: "#fff" }} />
 										) : index == 2 ? (
-											<MedicationSharpIcon />
+											<MedicationSharpIcon style={{ color: "#fff" }} />
 										) : index == 3 ? (
-											<UndoSharpIcon />
+											<UndoSharpIcon style={{ color: "#fff" }} />
 										) : index == 4 ? (
-											<UpdateSharpIcon />
+											<UpdateSharpIcon style={{ color: "#fff" }} />
 										) : (
-											<LogoutSharpIcon />
+											<LogoutSharpIcon style={{ color: "#fff" }} />
 										)}
 									</ListItemIcon>
-									<ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+									<ListItemText primary={text} sx={{ ...(!open && { display: "none" }), color: "#fff" }} />
 								</ListItemButton>
 							</ListItem>
 						))}
