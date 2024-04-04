@@ -10,27 +10,16 @@ import "./PatientConsultation.css";
 function PatientConsultation() {
 	const [socket, setSocket] = useState(null);
 	const [messages, setMessages] = useState([]);
+	const createWebSocket = () => {
+		const newSocket = new WebSocket("ws://localhost:9090/doctor-status");
 
-	useEffect(() => {
-		const createWebSocket = () => {
-			const newSocket = new WebSocket("ws://localhost:9090/doctor-status");
-
-			newSocket.onopen = () => {
-				console.log("WebSocket connection established");
-			};
-
-			setSocket(newSocket);
+		newSocket.onopen = () => {
+			console.log("WebSocket connection established");
 		};
 
-		createWebSocket();
-
-		return () => {
-			if (socket) {
-				socket.close();
-			}
-		};
-	}, []);
-
+		setSocket(newSocket);
+	document.getElementById("active-docs").style.display = "block";
+	};
 	useEffect(() => {
 		if (socket) {
 			socket.onmessage = (event) => {
@@ -46,11 +35,12 @@ function PatientConsultation() {
 	return (
 		<Box className="patient-consultation">
 			<Chatbot
+				socketFunc = {createWebSocket}
 				config={config}
 				messageParser={MessageParser}
 				actionProvider={ActionProvider}
 			/>
-			<Box className="active-docs">
+			<Box id ="active-docs" className="active-docs">
 				<table className="avail-docs">
 					<thead>
 						<tr>

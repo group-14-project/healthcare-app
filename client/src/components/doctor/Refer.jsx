@@ -52,7 +52,9 @@ function Refer() {
 							<StyledTableCell>Patient Name</StyledTableCell>
 							<StyledTableCell align="center">Hospital</StyledTableCell>
 							<StyledTableCell align="center">Doctor</StyledTableCell>
-							<StyledTableCell align="right">Share &nbsp; &nbsp;</StyledTableCell>
+							<StyledTableCell align="right">
+								Share &nbsp; &nbsp;
+							</StyledTableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -73,7 +75,10 @@ function Refer() {
 									</select>
 								</StyledTableCell>
 								<StyledTableCell align="center">
-									<select id="doctor" name="doctor">
+									<select
+										id="doctor"
+										name="doctor"
+									>
 										<option value="" disabled selected>
 											Choose Doctor
 										</option>

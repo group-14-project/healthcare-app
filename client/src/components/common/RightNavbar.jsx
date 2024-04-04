@@ -21,46 +21,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
-// const RightNavbar = () => {
-
-//      // const theme = useTheme();
-
-//      return (
-
-//           <Box sx={{ display: 'flex' }}>
-
-//                <CssBaseline />
-//                <ThemeProvider theme={NavbarTheme}>
-//                     <AppBar >
-//                          <Toolbar>
-//                               {/* <IconButton
-//                                    color="inherit"
-//                                    // aria-label="open drawer"
-//                                    // onClick={handleDrawerOpen}
-//                                    edge="start"
-//                                    sx={{
-//                                         marginRight: 5,
-//                                         // ...(open && { display: 'none' }),
-//                                    }}
-//                               >
-//                                    <MenuIcon />
-//                               </IconButton> */}
-//                               <Typography variant="h6" noWrap component="div">
-//                                    right variant drawer
-//                               </Typography>
-//                          </Toolbar>
-//                     </AppBar>
-//                </ThemeProvider>
-
-//           </Box>
-
-//      )
-
-// }
-
 const RightNavbar = () => {
 	const location = useLocation();
-	console.log(location.state);
+	console.log("Right Navbar", location.state);
 
 	return (
 		<Box className="right-navbar-parent">
@@ -75,19 +38,21 @@ const RightNavbar = () => {
 							<NotificationsNoneIcon className="rgt-navbar-notif-btn" />
 						</IconButton>
 					</Toolbar>
-<Toolbar>
-     <Box>
-          <Typography noWrap component="p" className="rgt-navbar-name">
-               {/* {location.state[location.state.role].firstName + " " + location.state[location.state.role].lastName} */}
-          </Typography>
-          <Link href="#" underline="none" className="rgt-navbar-view-label">
-               {"View Profile"}
-          </Link>
-     </Box>
-     <IconButton>
-          <AccountCircleIcon className="profile-icon" />
-     </IconButton>
-</Toolbar>
+					<Toolbar>
+						<Box>
+							<Typography noWrap component="p" className="rgt-navbar-name">
+								{/* {location.state[location.state.role].firstName +
+									" " +
+									location.state[location.state.role].lastName} */}
+							</Typography>
+							<Link href="#" underline="none" className="rgt-navbar-view-label">
+								{"View Profile"}
+							</Link>
+						</Box>
+						<IconButton>
+							<AccountCircleIcon className="profile-icon" />
+						</IconButton>
+					</Toolbar>
 				</Toolbar>
 			</AppBar>
 		</Box>

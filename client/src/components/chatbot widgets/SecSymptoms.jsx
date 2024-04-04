@@ -3,6 +3,7 @@ import "./SecSymptoms.css";
 import { Button } from "@mui/material";
 
 const SecSymptoms = (props) => {
+	console.log("Sec", props);
 	const [selectedSymps, setSelectedSymps] = useState([]);
 	const handleChange = (event) => {
 		const value = event.target.value;
@@ -14,6 +15,7 @@ const SecSymptoms = (props) => {
 	};
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		props.socketFunc();
 		props.actions.handleConvertToString(selectedSymps);
 	};
 

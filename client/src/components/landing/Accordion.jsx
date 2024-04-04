@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Box } from "@mui/material";
 
-export const Accordion = ({ section, key }) => {
+export const Accordion = ({ section }) => {
 	const [isOpen, setOpenState] = useState(false);
 
 	const toggle = useCallback(() => {
@@ -36,6 +36,8 @@ export const ExpendableColumn = ({ question, isOpen, toggle }) => {
 		fontWeight: "bold", // Bold font for question
 		textDecoration: "none",
 		marginBottom: "10px", // Add some space between question and answer
+		display: "inline-block",
+		width: "97%", // Make the question take up most of the space
 	};
 
 	return (
@@ -43,7 +45,15 @@ export const ExpendableColumn = ({ question, isOpen, toggle }) => {
 			<div className="column-text" style={questionStyle}>
 				{question}
 			</div>
-			<button className="expendable-button">
+			<button
+				className="expendable-button"
+				style={{
+					backgroundColor: "transparent",
+					border: "none",
+					cursor: "pointer",
+					fontSize: "25px",
+				}}
+			>
 				{isOpen ? (
 					<span className="material-symbols-outlined">-</span>
 				) : (

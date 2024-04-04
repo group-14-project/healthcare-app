@@ -30,12 +30,11 @@
 }
 
 .avail-docs{
-    border: 2px solid black;
     width: 100%;
 }
 .active-docs{
     width: 80%;
     margin: auto;
     margin-top: 3%;
-    border: 2px solid green;
+    display: none;
 }

@@ -48,9 +48,8 @@ function Login() {
 			document.getElementById("admin").style.backgroundColor = "#efefef";
 			document.getElementById("doctor").style.backgroundColor = "#efefef";
 		}
-
-
 	}
+	
 	useEffect(() => {
 		document.getElementById("patient").style.backgroundColor = "#4FA786";
 	}, []);
@@ -115,10 +114,10 @@ function Login() {
 					},
 				}
 			);
-			console.log("User Verification:", response);
+			console.log("User Verification:");
 			const data = JSON.parse(response.config.data);
 			navigate("/verify-otp", {
-				state: { email: loginData.user.email, type: "login",role:role },
+				state: { email: loginData.user.email, type: "login",role : role },
 			});
 		} catch (error) {
 			console.error("Error signing up:", error);

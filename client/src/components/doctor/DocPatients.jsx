@@ -9,6 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useLocation } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -43,6 +44,8 @@ const rows = [
 	createData("Gingerbread", "25 May 2024", "Click Here"),
 ];
 function DocPatients() {
+	const location = useLocation();
+	console.log("Doctor Patients", location.state);
 	return (
 		<Box sx={{ display: "flex", marginLeft: "65px" }}>
 			<TableContainer component={Paper}>

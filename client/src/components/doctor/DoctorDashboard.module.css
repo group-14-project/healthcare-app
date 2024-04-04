@@ -1,6 +1,6 @@
-/* .outer_div{
-    height: 100vh;
-} */
+.outer_div{
+    height: 140vh;
+}
 .main_box{
     /* justify-content: center; */
     display : flex;
@@ -89,7 +89,7 @@
     padding: 40px;
     flex-direction: column; 
    /* height: 100vh; */
-    border: 2px solid green;
+    /* border: 2px solid green; */
     
 }
 

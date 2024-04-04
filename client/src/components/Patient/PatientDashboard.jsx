@@ -13,7 +13,7 @@ import { useLocation } from "react-router-dom";
 const PatientDashboard = (props) => {
 	const location = useLocation();
 	const p = location.state.patient;
-	console.log(p);
+	console.log("patient dashboard", p);
 	const heads = ["Date", "Doctor Name", "Symptom"];
 	return (
 		<Box

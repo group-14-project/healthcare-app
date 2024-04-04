@@ -12,6 +12,7 @@ import {
 	Navbar,
 	Faq,
 	OPDTimings,
+	DocPatients,
 } from "./components/index";
 
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
@@ -94,6 +95,18 @@ const router = createBrowserRouter([
 			{
 				path: "/doctor/dashboard",
 				element: <DoctorDashboard />,
+			},
+			{
+				path: "/doctor/feedback",
+				element: <Feedback />,
+			},
+			{
+				path: "/doctor/refer",
+				element: <Refer />,
+			},
+			{
+				path: "/doctor/patients",
+				element: <DocPatients />,
 			},
 			{
 				path: "/doctor/feedback",

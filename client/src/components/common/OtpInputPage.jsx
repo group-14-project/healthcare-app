@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import otpImage from "../../assets/otp.jpeg";
 
 const OtpInputPage = () => {
 	const navigate = useNavigate();
@@ -65,6 +66,7 @@ const OtpInputPage = () => {
 				`User ${location.state.type === "signIn" ? "Signed Up" : "Logged In"}:`,
 				response
 			);
+			const newState = {...(location.state ?? {}), [location.state.role]: response.data};
 			navigate(
 				location.state.role === "patient"
 					? location.state.type === "signUp"
@@ -75,8 +77,7 @@ const OtpInputPage = () => {
 					: `/${location.state.role}/dashboard`,
 				{
 					state: {
-						[location.state.role]: response.data,
-						role: location.state.role,
+						...newState
 					},
 				}
 			);
@@ -86,8 +87,19 @@ const OtpInputPage = () => {
 	};
 
 	return (
-		<div style={{ textAlign: "center", marginTop: "150px" }}>
-			<h2>Enter OTP</h2>
+		<div
+			style={{
+				textAlign: "center",
+				boxSizing: "border-box",
+				paddingTop: "110px",
+			}}
+		>
+			<img
+				src={otpImage}
+				alt="otp"
+				style={{ width: "200px", marginLeft: "80px", marginBottom: "2%" }}
+			/>
+			<h2>Enter 6 Digit OTP</h2>
 			<div>
 				{otp.map((value, index) => {
 					return (
@@ -112,15 +124,29 @@ const OtpInputPage = () => {
 			</div>
 			<Button
 				variant="contained"
-				color="primary"
 				onClick={fetchData}
-				style={{ marginTop: "20px" }}
+				style={{
+					marginTop: "10px",
+					backgroundColor: "#3F776B",
+					color: "white",
+				}}
 			>
 				Verify OTP
 			</Button>
-			{/* <p style={{ marginTop: "20px" }}>
-        <span onClick={() => navigate(location.state.signIn)}>Resend OTP</span>
-      </p> */}
+			<p style={{ marginTop: "20px" }}>
+				<span onClick={() => navigate(location.state.signIn)}>
+					Didn't Received OTP{" "}
+					<span
+						style={{
+							textDecoration: "underline",
+							color: "blue",
+							cursor: "pointer",
+						}}
+					>
+						Resend OTP
+					</span>
+				</span>
+			</p>
 		</div>
 	);
 };
