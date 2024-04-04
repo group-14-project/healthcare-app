@@ -1,9 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-// import MidNavbar from '../common/MidNavbar'
-// import RightNavbar from '../common/RightNavbar'
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs/index";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDateTimePicker } from "@mui/x-date-pickers/StaticDateTimePicker";
@@ -16,6 +13,7 @@ import { useLocation } from "react-router-dom";
 const PatientDashboard = () => {
 	const location = useLocation();
 	const p = location.state.patient;
+	console.log(p);
 	const heads = ["Date", "Doctor Name", "Symptom"];
 	return (
 		<Box
@@ -183,7 +181,7 @@ const PatientDashboard = () => {
 					</Box>
 
 					<Box sx={{ padding: "40px" }}>
-						<PatientTable pastApp={p.pastAppointments} heads = {heads}/>
+						<PatientTable pastApp={p.pastAppointments} heads={heads} />
 					</Box>
 				</Box>
 			</Box>

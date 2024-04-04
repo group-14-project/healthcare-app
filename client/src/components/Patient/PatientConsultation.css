@@ -1,16 +1,27 @@
 .patient-consultation{
-    margin-left: 66px;
-    box-sizing: border-box;
-    display: flex;
-    padding: 10px;
-    border: 2px solid black;
+   /*
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: absolute;
+    width: 100%; */
+    margin-left: 66px;
+    box-sizing: border-box;
+    /* border: 2px solid green; */
+    /* background-color: #00AFBB; */
+    
 }
 
 .react-chatbot-kit-chat-container {
-    width: 900px;
+    /* border: 2px solid black; */
+    width: 80%;
+    margin: auto;
+    /* position: relative; */
+}
+
+.react-chatbot-kit-chat-message-container::-webkit-scrollbar{
+    display: none;
+
 }
 
 .react-chatbot-kit-chat-bot-message{

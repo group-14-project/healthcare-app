@@ -21,7 +21,7 @@ const config = {
 		{
 			widgetName: "secsymptoms",
 			widgetFunc: (props) => <SecSymptoms {...props} />,
-			mapStateToProps: ['options'],
+			mapStateToProps: ["options"],
 		},
 	],
 	customComponents: {
@@ -31,7 +31,9 @@ const config = {
 				style={{
 					padding: "5px",
 					borderRadius: "3px",
-					border: "2px solid black",
+					// border: "2px solid black",
+					fontWeight: "bold",
+					fontSize: "20px",
 				}}
 			>
 				Ask Arogyashala

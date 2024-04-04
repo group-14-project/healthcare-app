@@ -66,14 +66,20 @@ const OtpInputPage = () => {
 				response
 			);
 			navigate(
-				location.state.role === "patient"?
-				(location.state.type === "signUp"
-				  ? "/login"
-				  : !response.data.firstTimeLogin
-				  ? "/patient/details"
-				  : "/patient/dashboard"):`/${location.state.role}/dashboard`,
-				{ state: { [location.state.role]: response.data } }
-			  );
+				location.state.role === "patient"
+					? location.state.type === "signUp"
+						? "/login"
+						: !response.data.firstTimeLogin
+						? "/patient/details"
+						: "/patient/dashboard"
+					: `/${location.state.role}/dashboard`,
+				{
+					state: {
+						[location.state.role]: response.data,
+						role: location.state.role,
+					},
+				}
+			);
 		} catch (error) {
 			console.error(`Error verifying:`, error);
 		}

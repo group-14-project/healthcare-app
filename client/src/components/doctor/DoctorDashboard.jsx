@@ -41,7 +41,7 @@ function DoctorDashboard() {
 			<Box sx={{ display: "flex", marginLeft: "60px" }}>
 				<Box className={styles.main_box} sx={{ width: "66.6%" }}>
 					<Banner doctor={d} />
-					<Box className={styles.quick-actions}>
+					<Box className={styles.quick_actions}>
 						<Box className={`${styles.action_btn} ${styles.action_btn_1}`}>
 							<Box className={styles.patient_icon}>
 								<img src={patient} alt="patient" />
@@ -54,7 +54,7 @@ function DoctorDashboard() {
 							>
 								Total Patients
 							</Box>
-							<Box className={btn_div}>{d.totalPatients}</Box>
+							<Box className={styles.btn_div}>{d.totalPatients}</Box>
 						</Box>
 						<Box className={`${styles.action_btn} ${styles.action_btn_2}`}>
 							<Box className={styles.patient_icon}>
@@ -112,23 +112,25 @@ function DoctorDashboard() {
 				</Box>
 				<Box className={styles.side_box}>
 					<Box className={styles.side_divs}>Calender</Box>
-					<Box className={styles.side_divs}>
-						<h4 className="land-head">Recent Appointments</h4>
-						<br />
-						<ul className={styles.appointment_list}>
-							{d.pastAppointments.map((appointment, index) => {
-								return (
-									<li className={styles.recent_appointments} key={index}>
-										<p>
-											{appointment.patientFirstName}&nbsp;
-											{appointment.patientLastName}
-										</p>
-										<p>{appointment.appointmentDateAndTime.split("T")[0]}</p>
-									</li>
-								);
-							})}
+					<div
+						className={`${styles.appointments_container} ${styles.side_divs}`}
+					>
+						<h2 className={styles.appointments_title}>Recent Appointments</h2>
+						<ul className={styles.appointments_list}>
+							{d.pastAppointments.map((appointment,index) => (
+								<li key={index} className={styles.appointment_item}>
+									<div className={styles.patient_name}>
+										{appointment.patientFirstName}&nbsp;
+										{appointment.patientLastName}
+									</div>
+									<div className={styles.appointment_date}>
+										{appointment.appointmentDateAndTime.split("T")[0]}
+									</div>
+								</li>
+							))}
 						</ul>
-					</Box>
+					</div>
+
 					<Box className={styles.quote_box}>
 						<div
 							className="card text-white height"
