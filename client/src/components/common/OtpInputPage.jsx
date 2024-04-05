@@ -14,6 +14,7 @@ const OtpInputPage = () => {
 		if (inputRefs.current[0]) {
 			inputRefs.current[0].focus();
 		}
+		localStorage.setItem("role", location.state.role);
 	}, []);
 
 	const handleChange = (index, e) => {

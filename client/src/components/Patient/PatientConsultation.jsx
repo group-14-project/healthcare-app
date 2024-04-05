@@ -47,6 +47,7 @@ function PatientConsultation() {
 							<th>Name</th>
 							<th>Degree</th>
 							<th>Hospital</th>
+							{/* <th>Email</th> */}
 							<th>Status</th>
 						</tr>
 					</thead>
@@ -56,6 +57,7 @@ function PatientConsultation() {
 								<td>Dr. {message.firstName}</td>
 								<td>{message.degree}</td>
 								<td>{message.hospitalName}</td>
+								{/* <td>{message.email}</td> */}
 								<td>{message.status}</td>
 							</tr>
 						))}
