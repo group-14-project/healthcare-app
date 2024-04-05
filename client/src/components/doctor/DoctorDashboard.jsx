@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Banner, Graph } from "../index";
 import { Box } from "@mui/material";
 import patient from "../../assets/patient.png";
@@ -8,32 +8,78 @@ import prescription from "../../assets/prescription.png";
 import styles from "./DoctorDashboard.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import SockJS from "sockjs-client";
+import Stomp from 'stompjs';
+
 function DoctorDashboard() {
+	const [incomingCall, setIncomingCall] = useState(false);
 	const location = useLocation();
 	const d = location.state.doctor;
 	var category = "health";
+	let stompClient = useRef();
+
+
+	const handleAcceptCall = () => {
+		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+			(c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
+		);
+
+		console.log(newUuid);
+
+		setRoomID(newUuid);
+
+		stompClient.current.send("/app/acceptCall", {}, JSON.stringify({
+			"roomID": newUuid,
+			"acceptedBy": localID.toString(),
+			"initiatedBy": remoteID.toString()
+		}));
+
+		navigate(`/room/${newUuid}`, { state: { callee: remoteID, caller: localID } });
+
+
+	}
+
+
+
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await axios.get(
-					`https://api.api-ninjas.com/v1/quotes?category=${category}`,
-					{
-						headers: {
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods":
-								"GET,PUT,POST,DELETE,PATCH,OPTIONS",
-							"Access-Control-Allow-Headers": "Content-Type",
-							"X-Api-Key": `Y+pN8GpN+SFL+5UL96rzFw==OsFELYxpBagii5Aa`,
-						},
-					}
-				);
-				console.log("Quote Fetched:", response);
-				const data = JSON.parse(response.config.data);
-			} catch (error) {
-				console.error("Error fetching quote", error);
-			}
-		};
-		fetchData();
+
+		var conn = new SockJS("http://localhost:9190/socket");
+		stompClient.current = new Stomp.over(conn);
+
+		stompClient.current.connect({}, (frame) => {
+
+			stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+				console.log("call from: " + call.body);
+				console.log("remote id: " + call.body);
+		  
+				setRemoteId(call.body);
+		  
+				setIncomingCall(true);
+			   })
+
+		})
+
+		// const fetchData = async () => {
+		// 	try {
+		// 		const response = await axios.get(
+		// 			`https://api.api-ninjas.com/v1/quotes?category=${category}`,
+		// 			{
+		// 				headers: {
+		// 					"Access-Control-Allow-Origin": "*",
+		// 					"Access-Control-Allow-Methods":
+		// 						"GET,PUT,POST,DELETE,PATCH,OPTIONS",
+		// 					"Access-Control-Allow-Headers": "Content-Type",
+		// 					"X-Api-Key": `Y+pN8GpN+SFL+5UL96rzFw==OsFELYxpBagii5Aa`,
+		// 				},
+		// 			}
+		// 		);
+		// 		console.log("Quote Fetched:", response);
+		// 		const data = JSON.parse(response.config.data);
+		// 	} catch (error) {
+		// 		console.error("Error fetching quote", error);
+		// 	}
+		// };
+		// fetchData();
 	}, []);
 	return (
 		<>

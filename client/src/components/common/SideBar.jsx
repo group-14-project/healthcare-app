@@ -25,7 +25,7 @@ import smallLogo from "../../assets/logo.png";
 import largeLogo from "../../assets/logo_full.png";
 import { Link } from "react-router-dom";
 import './Sidebar.css';
-
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -80,6 +80,9 @@ function SideBar(props) {
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
 	const [logo,setLogo] = React.useState(smallLogo);
+	const location = useLocation();
+	const patientData = location.state;
+	console.log(location.state);
 
 	React.useEffect(() => {
 		function handleClickOutside(event) {
@@ -138,6 +141,7 @@ function SideBar(props) {
 									}}
 									component={Link}
 									to={`${userType}/${text.toLowerCase()}`}
+									patient={patientData}
 								>
 									<ListItemIcon
 										sx={{

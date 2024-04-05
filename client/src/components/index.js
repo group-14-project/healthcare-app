@@ -18,7 +18,7 @@ import PatientDetails from "./Patient/PatientDetails";
 import OtpInputPage from "./common/OtpInputPage";
 import Navbar from "./landing/Navbar";
 import Faq from "./landing/Faq";
-import OPDTimings from "./landing/OPDtimings";
+import OPDTimings from "./landing/OPDTimings";
 
 export {
 	MidNavbar,
