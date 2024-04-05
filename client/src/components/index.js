@@ -19,6 +19,10 @@ import OtpInputPage from "./common/OtpInputPage";
 import Navbar from "./landing/Navbar";
 import Faq from "./landing/Faq";
 import OPDTimings from "./landing/OPDTimings";
+import Room from "./Room/Room";
+import EndCall from "./Room/EndCall";
+import AboutUs from "./landing/AboutUs";
+import ContactSection from "./landing/ContactSection";
 
 export {
 	MidNavbar,
@@ -42,4 +46,8 @@ export {
 	Navbar,
 	Faq,
 	OPDTimings,
+	Room,
+	EndCall,
+	AboutUs,
+	ContactSection
 };

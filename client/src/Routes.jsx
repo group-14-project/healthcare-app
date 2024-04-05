@@ -1,3 +1,4 @@
+// import EndCall from "./components/Room/EndCall";
 import {
 	Nav,
 	Landing,
@@ -13,6 +14,10 @@ import {
 	Faq,
 	OPDTimings,
 	DocPatients,
+	Room,
+	EndCall,
+	AboutUs,
+	ContactSection
 } from "./components/index";
 
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
@@ -50,7 +55,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/about-us",
-				element: <Landing />,
+				element: <AboutUs />,
 			},
 			{
 				path: "/opd-timings",
@@ -74,6 +79,23 @@ const router = createBrowserRouter([
 	{
 		path: "patient/details",
 		element: <PatientDetails />,
+	},
+	{
+		path: "/room/:roomId",
+		element: <Room/>
+	},
+	{
+		path: "/endCall",
+		element: <EndCall/>
+	},
+	{
+		path: "/doctor/logout",
+		element: <Landing />
+	},
+	{
+		path: "/patient/logout",
+		element: <Landing />
+
 	},
 	{
 		element: (

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs/index";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -15,6 +15,10 @@ const PatientDashboard = (props) => {
 	const p = location.state.patient;
 	console.log("patient dashboard", p);
 	const heads = ["Date", "Doctor Name", "Symptom"];
+	useEffect(() => {
+		localStorage.setItem("patientId", JSON.stringify(p.patientId));
+		localStorage.setItem("patientName", JSON.stringify(p.firstName));
+	}, []);
 	return (
 		<Box
 			sx={{ display: "flex", marginLeft: "65px", backgroundColor: "#F9F9F9" }}

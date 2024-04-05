@@ -10,13 +10,25 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from 'stompjs';
+import Button from '@mui/material/Button';
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
 	const location = useLocation();
 	const d = location.state.doctor;
+	const navigate = useNavigate();
+	console.log("doctor: ", d);
 	var category = "health";
 	let stompClient = useRef();
+	const [remoteID, setRemoteId] = useState("");
+	const [localID, setLocalID] = useState(d.doctorId);
+	const [roomID, setRoomID] = useState("");
+	const [patientName, setPatientName] = useState("");
+
+	useEffect(() => {
+		localStorage.setItem("doctorId", d.doctorId);
+		localStorage.setItem("doctorName", d.firstName);
+	}, []);
 
 
 	const handleAcceptCall = () => {
@@ -26,16 +38,20 @@ function DoctorDashboard() {
 
 		console.log(newUuid);
 
+		const doctorName = d.firstName;
+		
 		setRoomID(newUuid);
+
+		const acceptedBy = {name:doctorName, "callee":localID};
+		const initiatedBy = {name: patientName, "caller": remoteID};
 
 		stompClient.current.send("/app/acceptCall", {}, JSON.stringify({
 			"roomID": newUuid,
-			"acceptedBy": localID.toString(),
-			"initiatedBy": remoteID.toString()
+			"acceptedBy": JSON.stringify(acceptedBy),
+			"initiatedBy": JSON.stringify(initiatedBy)
 		}));
 
-		navigate(`/room/${newUuid}`, { state: { callee: remoteID, caller: localID } });
-
+		navigate(`/room/${newUuid}`, { state: { acceptedBy, initiatedBy } });
 
 	}
 
@@ -50,12 +66,15 @@ function DoctorDashboard() {
 
 			stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
 				console.log("call from: " + call.body);
-				console.log("remote id: " + call.body);
-		  
-				setRemoteId(call.body);
-		  
+				// console.log("remote id: " + call.body);
+				const userData = JSON.parse(call.body);
+				console.log(userData);
+
+				setRemoteId(userData.localId);
+				setPatientName(userData.patientName.slice(1,userData.patientName.length-1));
+
 				setIncomingCall(true);
-			   })
+			})
 
 		})
 
@@ -211,6 +230,30 @@ function DoctorDashboard() {
 					</Box>
 				</Box>
 			</Box>
+
+
+			{
+				incomingCall
+					?
+					<div style={{ position: 'fixed', width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "rgb(0,0,0,0.9)", backdropFilter: blur("10px"), zIndex: "2", top: 0, bottom: 0, right: 0, left: 0 }}>
+						<h4 style={{ color: "#fff" }}>
+							Patient {patientName} is calling you
+						</h4>
+						<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", width: "20%" }}>
+							<Button variant="contained" color="success" onClick={handleAcceptCall}>
+								Accept
+							</Button>
+							<Button variant="outlined" color="error">
+								Reject
+							</Button>
+						</div>
+
+					</div>
+					:
+					<></>
+
+			}
+
 		</>
 	);
 }

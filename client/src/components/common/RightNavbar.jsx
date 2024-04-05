@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -24,6 +24,10 @@ import { useLocation } from "react-router-dom";
 const RightNavbar = () => {
 	const location = useLocation();
 	console.log("Right Navbar", location.state);
+	const [roleName,setRoleName] = useState("");
+	useEffect(() => {
+		setRoleName(localStorage.getItem("role"));
+	}, []);
 
 	return (
 		<Box className="right-navbar-parent">
@@ -41,9 +45,9 @@ const RightNavbar = () => {
 					<Toolbar>
 						<Box>
 							<Typography noWrap component="p" className="rgt-navbar-name">
-								{/* {location.state[location.state.role].firstName +
+								{/* {location.state[roleName].firstName +
 									" " +
-									location.state[location.state.role].lastName} */}
+									location.state[roleName].lastName} */}
 							</Typography>
 							<Link href="#" underline="none" className="rgt-navbar-view-label">
 								{"View Profile"}

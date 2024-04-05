@@ -9,11 +9,13 @@ const OtpInputPage = () => {
 	const location = useLocation();
 	const [otp, setOtp] = useState(new Array(6).fill(""));
 	const inputRefs = useRef([]);
+	console.log(location.state)
 
 	useEffect(() => {
 		if (inputRefs.current[0]) {
 			inputRefs.current[0].focus();
 		}
+		localStorage.setItem("role", location.state.role);
 	}, []);
 
 	const handleChange = (index, e) => {

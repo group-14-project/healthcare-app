@@ -87,7 +87,7 @@ function Login() {
 			console.log("User signed up:", response);
 			const data = JSON.parse(response.config.data);
 			navigate("/verify-otp", {
-				state: { email: formData.patient.email, type: "signUp" },
+				state: { email: formData.patient.email, type: "signup",role:"patient" },
 			});
 		} catch (error) {
 			console.error("Error signing up:", error);
