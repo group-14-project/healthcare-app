@@ -37,7 +37,7 @@ function PatientConsultation(props) {
 	let stompClient = useRef();
 
 	const handleCall = (doctorId, doctorName) => {
-		var conn = new SockJS("http://localhost:9190/socket");
+		var conn = new SockJS("http://localhost:9090/socket");
 		stompClient.current = new Stomp.over(conn);
 		setRemoteID(doctorId.toString());
 		stompClient.current.connect({}, (frame) => {

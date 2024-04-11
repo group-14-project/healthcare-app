@@ -59,7 +59,7 @@ function DoctorDashboard() {
 
 	useEffect(() => {
 
-		var conn = new SockJS("http://localhost:9190/socket");
+		var conn = new SockJS("http://localhost:9090/socket");
 		stompClient.current = new Stomp.over(conn);
 
 		stompClient.current.connect({}, (frame) => {
