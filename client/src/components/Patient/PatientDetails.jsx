@@ -13,6 +13,8 @@ import {
 	Button,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { store } from "../../Store/store";
+import { patientActions } from "../../Features/patientSlice";
 
 const PatientDetails = (props) => {
 	const navigate = useNavigate();
@@ -61,6 +63,7 @@ const PatientDetails = (props) => {
 	};
 	const handleChange = (e) => {
 		const { name, value } = e.target;
+		store.dispatch(patientActions.updatePatient({name, value}))
 		setFormData((prevState) => ({
 			...prevState,
 			patient: {

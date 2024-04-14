@@ -11,6 +11,8 @@ import PatientTable from "./PatientTable";
 import { useLocation } from "react-router-dom";
 
 const PatientDashboard = (props) => {
+	console.log(props);
+
 	const location = useLocation();
 	const p = location.state.patient;
 	console.log("patient dashboard", p);

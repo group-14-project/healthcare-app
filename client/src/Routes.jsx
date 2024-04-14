@@ -19,15 +19,16 @@ import {
 	AboutUs,
 	ContactSection
 } from "./components/index";
-
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { store } from './Store/store.js';
+import { createBrowserRouter, Outlet } from "react-router-dom";
 
 const Common = (props) => {
 	const sidebar = props.sidebar;
 	const user = props.user;
+	const store = props.store;
 	return (
 		<>
-			<Nav sidebar={{ sidebar }} user={{ user }} />
+			<Nav sidebar={{ sidebar }} user={{ user }} store={{store}} />
 			<Outlet />
 		</>
 	);
@@ -43,7 +44,7 @@ const LandingNav = (props) => {
 
 const router = createBrowserRouter([
 	{
-		element: <LandingNav />,
+		element: <LandingNav store={store}/>,
 		children: [
 			{
 				path: "/",
@@ -69,16 +70,16 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/login",
-		element: <Login />,
+		element: <Login store={store}/>,
 	},
 
 	{
 		path: "/verify-otp",
-		element: <OtpInputPage />,
+		element: <OtpInputPage store={store}/>,
 	},
 	{
 		path: "patient/details",
-		element: <PatientDetails />,
+		element: <PatientDetails store={store}/>,
 	},
 	{
 		path: "/room/:roomId",
@@ -86,15 +87,15 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/endCall",
-		element: <EndCall/>
+		element: <EndCall store={store}/>
 	},
 	{
 		path: "/doctor/logout",
-		element: <Landing />
+		element: <Landing store={store}/>
 	},
 	{
 		path: "/patient/logout",
-		element: <Landing />
+		element: <Landing store={store}/>
 
 	},
 	{
@@ -111,6 +112,7 @@ const router = createBrowserRouter([
 					],
 				}}
 				user={{ type: "doctor" }}
+				store={store}
 			/>
 		),
 		children: [
@@ -154,6 +156,7 @@ const router = createBrowserRouter([
 					],
 				}}
 				user={{ type: "patient" }}
+				store={{store}}
 			/>
 		),
 		children: [
@@ -167,6 +170,6 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-]);
+])
 
 export default router;

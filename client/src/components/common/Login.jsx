@@ -2,9 +2,13 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
+import { login, loginActions } from "../../Features/loginSlice";
+import { store } from '../../Store/store';
+// import useSelec
 
 function Login() {
 	const navigate = useNavigate();
+	const data = store.getState().loginReducer.user;
 	const [containerClass, setContainerClass] = useState("sign-in");
 	const [role, setRole] = useState("patient");
 	const [formData, setFormData] = useState({
@@ -24,32 +28,37 @@ function Login() {
 
 	const handleSignInChange = (e) => {
 		const { name, value } = e.target;
-		setLoginData((prevState) => ({
-			...prevState,
-			user: {
-				...prevState.user,
-				[name]: value,
-			},
-		}));
+		store.dispatch(loginActions.updateUser({ name, value }));
+
+		// setLoginData((prevState) => ({
+		// 	...prevState,
+		// 	user: {
+		// 		...prevState.user,
+		// 		[name]: value,
+		// 	},
+		// }));
+
+		// console.log(store.getState());
 	};
 
-	const handleRoleChange = (e) =>{
-		setRole(e.target.innerText.toLowerCase());
+	const handleRoleChange = (e) => {
+		// setRole(e.target.innerText.toLowerCase());
+		store.dispatch(loginActions.updateRole(e.target.innerText.toLowerCase()));
 		document.getElementById(e.target.id).style.backgroundColor = "#4FA786";
-		if(e.target.id === "admin"){
+		if (e.target.id === "admin") {
 			document.getElementById("doctor").style.backgroundColor = "#efefef";
 			document.getElementById("patient").style.backgroundColor = "#efefef";
 		}
-		if(e.target.id === "doctor"){
+		if (e.target.id === "doctor") {
 			document.getElementById("admin").style.backgroundColor = "#efefef";
 			document.getElementById("patient").style.backgroundColor = "#efefef";
 		}
-		if(e.target.id === "patient"){
+		if (e.target.id === "patient") {
 			document.getElementById("admin").style.backgroundColor = "#efefef";
 			document.getElementById("doctor").style.backgroundColor = "#efefef";
 		}
 	}
-	
+
 	useEffect(() => {
 		document.getElementById("patient").style.backgroundColor = "#4FA786";
 	}, []);
@@ -87,7 +96,7 @@ function Login() {
 			console.log("User signed up:", response);
 			const data = JSON.parse(response.config.data);
 			navigate("/verify-otp", {
-				state: { email: formData.patient.email, type: "signup",role:"patient" },
+				state: { email: formData.patient.email, type: "signup", role: "patient" },
 			});
 		} catch (error) {
 			console.error("Error signing up:", error);
@@ -96,32 +105,15 @@ function Login() {
 
 	const handleSignIn = async (e) => {
 		e.preventDefault();
-		console.log("Role:", role)
-		try {
-			const response = await axios.post(
-				`http://localhost:9090/${role}/loginotp`,
-				loginData,
-				{
-					Authorization: {
-						Type: "Basic Auth",
-						Username: "user",
-						Password: "password",
-					},
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log("User Verification:");
-			const data = JSON.parse(response.config.data);
-			navigate("/verify-otp", {
-				state: { email: loginData.user.email, type: "login",role : role },
-			});
-		} catch (error) {
-			console.error("Error signing up:", error);
-		}
+		const loginData = store.getState().loginReducer;
+		console.log(store.getState().loginReducer);
+
+		const response = await store.dispatch(login(loginData));
+		console.log("User Verification:");
+		console.log(response);
+		navigate("/verify-otp", {
+			state: { email: loginData.user.email, type: "login", role: loginData.role },
+		});
 	};
 
 	const toggle = () => {
@@ -207,7 +199,7 @@ function Login() {
 						<div className="form sign-in">
 							<div className="role-group">
 								<div
-									id = "admin"
+									id="admin"
 									className="roles"
 									onClick={handleRoleChange}
 								>
@@ -221,7 +213,7 @@ function Login() {
 									Doctor
 								</div>
 								<div
-									id = "patient"
+									id="patient"
 									className="roles"
 									onClick={handleRoleChange}
 								>

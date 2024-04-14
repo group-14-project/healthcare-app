@@ -8,20 +8,24 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { useNavigate } from 'react-router-dom';
+import { useReactMediaRecorder } from "react-media-recorder";
 import "./Room.css";
 
 const Room = () => {
 
      let stompClient = useRef();
 
-     // let peerState = useState(["local", re])
      const location = useLocation();
 
      let localVideoRef = useRef();
      let remoteVideoRef = useRef();
      let peerConnection = useRef();
      let myref = useRef();
+     let mediaRecorder = useRef();
+
 
      let remoteID = location.state.initiatedBy.caller;
      let remoteName = location.state.initiatedBy.name
@@ -31,21 +35,18 @@ const Room = () => {
      const [video, setVideo] = useState(false);
      const [localStream, setLocalStream] = useState(null);
      const [remoteStream, setRemoteStream] = useState(null);
+     const [recording, setRecording] = useState([]);
+     const [recordingStart, setRecordingStart] = useState(false);
+     const [recordingStop, setRecordingStop] = useState(true);
+     const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ video: true });
+
 
      const navigate = useNavigate();
 
-     // const [reloadCount, setReloadCount] = useState(1);
-     // localStorage.setItem("reloadCount", 1);
-
-     // const reloadCount = parseInt(localStorage.getItem("reloadCount"));
+     const role = localStorage.getItem("role");
 
 
      useEffect(() => {
-
-          // if(reloadCount===1){
-          //      localStorage.setItem("reloadCount", reloadCount+1);
-          //      window.location.reload();
-          // }
 
 
           var configuration = {
@@ -63,7 +64,7 @@ const Room = () => {
 
 
           stompClient.current.connect({}, async (frame) => {
-               
+
                await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: true
@@ -171,11 +172,9 @@ const Room = () => {
 
           })
 
-
-
-
-
      }, [])
+
+
 
 
      const handleVoiceToggle = async (e) => {
@@ -242,10 +241,89 @@ const Room = () => {
 
      }
 
+     /*
+     
+          NEED TO COMPLETE THE RECORDING TASK
+ 
+     function download() {
+          console.log(recording);
+          const blob = new Blob(recording, {
+               type: "video/mp4",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
+          a.href = url;
+          a.download = "test.mp4";
+          a.click();
+          window.URL.revokeObjectURL(url);
+     }
+ 
+     const handleStartRecording = async () => {
+          startRecording();
+          // const canvas = document.querySelector("body");
+          // const stream = localStream.captureStream(25);
+          // setRecordingStart(prev => prev = true);
+          // setRecordingStop(prev => prev = false);
+ 
+          // const options = { mimeType: "video/webm;codecs=vp9,opus" };
+          // mediaRecorder.current = new MediaRecorder(localStream, options);
+          // mediaRecorder.current.ondataavailable = (event) => {
+          //      console.log(event);
+ 
+          //      if (event.data.size > 0) {
+          //           setRecording(event.data);
+          //           // console.log(recording);
+          //           download();
+          //      }
+          // }
+          // mediaRecorder.current.start();
+ 
+ 
+          // mediaRecorder.current
+     }
+ 
+     const handleDownload = () => {
+          console.log(mediaBlobUrl);
+          if (mediaBlobUrl) {
+               const url = window.URL.createObjectURL(new Blob(mediaBlobUrl, {type: 'video/mp4'}));
+               const a = document.createElement('a');
+               a.style.display = 'none';
+               a.href = url;
+               a.download = 'recorded_video.mp4'; // You can set the desired file name here
+               document.body.appendChild(a);
+               a.click();
+               window.URL.revokeObjectURL(url);
+               document.body.removeChild(a);
+          }
+     };
+ 
+ 
+     const handleStopRecording = async () => {
+          stopRecording();
+          handleDownload();
+          // setRecordedVideoBlob(mediaBlobUrl);
+ 
+          // const canvas = document.querySelector("body");
+          // const stream = localStream.captureStream(25);
+ 
+          // setRecordingStart(prev => prev = false);
+          // setRecordingStop(prev => prev = true);
+ 
+          // mediaRecorder.current.stop();
+     }
+     */
+
+
+
+
+
 
 
 
      console.log(location.state);
+     console.log("status: ", status);
 
 
 
@@ -253,7 +331,7 @@ const Room = () => {
           <>
                <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
                     <div style={{ margin: "10px" }}>
-                         <video ref={localVideoRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
+                         <video src={mediaBlobUrl} ref={localVideoRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
                          <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{localName}(You)</div>
                     </div>
                     <div ref={myref} style={{ margin: "10px" }} >
@@ -286,6 +364,29 @@ const Room = () => {
                               <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
                          }
                     </IconButton>
+
+                    {console.log(status)}
+                    {
+                         // role === "doctor"
+                         //      ?
+                         //      status === "idle" || status === "stopped"
+                         //           ?
+                         //           <IconButton onClick={handleStartRecording}>
+                         //                {
+                         //                     <RadioButtonCheckedIcon className='call_btn' sx={{ margin: "20px" }} />
+                         //                }
+                         //           </IconButton>
+                         //           :
+                         //           <IconButton onClick={handleStopRecording}>
+                         //                {
+                         //                     <StopCircleIcon className='call_btn' sx={{ margin: "20px" }} />
+                         //                }
+                         //           </IconButton>
+                         //      :
+                         //      <>
+                         //      </>
+                    }
+
                </div>
           </>
      )
