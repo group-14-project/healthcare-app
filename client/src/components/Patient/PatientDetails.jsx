@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styles from "./PatientDetails.module.css";
 import {
 	Container,
 	Typography,
@@ -31,7 +30,7 @@ const PatientDetails = (props) => {
 	};
 
 	return (
-		<Container className={styles.main_div} maxWidth="md">
+		<Container style = {{marginTop: "70px"}} maxWidth="md">
 			<Typography variant="h4" align="center" gutterBottom>
 				Add Details
 			</Typography>

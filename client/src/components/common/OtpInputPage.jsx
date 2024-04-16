@@ -3,23 +3,24 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import otpImage from "../../assets/otp.jpeg";
 import { useDispatch, useSelector } from "react-redux";
-import { store } from "../../Store/store";
 import { handleOTPverification } from "../../Store/loginSlice";
+
+
 const OtpInputPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [otp, setOtp] = useState(new Array(6).fill(""));
 	const inputRefs = useRef([]);
 	const role = useSelector((state) => state.login.user.role);
-	const firstTimeLogin = useSelector((state) => state.patient.firstTimeLogin);
+	const firstTimeLogin = useSelector((state) => state[role].firstTimeLogin);
 	const dispatch = useDispatch();
-	const state = store.getState();
+	const isFirstRender = useRef(true);
+
 
 	useEffect(() => {
 		if (inputRefs.current[0]) {
 			inputRefs.current[0].focus();
 		}
-		localStorage.setItem("role", location.state.role);
 	}, []);
 
 	const handleChange = (index, e) => {
@@ -54,29 +55,33 @@ const OtpInputPage = () => {
 		}
 	};
 
-	const fetchData = async () => {
-		
-			dispatch(
-				handleOTPverification({
-					otp: otp.join(""),
-					type: location.state.type,
-				})
-			);
-			console.log("After Verification State is", state);
-			console.log(firstTimeLogin)
-			if(role === "patient" && location.state.type === "signup"){
-				navigate("/login");
-			}
-			else if(role === "patient" && location.state.type === "login" && firstTimeLogin === false){
-				navigate("/patient/details");
-			}
-			else if(role === "patient" && location.state.type === "login"){
-				navigate("/patient/dashboard");
-			}
-			else{
-				navigate(`/${role}/dashboard`);
-			}
+	const fetchData = () => {
+		dispatch(
+			handleOTPverification({
+				otp: otp.join(""),
+				type: location.state.type,
+			})
+		);
 	};
+	useEffect(() => {
+		if (isFirstRender.current) {
+			isFirstRender.current = false; // it's no longer the first render
+			return;
+		  }
+		if (role === "patient") {
+		  if (location.state.type === "signup") {
+			navigate("/login");
+		  } else if (location.state.type === "login") {
+			if (firstTimeLogin === false) {
+			  navigate("/patient/details");
+			} else {
+			  navigate("/patient/dashboard");
+			}
+		  }
+		} else {
+		  navigate(`/${role}/dashboard`);
+		}
+	  }, [role, location.state.type, firstTimeLogin, navigate]);
 
 	return (
 		<div

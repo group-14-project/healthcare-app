@@ -12,6 +12,7 @@ const initialState = {
 	futureAppointments: [],
 	patientId: null,
 	firstTimeLogin: false,
+	loading:true
 };
 
 export const handleUpdatePatientDetails = () => {

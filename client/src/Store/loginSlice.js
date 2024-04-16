@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { patientActions } from "./patientSlice";
+import { doctorActions } from "./doctorSlice";
 import axios from "axios";
 // import setAuthToken from "../utils/setHeaders";
 
@@ -98,11 +99,11 @@ export const handleOTPverification = createAsyncThunk(
 					response.headers.get("authorization")
 				);
 				if (state.login.user.role === "patient") {
-					dispatch(patientActions.addPatientDetails(response.data));
+					 dispatch(patientActions.addPatientDetails(response.data));
 				}
-				// else if(role === 'doctor'){
-				// 	// dispatch(doctorActions.updateDoctorDetails(response.data));
-				// }
+				else if(role === 'doctor'){
+					dispatch(doctorActions.addDoctorDetails(response.data));
+				}
 				// else{
 				// 	// dispatch(adminActions.updateAdminDetails(response.data));
 				// }

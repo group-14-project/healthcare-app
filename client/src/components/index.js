@@ -23,6 +23,8 @@ import Room from "./Room/Room";
 import EndCall from "./Room/EndCall";
 import AboutUs from "./landing/AboutUs";
 import ContactSection from "./landing/ContactSection";
+import ChangePassword from "./common/ChangePassword";
+
 
 export {
 	MidNavbar,
@@ -49,5 +51,6 @@ export {
 	Room,
 	EndCall,
 	AboutUs,
-	ContactSection
+	ContactSection,
+	ChangePassword,
 };

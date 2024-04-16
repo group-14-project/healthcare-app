@@ -1,4 +1,3 @@
-// import EndCall from "./components/Room/EndCall";
 import {
 	Nav,
 	Landing,
@@ -17,9 +16,10 @@ import {
 	Room,
 	EndCall,
 	AboutUs,
-	ContactSection
+	ContactSection,
+	ChangePassword,
 } from "./components/index";
-import { store } from './Store/store.js';
+import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 const Common = (props) => {
@@ -28,7 +28,7 @@ const Common = (props) => {
 	const store = props.store;
 	return (
 		<>
-			<Nav sidebar={{ sidebar }} user={{ user }} store={{store}} />
+			<Nav sidebar={{ sidebar }} user={{ user }} store={{ store }} />
 			<Outlet />
 		</>
 	);
@@ -44,7 +44,7 @@ const LandingNav = (props) => {
 
 const router = createBrowserRouter([
 	{
-		element: <LandingNav store={store}/>,
+		element: <LandingNav store={store} />,
 		children: [
 			{
 				path: "/",
@@ -70,33 +70,41 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/login",
-		element: <Login store={store}/>,
+		element: <Login store={store} />,
 	},
 
 	{
 		path: "/verify-otp",
-		element: <OtpInputPage store={store}/>,
+		element: <OtpInputPage store={store} />,
+	},
+	{
+		path: "/doctor/changepwd",
+		element: <ChangePassword />,
+	},
+
+	{
+		path: "/admin/changepwd",
+		element: <ChangePassword />,
 	},
 	{
 		path: "patient/details",
-		element: <PatientDetails store={store}/>,
+		element: <PatientDetails store={store} />,
 	},
 	{
 		path: "/room/:roomId",
-		element: <Room/>
+		element: <Room />,
 	},
 	{
 		path: "/endCall",
-		element: <EndCall store={store}/>
+		element: <EndCall store={store} />,
 	},
 	{
 		path: "/doctor/logout",
-		element: <Landing store={store}/>
+		element: <Landing store={store} />,
 	},
 	{
 		path: "/patient/logout",
-		element: <Landing store={store}/>
-
+		element: <Landing store={store} />,
 	},
 	{
 		element: (
@@ -156,7 +164,7 @@ const router = createBrowserRouter([
 					],
 				}}
 				user={{ type: "patient" }}
-				store={{store}}
+				store={{ store }}
 			/>
 		),
 		children: [
@@ -170,6 +178,6 @@ const router = createBrowserRouter([
 			},
 		],
 	},
-])
+]);
 
 export default router;

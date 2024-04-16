@@ -9,7 +9,7 @@ import bloodType from "../../assets/blood-type.png";
 import weight from "../../assets/weight.png";
 import PatientTable from "./PatientTable";
 import { store } from "../../Store/store";
-
+import Loader from "../common/Loader";
 const PatientDashboard = (props) => {
 	const state = store.getState().patient;
 	console.log("From patient dashboard",state);
