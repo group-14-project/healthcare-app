@@ -2,117 +2,45 @@ import { React, useState, useEffect } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { login, loginActions } from "../../Features/loginSlice";
-import { store } from '../../Store/store';
-// import useSelec
+import { handleLogin,handleSignUp ,loginActions } from "../../Store/loginSlice";
+import {useDispatch, useSelector} from "react-redux"
+import { Button } from '@mui/material';
 
 function Login() {
 	const navigate = useNavigate();
-	const data = store.getState().loginReducer.user;
+	const dispatch = useDispatch();
+	const data = useSelector((state) => state.login.user);
 	const [containerClass, setContainerClass] = useState("sign-in");
-	const [role, setRole] = useState("patient");
-	const [formData, setFormData] = useState({
-		patient: {
-			email: "",
-			password: "",
-			firstName: "",
-			lastName: "",
-		},
-	});
-	const [loginData, setLoginData] = useState({
-		user: {
-			email: "",
-			password: "",
-		},
-	});
 
 	const handleSignInChange = (e) => {
 		const { name, value } = e.target;
-		store.dispatch(loginActions.updateUser({ name, value }));
-
-		// setLoginData((prevState) => ({
-		// 	...prevState,
-		// 	user: {
-		// 		...prevState.user,
-		// 		[name]: value,
-		// 	},
-		// }));
-
-		// console.log(store.getState());
+		dispatch(loginActions.updateDetails({name,value}));
+		const { id } = e.target;
+		const buttons = ["admin", "doctor", "patient"];
+		if(id){
+			buttons.forEach((button) => {
+				document.getElementById(button).style.backgroundColor = button === id ? "#4FA786" : "#efefef";
+			});
+		}
 	};
-
-	const handleRoleChange = (e) => {
-		// setRole(e.target.innerText.toLowerCase());
-		store.dispatch(loginActions.updateRole(e.target.innerText.toLowerCase()));
-		document.getElementById(e.target.id).style.backgroundColor = "#4FA786";
-		if (e.target.id === "admin") {
-			document.getElementById("doctor").style.backgroundColor = "#efefef";
-			document.getElementById("patient").style.backgroundColor = "#efefef";
-		}
-		if (e.target.id === "doctor") {
-			document.getElementById("admin").style.backgroundColor = "#efefef";
-			document.getElementById("patient").style.backgroundColor = "#efefef";
-		}
-		if (e.target.id === "patient") {
-			document.getElementById("admin").style.backgroundColor = "#efefef";
-			document.getElementById("doctor").style.backgroundColor = "#efefef";
-		}
-	}
-
-	useEffect(() => {
-		document.getElementById("patient").style.backgroundColor = "#4FA786";
-	}, []);
+	const handleSignIn = async (e) => {
+		e.preventDefault();
+		dispatch(handleLogin(data));
+		navigate("/verify-otp", {
+			state: {type: "login" },
+		});
+	};
 
 	const handleSignUpChange = (e) => {
 		const { name, value } = e.target;
-		setFormData((prevState) => ({
-			...prevState,
-			patient: {
-				...prevState.patient,
-				[name]: value,
-			},
-		}));
+		dispatch(loginActions.updateDetails({name,value}));
 	};
 
-	const handleSignUp = async (e) => {
+	const handlingSignUp = async (e) => {
 		e.preventDefault();
-		try {
-			const response = await axios.post(
-				`http://localhost:9090/patient/signupotp`,
-				formData,
-				{
-					Authorization: {
-						Type: "Basic Auth",
-						Username: "user",
-						Password: "password",
-					},
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log("User signed up:", response);
-			const data = JSON.parse(response.config.data);
-			navigate("/verify-otp", {
-				state: { email: formData.patient.email, type: "signup", role: "patient" },
-			});
-		} catch (error) {
-			console.error("Error signing up:", error);
-		}
-	};
-
-	const handleSignIn = async (e) => {
-		e.preventDefault();
-		const loginData = store.getState().loginReducer;
-		console.log(store.getState().loginReducer);
-
-		const response = await store.dispatch(login(loginData));
-		console.log("User Verification:");
-		console.log(response);
+		dispatch(handleSignUp(data));
 		navigate("/verify-otp", {
-			state: { email: loginData.user.email, type: "login", role: loginData.role },
+			state: {type: "signup"},
 		});
 	};
 
@@ -143,7 +71,6 @@ function Login() {
 								<input
 									name="firstName"
 									type="text"
-									value={formData.firstname}
 									onChange={handleSignUpChange}
 									placeholder="First Name"
 								/>
@@ -153,7 +80,6 @@ function Login() {
 								<input
 									name="lastName"
 									type="text"
-									value={formData.lastname}
 									onChange={handleSignUpChange}
 									placeholder="Last Name"
 								/>
@@ -163,7 +89,6 @@ function Login() {
 								<input
 									name="email"
 									type="email"
-									value={formData.email}
 									onChange={handleSignUpChange}
 									placeholder="Email"
 								/>
@@ -173,7 +98,6 @@ function Login() {
 								<input
 									name="password"
 									type="password"
-									value={formData.password}
 									onChange={handleSignUpChange}
 									placeholder="Password"
 								/>
@@ -182,7 +106,7 @@ function Login() {
 								<i className="bx bxs-lock-alt"></i>
 								<input type="password" placeholder="Confirm password" />
 							</div>
-							<button onClick={handleSignUp}>Sign up</button>
+							<button onClick={handlingSignUp}>Sign up</button>
 							<p>
 								<span>Already have an account?</span>
 								<b onClick={toggle} className="pointer">
@@ -198,34 +122,43 @@ function Login() {
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-in">
 							<div className="role-group">
-								<div
+								<Button
 									id="admin"
 									className="roles"
-									onClick={handleRoleChange}
+									name = "role"
+									value = "admin"
+									variant="contained"
+									onClick={handleSignInChange}
 								>
 									Admin
-								</div>
-								<div
+								</Button>
+								<Button
 									id="doctor"
 									className="roles"
-									onClick={handleRoleChange}
+									name = "role"
+									value = "doctor"
+									variant="contained"
+									onClick={handleSignInChange}
 								>
 									Doctor
-								</div>
-								<div
+								</Button>
+								<Button
 									id="patient"
 									className="roles"
-									onClick={handleRoleChange}
+									name = "role"
+									value = "patient"
+									variant="contained"
+									onClick={handleSignInChange}
 								>
 									Patient
-								</div>
+								</Button>
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input
 									name="email"
 									type="text"
-									placeholder="Username"
+									placeholder="Username"	
 									onChange={handleSignInChange}
 								/>
 							</div>

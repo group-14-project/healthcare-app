@@ -60,7 +60,8 @@ function Section3() {
 			fname={item.firstName}
 			lname={item.lastName}
 			url={item.imageUrl}
-			qual={item.degree}
+			qual={item.specialization}
+			hospitalName = {item.hospitalName}
 		/>
 	));
 

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./PatientDetails.module.css";
-import axios from "axios";
 import {
 	Container,
 	Typography,
@@ -12,77 +11,24 @@ import {
 	MenuItem,
 	Button,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { store } from "../../Store/store";
-import { patientActions } from "../../Features/patientSlice";
+import { handleUpdatePatientDetails, patientActions } from "../../Store/patientSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const PatientDetails = (props) => {
 	const navigate = useNavigate();
-	const location = useLocation();
-	console.log(location.state);
-	const [formData, setFormData] = useState({
-		patient: {
-			firstName: "",
-			lastName: "",
-			email: "",
-			phoneNumber: "",
-			height: "",
-			weight: "",
-			bloodGroup: "",
-			gender: "",
-			city: "",
-			pinCode: "",
-			address: "",
-		},
-	});
+	const formData = useSelector((state) => state.patient);
+	const dispatch = useDispatch();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		try {
-			const response = await axios.put(
-				"http://localhost:9090/patient/updateDetail",
-				formData.patient,
-				{
-					Authorization: {
-						Type: "Basic Auth",
-						Username: "user",
-						Password: "password",
-					},
-					headers: {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log("details added", response.data);
-			navigate("/patient/dashboard", {
-				state: {patient: response.data},});
-		} catch (error) {
-			console.error("Error adding details", error);
-		}
+		dispatch(handleUpdatePatientDetails())
+		navigate("/patient/dashboard");
 	};
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		store.dispatch(patientActions.updatePatient({name, value}))
-		setFormData((prevState) => ({
-			...prevState,
-			patient: {
-				...prevState.patient,
-				[name]: value,
-			},
-		}));
+		store.dispatch(patientActions.updatePatientDetails({ name, value }));
 	};
-	useEffect(() => {
-		setFormData((prevState) => ({
-			...prevState,
-			patient: {
-				...prevState.patient,
-				email: location.state.patient.email,
-				firstName: location.state.patient.firstName,
-				lastName: location.state.patient.lastName,
-			},
-		}));
-	}, []);
 
 	return (
 		<Container className={styles.main_div} maxWidth="md">
@@ -99,7 +45,7 @@ const PatientDetails = (props) => {
 							name="firstName"
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
-							value={formData.patient.firstName}
+							value={formData.firstName}
 							onChange={handleChange}
 							required
 							disabled
@@ -111,7 +57,7 @@ const PatientDetails = (props) => {
 							fullWidth
 							label="Last Name"
 							name="lastName"
-							value={formData.patient.lastName}
+							value={formData.lastName}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -126,7 +72,7 @@ const PatientDetails = (props) => {
 							label="Email"
 							name="email"
 							type="email"
-							value={formData.patient.email}
+							value={formData.email}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -141,7 +87,6 @@ const PatientDetails = (props) => {
 							label="Phone Number"
 							name="phoneNumber"
 							type="Number"
-							value={formData.patient.phoneNumber}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -155,7 +100,6 @@ const PatientDetails = (props) => {
 							label="Height"
 							name="height"
 							type="text"
-							value={formData.patient.height}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -168,8 +112,7 @@ const PatientDetails = (props) => {
 							fullWidth
 							label="Weight"
 							name="weight"
-							type="weight"
-							value={formData.patient.weight}
+							type="number"
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -183,7 +126,6 @@ const PatientDetails = (props) => {
 							</InputLabel>
 							<Select
 								label="Blood Group"
-								value={formData.patient.bloodType}
 								name="bloodGroup"
 								defaultValue=""
 								inputProps={{ style: { borderRadius: 16 } }}
@@ -210,7 +152,6 @@ const PatientDetails = (props) => {
 							</InputLabel>
 							<Select
 								label="Gender"
-								value={formData.patient.gender}
 								defaultValue=""
 								name="gender"
 								inputProps={{ style: { borderRadius: 16 } }}
@@ -232,7 +173,6 @@ const PatientDetails = (props) => {
 							label="City"
 							name="city"
 							type="text"
-							value={formData.patient.city}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -246,7 +186,6 @@ const PatientDetails = (props) => {
 							label="Pincode"
 							name="pinCode"
 							type="text"
-							value={formData.patient.pinCode}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -260,7 +199,6 @@ const PatientDetails = (props) => {
 							label="Address"
 							name="address"
 							type="text"
-							value={formData.patient.address}
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
 							onChange={handleChange}
@@ -283,7 +221,6 @@ const PatientDetails = (props) => {
 					</Button>
 				</Grid>
 			</form>
-			{/* </Box> */}
 		</Container>
 	);
 };

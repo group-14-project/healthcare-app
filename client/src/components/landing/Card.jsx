@@ -15,7 +15,7 @@ function Card(props) {
 				<h4 className={`${styles.info_divs} ${styles.doc_name}`}>
 					Dr. {props.fname} {props.lname}
 				</h4>
-				<p className={styles.info_divs}>{props.qual}</p>
+				<p className={styles.info_divs}>{props.hospitalName},  {props.qual}</p>
 			</div>
 		</div>
 	);

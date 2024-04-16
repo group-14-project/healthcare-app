@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { loginReducer, loginActions } from "../Features/loginSlice";
+import { loginReducer} from "./loginSlice";
+import { patientReducer } from "./patientSlice";
 
 export const store = configureStore({
      reducer: {
-          loginReducer,
+          login:loginReducer,
+          patient: patientReducer
      }
 })

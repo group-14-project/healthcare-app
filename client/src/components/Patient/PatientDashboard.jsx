@@ -8,19 +8,12 @@ import height from "../../assets/height.png";
 import bloodType from "../../assets/blood-type.png";
 import weight from "../../assets/weight.png";
 import PatientTable from "./PatientTable";
-import { useLocation } from "react-router-dom";
+import { store } from "../../Store/store";
 
 const PatientDashboard = (props) => {
-	console.log(props);
-
-	const location = useLocation();
-	const p = location.state.patient;
-	console.log("patient dashboard", p);
+	const state = store.getState().patient;
+	console.log("From patient dashboard",state);
 	const heads = ["Date", "Doctor Name", "Symptom"];
-	useEffect(() => {
-		localStorage.setItem("patientId", JSON.stringify(p.patientId));
-		localStorage.setItem("patientName", JSON.stringify(p.firstName));
-	}, []);
 	return (
 		<Box
 			sx={{ display: "flex", marginLeft: "65px", backgroundColor: "#F9F9F9" }}
@@ -56,7 +49,7 @@ const PatientDashboard = (props) => {
 								component="h2"
 								sx={{ fontWeight: "900", color: "rgb(4 47 175)" }}
 							>
-								Greetings, {p.firstName} {p.lastName}!
+								Greetings, {state.firstName} {state.lastName}!
 							</Typography>
 							<Typography
 								variant="h6"
@@ -107,7 +100,7 @@ const PatientDashboard = (props) => {
 										borderRadius: "5px",
 									}}
 								>
-									{p.height} cm
+									{state.height} cm
 								</Typography>
 							</Box>
 						</Box>
@@ -144,7 +137,7 @@ const PatientDashboard = (props) => {
 										borderRadius: "5px",
 									}}
 								>
-									{p.weight} Kg
+									{state.weight} Kg
 								</Typography>
 							</Box>
 						</Box>
@@ -180,14 +173,14 @@ const PatientDashboard = (props) => {
 										borderRadius: "5px",
 									}}
 								>
-									{p.bloodGroup}
+									{state.bloodGroup}
 								</Typography>
 							</Box>
 						</Box>
 					</Box>
 
 					<Box sx={{ padding: "40px" }}>
-						<PatientTable pastApp={p.pastAppointments} heads={heads} />
+						<PatientTable pastApp={state.pastAppointments} heads={heads} />
 					</Box>
 				</Box>
 			</Box>

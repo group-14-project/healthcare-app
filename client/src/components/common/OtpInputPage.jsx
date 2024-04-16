@@ -1,15 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import otpImage from "../../assets/otp.jpeg";
-
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../Store/store";
+import { handleOTPverification } from "../../Store/loginSlice";
 const OtpInputPage = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [otp, setOtp] = useState(new Array(6).fill(""));
 	const inputRefs = useRef([]);
-	console.log(location.state)
+	const role = useSelector((state) => state.login.user.role);
+	const firstTimeLogin = useSelector((state) => state.patient.firstTimeLogin);
+	const dispatch = useDispatch();
+	const state = store.getState();
 
 	useEffect(() => {
 		if (inputRefs.current[0]) {
@@ -51,41 +55,27 @@ const OtpInputPage = () => {
 	};
 
 	const fetchData = async () => {
-		try {
-			const response = await axios.post(
-				`http://localhost:9090/${location.state.role}/${location.state.type}`,
-				{ user: { email: location.state.email, otp: otp.join("") } },
-				{
-					headers: {
-						Authorization: "Basic Auth",
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
+		
+			dispatch(
+				handleOTPverification({
+					otp: otp.join(""),
+					type: location.state.type,
+				})
 			);
-			console.log(
-				`User ${location.state.type === "signIn" ? "Signed Up" : "Logged In"}:`,
-				response
-			);
-			const newState = {...(location.state ?? {}), [location.state.role]: response.data};
-			navigate(
-				location.state.role === "patient"
-					? location.state.type === "signUp"
-						? "/login"
-						: !response.data.firstTimeLogin
-						? "/patient/details"
-						: "/patient/dashboard"
-					: `/${location.state.role}/dashboard`,
-				{
-					state: {
-						...newState
-					},
-				}
-			);
-		} catch (error) {
-			console.error(`Error verifying:`, error);
-		}
+			console.log("After Verification State is", state);
+			console.log(firstTimeLogin)
+			if(role === "patient" && location.state.type === "signup"){
+				navigate("/login");
+			}
+			else if(role === "patient" && location.state.type === "login" && firstTimeLogin === false){
+				navigate("/patient/details");
+			}
+			else if(role === "patient" && location.state.type === "login"){
+				navigate("/patient/dashboard");
+			}
+			else{
+				navigate(`/${role}/dashboard`);
+			}
 	};
 
 	return (
