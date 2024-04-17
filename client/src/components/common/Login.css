@@ -360,5 +360,10 @@ right: 50%;
     justify-content: center;
     cursor: pointer;
     border-right:1px solid var(--gray-2);
+}
 
+#admin,#doctor,#patient{
+    background-color: #efefef;
+    border-radius: 0rem ;
+    color:black;
 }

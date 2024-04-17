@@ -24,10 +24,12 @@ function Login() {
 	};
 	const handleSignIn = async (e) => {
 		e.preventDefault();
-		dispatch(handleLogin(data));
-		navigate("/verify-otp", {
-			state: {type: "login" },
-		});
+		if(data.role !== ""){
+			dispatch(handleLogin(data));
+			navigate("/verify-otp", {
+				state: {type: "login" },
+			});
+		}
 	};
 
 	const handleSignUpChange = (e) => {
@@ -37,10 +39,12 @@ function Login() {
 
 	const handlingSignUp = async (e) => {
 		e.preventDefault();
+		
 		dispatch(handleSignUp(data));
 		navigate("/verify-otp", {
 			state: {type: "signup"},
 		});
+		
 	};
 
 	const toggle = () => {
@@ -121,17 +125,29 @@ function Login() {
 					<div className="form-wrapper align-items-center">
 						<div className="form sign-in">
 							<div className="role-group">
-								<Button
+								<button
+									id="patient"
+									className="roles"
+									name = "role"
+									value = "patient"
+									variant="contained"
+									onClick={handleSignInChange}
+									style = {{backgroundColor: "#4FA786"}}
+								>
+									Patient
+								</button>
+								<button
 									id="admin"
 									className="roles"
 									name = "role"
 									value = "admin"
 									variant="contained"
+									
 									onClick={handleSignInChange}
 								>
 									Admin
-								</Button>
-								<Button
+								</button>
+								<button
 									id="doctor"
 									className="roles"
 									name = "role"
@@ -140,17 +156,8 @@ function Login() {
 									onClick={handleSignInChange}
 								>
 									Doctor
-								</Button>
-								<Button
-									id="patient"
-									className="roles"
-									name = "role"
-									value = "patient"
-									variant="contained"
-									onClick={handleSignInChange}
-								>
-									Patient
-								</Button>
+								</button>
+								
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>

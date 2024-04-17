@@ -12,7 +12,6 @@ const initialState = {
 	futureAppointments: [],
 	patientId: null,
 	firstTimeLogin: false,
-	loading:true
 };
 
 export const handleUpdatePatientDetails = () => {
@@ -60,7 +59,7 @@ const patientSlice = createSlice({
 			state.pastAppointments = payload.pastAppointments;
 			state.futureAppointments = payload.futureAppointments;
 			state.patientId = payload.patientId;
-			state.firstTimeLogin = true;
+			state.firstTimeLogin = payload.firstTimeLogin;
 		},
 		updatePatientDetails: (state, { payload }) => {
 			return {

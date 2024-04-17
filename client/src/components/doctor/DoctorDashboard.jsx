@@ -9,96 +9,102 @@ import styles from "./DoctorDashboard.module.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import SockJS from "sockjs-client";
-import Stomp from 'stompjs';
-import Button from '@mui/material/Button';
+import Stomp from "stompjs";
+import Button from "@mui/material/Button";
+import { store } from "../../Store/store";
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
-	const location = useLocation();
-	const d = location.state.doctor;
+	// const location = useLocation();
+	// const d = location.state.doctor;
 	const navigate = useNavigate();
-	console.log("doctor: ", d);
+	// console.log("doctor: ", d);
+	const state = store.getState();
 	var category = "health";
 	let stompClient = useRef();
 	const [remoteID, setRemoteId] = useState("");
-	const [localID, setLocalID] = useState(d.doctorId);
+	const [localID, setLocalID] = useState(state.doctor.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
 
 	useEffect(() => {
-		localStorage.setItem("doctorId", d.doctorId);
-		localStorage.setItem("doctorName", d.firstName);
+		localStorage.setItem("doctorId", state.doctor.doctorId);
+		localStorage.setItem("doctorName", state.doctor.firstName);
 	}, []);
 
-
 	const handleAcceptCall = () => {
-		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-			(c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),
+		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+			/[018]/g,
+			(c) =>
+				(
+					c ^
+					(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+				).toString(16)
 		);
 
 		console.log(newUuid);
 
-		const doctorName = d.firstName;
-		
+		const doctorName = state.doctor.firstName;
+
 		setRoomID(newUuid);
 
-		const acceptedBy = {name:doctorName, "callee":localID};
-		const initiatedBy = {name: patientName, "caller": remoteID};
+		const acceptedBy = { name: doctorName, callee: localID };
+		const initiatedBy = { name: patientName, caller: remoteID };
 
-		stompClient.current.send("/app/acceptCall", {}, JSON.stringify({
-			"roomID": newUuid,
-			"acceptedBy": JSON.stringify(acceptedBy),
-			"initiatedBy": JSON.stringify(initiatedBy)
-		}));
+		stompClient.current.send(
+			"/app/acceptCall",
+			{},
+			JSON.stringify({
+				roomID: newUuid,
+				acceptedBy: JSON.stringify(acceptedBy),
+				initiatedBy: JSON.stringify(initiatedBy),
+			})
+		);
 
 		navigate(`/room/${newUuid}`, { state: { acceptedBy, initiatedBy } });
-
-	}
-
-
+	};
 
 	useEffect(() => {
-
 		var conn = new SockJS("http://localhost:9090/socket");
 		stompClient.current = new Stomp.over(conn);
 
 		stompClient.current.connect({}, (frame) => {
+			stompClient.current.subscribe(
+				"/user/" + localID + "/topic/call",
+				(call) => {
+					console.log("call from: " + call.body);
+					// console.log("remote id: " + call.body);
+					const userData = JSON.parse(call.body);
+					console.log(userData);
 
-			stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
-				console.log("call from: " + call.body);
-				// console.log("remote id: " + call.body);
-				const userData = JSON.parse(call.body);
-				console.log(userData);
+					setRemoteId(userData.localId);
+					setPatientName(
+						userData.patientName.slice(1, userData.patientName.length - 1)
+					);
 
-				setRemoteId(userData.localId);
-				setPatientName(userData.patientName.slice(1,userData.patientName.length-1));
-
-				setIncomingCall(true);
-			})
-
-		})
-
-		// const fetchData = async () => {
-		// 	try {
-		// 		const response = await axios.get(
-		// 			`https://api.api-ninjas.com/v1/quotes?category=${category}`,
-		// 			{
-		// 				headers: {
-		// 					"Access-Control-Allow-Origin": "*",
-		// 					"Access-Control-Allow-Methods":
-		// 						"GET,PUT,POST,DELETE,PATCH,OPTIONS",
-		// 					"Access-Control-Allow-Headers": "Content-Type",
-		// 					"X-Api-Key": `Y+pN8GpN+SFL+5UL96rzFw==OsFELYxpBagii5Aa`,
-		// 				},
-		// 			}
-		// 		);
-		// 		console.log("Quote Fetched:", response);
-		// 		const data = JSON.parse(response.config.data);
-		// 	} catch (error) {
-		// 		console.error("Error fetching quote", error);
-		// 	}
-		// };
-		// fetchData();
+					setIncomingCall(true);
+				}
+			);
+		});
+	}, []);
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await axios.get(
+					`https://api.api-ninjas.com/v1/quotes?category=${category}`,
+					{
+						headers: {
+							"X-Api-Key": `Y+pN8GpN+SFL+5UL96rzFw==OsFELYxpBagii5Aa`,
+						},
+					}
+				);
+				console.log("Quote Fetched:", response);
+				const data = JSON.parse(response.config.data);
+			} catch (error) {
+				console.error("Error fetching quote", error);
+			}
+		};
+		fetchData();
 	}, []);
 	return (
 		<>
@@ -107,7 +113,7 @@ function DoctorDashboard() {
 				sx={{ display: "flex", marginLeft: "60px" }}
 			>
 				<Box className={styles.main_box} sx={{ width: "66.6%" }}>
-					<Banner doctor={d} />
+					<Banner doctor={state.doctor} />
 					<Box className={styles.quick_actions}>
 						<Box className={`${styles.action_btn} ${styles.action_btn_1}`}>
 							<Box className={styles.patient_icon}>
@@ -121,7 +127,7 @@ function DoctorDashboard() {
 							>
 								Total Patients
 							</Box>
-							<Box className={styles.btn_div}>{d.totalPatients}</Box>
+							<Box className={styles.btn_div}>{state.doctor.totalPatients}</Box>
 						</Box>
 						<Box className={`${styles.action_btn} ${styles.action_btn_2}`}>
 							<Box className={styles.patient_icon}>
@@ -155,7 +161,9 @@ function DoctorDashboard() {
 							>
 								Appointments
 							</Box>
-							<Box className={styles.quick_btn_font}>{d.totalAppointments}</Box>
+							<Box className={styles.quick_btn_font}>
+								{state.doctor.totalAppointments}
+							</Box>
 						</Box>
 						<Box className={`${styles.action_btn} ${styles.action_btn_4}`}>
 							<Box className={styles.patient_icon}>
@@ -174,7 +182,7 @@ function DoctorDashboard() {
 					</Box>
 
 					<Box className={styles.graph}>
-						<Graph data={d.eachDayCounts} />
+						<Graph data={state.doctor.eachDayCounts} />
 					</Box>
 				</Box>
 				<Box className={styles.side_box}>
@@ -184,7 +192,7 @@ function DoctorDashboard() {
 					>
 						<h2 className={styles.appointments_title}>Recent Appointments</h2>
 						<ul className={styles.appointments_list}>
-							{d.pastAppointments.map((appointment, index) => (
+							{state.doctor.pastAppointments.map((appointment, index) => (
 								<li key={index} className={styles.appointment_item}>
 									<div className={styles.patient_name}>
 										{appointment.patientFirstName}&nbsp;
@@ -231,29 +239,51 @@ function DoctorDashboard() {
 				</Box>
 			</Box>
 
-
-			{
-				incomingCall
-					?
-					<div style={{ position: 'fixed', width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "rgb(0,0,0,0.9)", backdropFilter: blur("10px"), zIndex: "2", top: 0, bottom: 0, right: 0, left: 0 }}>
-						<h4 style={{ color: "#fff" }}>
-							Patient {patientName} is calling you
-						</h4>
-						<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", width: "20%" }}>
-							<Button variant="contained" color="success" onClick={handleAcceptCall}>
-								Accept
-							</Button>
-							<Button variant="outlined" color="error">
-								Reject
-							</Button>
-						</div>
-
+			{incomingCall ? (
+				<div
+					style={{
+						position: "fixed",
+						width: "100%",
+						height: "100%",
+						display: "flex",
+						flexDirection: "column",
+						justifyContent: "center",
+						alignItems: "center",
+						backgroundColor: "rgb(0,0,0,0.9)",
+						backdropFilter: blur("10px"),
+						zIndex: "2",
+						top: 0,
+						bottom: 0,
+						right: 0,
+						left: 0,
+					}}
+				>
+					<h4 style={{ color: "#fff" }}>
+						Patient {patientName} is calling you
+					</h4>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "space-evenly",
+							width: "20%",
+						}}
+					>
+						<Button
+							variant="contained"
+							color="success"
+							onClick={handleAcceptCall}
+						>
+							Accept
+						</Button>
+						<Button variant="outlined" color="error">
+							Reject
+						</Button>
 					</div>
-					:
-					<></>
-
-			}
-
+				</div>
+			) : (
+				<></>
+			)}
 		</>
 	);
 }

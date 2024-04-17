@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import otpImage from "../../assets/otp.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { handleOTPverification } from "../../Store/loginSlice";
+import { store } from "../../Store/store";
 
 
 const OtpInputPage = () => {
@@ -15,6 +16,7 @@ const OtpInputPage = () => {
 	const firstTimeLogin = useSelector((state) => state[role].firstTimeLogin);
 	const dispatch = useDispatch();
 	const isFirstRender = useRef(true);
+	const state = useSelector((state) => state);
 
 
 	useEffect(() => {
@@ -56,15 +58,21 @@ const OtpInputPage = () => {
 	};
 
 	const fetchData = () => {
+		console.log(role)
 		dispatch(
 			handleOTPverification({
 				otp: otp.join(""),
 				type: location.state.type,
 			})
 		);
+		// console.log("fetchData",state[role])
+		if(role === "patient" && location.state.type === "signup"){
+			navigate("/login")
+		}
 	};
 	useEffect(() => {
 		if (isFirstRender.current) {
+			console.log("hi")
 			isFirstRender.current = false; // it's no longer the first render
 			return;
 		  }
@@ -81,7 +89,7 @@ const OtpInputPage = () => {
 		} else {
 		  navigate(`/${role}/dashboard`);
 		}
-	  }, [role, location.state.type, firstTimeLogin, navigate]);
+	  }, [role, location.state.type, firstTimeLogin, navigate,state]);
 
 	return (
 		<div
