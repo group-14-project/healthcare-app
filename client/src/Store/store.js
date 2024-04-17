@@ -1,12 +1,24 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { loginReducer} from "./loginSlice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { loginReducer } from "./loginSlice";
 import { patientReducer } from "./patientSlice";
 import { doctorReducer } from "./doctorSlice";
+import storageSession from 'redux-persist/lib/storage/session'
+import { persistReducer, persistStore } from "redux-persist";
+import {thunk} from "redux-thunk";
+const persistConfig = {
+	key: "root",
+	storage:storageSession,
+};
 
+const combinedReducer = combineReducers({
+	login: loginReducer,
+	patient: patientReducer,
+	doctor: doctorReducer,
+});
+const persistedReducer = persistReducer(persistConfig, combinedReducer);
 export const store = configureStore({
-     reducer: {
-          login:loginReducer,
-          patient: patientReducer,
-          doctor: doctorReducer,
-     }
-})
+	reducer: persistedReducer,
+     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
+});
+
+export const persistor = persistStore(store);

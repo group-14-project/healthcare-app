@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -9,6 +9,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { handlehospitalAndSpecializationAndDoctor } from "../../Store/doctorSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -31,61 +33,100 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 	},
 }));
 
-function createData(patient_name, hospital, doctor, share_button) {
-	return { patient_name, hospital, doctor, share_button };
-}
-
-const rows = [
-	createData("Frozen yoghurt", "25 May 2024", "Click Here"),
-	createData("Ice cream sandwich", "25 May 2024", "Click Here"),
-	createData("Eclair", "25 May 2024", "Click Here"),
-	createData("Cupcake", "25 May 2024", "Click Here"),
-	createData("Gingerbread", "25 May 2024", "Click Here"),
-];
 function Refer() {
+	const patientList = useSelector((state) => state.doctor.AllpatientsList);
+	const [hospitalName, setHospitalName] = useState("");
+	const [specializationName, setSpecialization] = useState("");
+	const [doctor, setDoctor] = useState("");
+	const dispatch = useDispatch();
+	console.log(hospitalName);
+	// console.log(patientList)
+	useEffect(() => {
+		dispatch(handlehospitalAndSpecializationAndDoctor());
+	}, []);
+
+	const hospitalList = useSelector(
+		(state) => state.doctor.hospitalAndSpecializationAndDoctor
+	);
+	console.log(hospitalList);
 	return (
-		<Box sx={{ display: "flex", marginLeft: "65px", padding: "20px" }}>
+		<Box sx={{ display: "flex", marginLeft: "65px" }}>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 700 }} aria-label="customized table">
 					<TableHead>
 						<TableRow>
 							<StyledTableCell>Patient Name</StyledTableCell>
 							<StyledTableCell align="center">Hospital</StyledTableCell>
-							<StyledTableCell align="center">Doctor</StyledTableCell>
+							<StyledTableCell align="center">Specialization</StyledTableCell>
+							<StyledTableCell align="right">Doctor</StyledTableCell>
 							<StyledTableCell align="right">
 								Share &nbsp; &nbsp;
 							</StyledTableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{rows.map((row) => (
-							<StyledTableRow key={row.patient_name}>
+						{patientList.map((patient, index) => (
+							<StyledTableRow key={index}>
 								<StyledTableCell component="th" scope="row">
-									{row.patient_name}
+									{patient.firstName} {patient.lastName}
 								</StyledTableCell>
 								<StyledTableCell align="center">
-									<select id="hospital" name="hospital">
+									<select
+										id="hospital"
+										name="hospital"
+										onChange={(e) => setHospitalName(e.target.value)}
+									>
 										<option value="" disabled selected>
 											Choose Hospital
 										</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="fiat">Fiat</option>
-										<option value="audi">Audi</option>
+										{hospitalList.map((hospital, index) => (
+											<option value={hospital.hospital} key={index}>
+												{hospital.hospital}
+											</option>
+										))}
 									</select>
 								</StyledTableCell>
 								<StyledTableCell align="center">
 									<select
+										id="specialization"
+										name="specialization"
+										onChange={(e) => setSpecialization(e.target.value)}
+									>
+										<option value="" disabled selected>
+											Choose Specialization
+										</option>
+										{hospitalList
+											.find((hospital) => hospital.hospital === hospitalName)
+											?.specializationNames.map((specialization, index) => (
+												<option
+													value={specialization.specialization}
+													key={index}
+												>
+													{specialization.specialization}
+												</option>
+											))}
+									</select>
+								</StyledTableCell>
+								<StyledTableCell align="right">
+									<select
 										id="doctor"
 										name="doctor"
+										onChange={(e) => setDoctor(e.target.value)}
 									>
 										<option value="" disabled selected>
 											Choose Doctor
 										</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="fiat">Fiat</option>
-										<option value="audi">Audi</option>
+										{hospitalList
+											.find((hospital) => hospital.hospital === hospitalName)
+											?.specializationNames.find(
+												(specialization) =>
+													specialization.specialization === specializationName
+											)
+											?.doctors.map((doctor, index) => (
+												<option value={doctor.firstName} key={index}>
+													{doctor.firstName} {doctor.lastName}
+												</option>
+											))}
 									</select>
 								</StyledTableCell>
 								<StyledTableCell align="right">

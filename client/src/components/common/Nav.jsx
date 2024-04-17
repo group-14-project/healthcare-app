@@ -7,7 +7,7 @@ import { Outlet } from 'react-router-dom'
 
 const Nav = (props) => {
 
-     console.log(props)
+     // console.log(props)
      const sidebarContent = props.sidebar;
      const user = props.user
      return (

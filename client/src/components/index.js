@@ -24,8 +24,9 @@ import EndCall from "./Room/EndCall";
 import AboutUs from "./landing/AboutUs";
 import ContactSection from "./landing/ContactSection";
 import ChangePassword from "./common/ChangePassword";
-
-
+import Prescription from "./doctor/Prescription"
+import Departments from "./doctor/Departments";
+import Calender from "./doctor/Calender";
 export {
 	MidNavbar,
 	SideBar,
@@ -53,4 +54,7 @@ export {
 	AboutUs,
 	ContactSection,
 	ChangePassword,
+	Prescription,
+	Departments,
+	Calender
 };

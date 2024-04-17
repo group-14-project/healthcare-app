@@ -12,7 +12,14 @@ const initialState = {
 	firstTimeLogin: false,
 	totalPatients:0,
 	totalAppointments:0,
-	eachDayCounts:[]
+	eachDayCounts:[],
+	quote:{
+		quote:"",
+		author:"",
+		category:""
+	},
+	AllpatientsList:[],
+	hospitalAndSpecializationAndDoctor:[]
 };
 
 // export const handleUpdateDoctorDetails = () => {
@@ -42,6 +49,57 @@ const initialState = {
 // 	};
 // };
 
+export const handlehospitalAndSpecializationAndDoctor = () => {
+		return async (dispatch,getState) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/doctor/viewHospitalsAndDoctors",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			const response = await fetchData();
+			// console.log("All patients fetched", response.data);
+			dispatch(doctorActions.updateDoctorDetails({name:"hospitalAndSpecializationAndDoctor",value:response.data}))
+		} catch (error) {
+			console.error("Error getting hospitalAndSpecializationAndDoctor management", error);
+		}
+	};
+}
+
+export const handleGetAllPatients  = () => {
+	return async (dispatch,getState) => {
+	const fetchData = async () => {
+		const response = await axios.get(
+			"http://localhost:9090/doctor/patientsLastAppointment",
+			{
+				headers: {
+					Authorization: localStorage.getItem("Authorization"),
+					"Access-Control-Allow-Origin": "*",
+					"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+					"Content-Type": "application/json",
+				},
+			}
+		);
+		return response;
+	};
+	try {
+		const response = await fetchData();
+		dispatch(doctorActions.updateDoctorDetails({name:"AllpatientsList",value:response.data}))
+	} catch (error) {
+		console.error("Error getting patients list", error);
+	}
+};
+}
+
 const doctorSlice = createSlice({
 	name: "doctor",
 	initialState,
@@ -68,6 +126,9 @@ const doctorSlice = createSlice({
 				...state,
 				[payload.name]: payload.value,
 			};
+		},
+		updateQuote: (state, { payload }) => {
+			state.quote = payload;
 		},
 	},
 });

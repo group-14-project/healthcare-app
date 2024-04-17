@@ -12,20 +12,23 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import Button from "@mui/material/Button";
 import { store } from "../../Store/store";
+import { useDispatch, useSelector, useStore } from "react-redux";
+import { doctorActions } from "../../Store/doctorSlice";
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
 	// const location = useLocation();
 	// const d = location.state.doctor;
 	const navigate = useNavigate();
-	// console.log("doctor: ", d);
-	const state = store.getState();
+	const dispatch = useDispatch();
+	const state = useSelector((state) => state);
 	var category = "health";
 	let stompClient = useRef();
 	const [remoteID, setRemoteId] = useState("");
 	const [localID, setLocalID] = useState(state.doctor.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
+
 
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctor.doctorId);
@@ -98,14 +101,17 @@ function DoctorDashboard() {
 						},
 					}
 				);
-				console.log("Quote Fetched:", response);
-				const data = JSON.parse(response.config.data);
+				console.log("Quote Fetched:", response.data[0]);
+				const quoteData = (response.data[0]);
+				console.log(quoteData)
+				dispatch(doctorActions.updateQuote(quoteData));
 			} catch (error) {
 				console.error("Error fetching quote", error);
 			}
 		};
 		fetchData();
 	}, []);
+	
 	return (
 		<>
 			<Box
@@ -186,11 +192,11 @@ function DoctorDashboard() {
 					</Box>
 				</Box>
 				<Box className={styles.side_box}>
-					<Box className={styles.side_divs}>Calender</Box>
+					<Box className={`${styles.side_divs } ${styles.calender}`}>Calender</Box>
 					<Box
 						className={`${styles.appointments_container} ${styles.side_divs}`}
 					>
-						<h2 className={styles.appointments_title}>Recent Appointments</h2>
+						<h4 className={styles.appointments_title}>Recent Appointments</h4>
 						<ul className={styles.appointments_list}>
 							{state.doctor.pastAppointments.map((appointment, index) => (
 								<li key={index} className={styles.appointment_item}>
@@ -206,23 +212,19 @@ function DoctorDashboard() {
 						</ul>
 					</Box>
 
-					<Box className={styles.quote_box}>
-						<div
-							className="card text-white height"
-							style={{ backgroundColor: "#009AAA", borderRadius: "15px" }}
-						>
-							<div className="card-body ">
+					<Box className={`${styles.quote_box} ${styles.side_divs} card text-white height`} style={{ backgroundColor: "#009AAA" }}>
+						
+							<div className="card-body " style = {{height:"100%" ,width: "100%"}}>
 								<i className="fas fa-quote-left fa-2x mb-4"></i>
 
-								<p className="lead">
-									Genius is one percent inspiration and ninety-nine percent
-									perspiration.
+								<p className={`lead ${styles.lead}`}>
+									{state.doctor.quote.quote}
 								</p>
 
 								<hr />
 
 								<div className="d-flex justify-content-between">
-									<p className="mb-0">Thomas Edison</p>
+									<p className="mb-0">{state.doctor.quote.author}</p>
 									<h6 className="mb-0">
 										<span
 											className="badge rounded-pill"
@@ -234,7 +236,6 @@ function DoctorDashboard() {
 									</h6>
 								</div>
 							</div>
-						</div>
 					</Box>
 				</Box>
 			</Box>

@@ -2,20 +2,19 @@
     height: 140vh;
 }
 .main_box{
-    /* justify-content: center; */
+    justify-content: space-between;
     display : flex;
     box-sizing: border-box;
     background-color: #F9F9F9;
     color: #154B50;
     flex-direction: column;
     padding: 40px;
-    /* border: 2px solid red; */
     height: 100%;
 }
 
 .quick_actions{
     display: flex;
-    margin-top: 4%;
+    margin-top: 9%;
     justify-content: space-around;
     box-sizing: border-box;
 }
@@ -86,26 +85,22 @@
     align-items: center; 
     justify-content: space-between; 
     box-sizing: border-box;   
-    padding: 40px;
+    padding: 20px;
     flex-direction: column; 
-   /* height: 100vh; */
-    /* border: 2px solid green; */
-    
 }
 
 .side_divs{
-    border: 2px solid black;
     width: 95%;
-    height: 20%;
+    height: 30%;
     border-radius: 25px;
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
     overflow: scroll;
-    /* padding-top: 15px; */
-    /* padding: 10px; */
-    /* justify-content: center; */
-    /* align-items: center; */
+}
+
+.calender{
+    height: 30%;
 }
 
 .side_divs::-webkit-scrollbar {
@@ -117,20 +112,27 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
-    padding: 10px;
-    width: 100%;
+    overflow: scroll;
 }
-.height{
-    height: 100%;
-    border-radius: 25px;
+.card-body{
+    width: 100% !important;
+    height: 100% !important;
 }
+
 .appointment_list{
     padding: 0;
     margin: 0;
+    text-align: center;
 
 }
-.land-head{
+.lead{
+    overflow: scroll;
+    height: 50%;
+}
+.lead::-webkit-scrollbar{
+    display: none;
+}
+/* .land-head{
     box-sizing: border-box;
     padding-left:40px;
     margin-bottom: 0;
@@ -139,25 +141,20 @@
     background-color: #009688 ;
     height: 30px;
 
-}
-.recent_appointments{
+} */
+/* .recent_appointments{
     border: 2px solid black;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     width: 100%;
-}
+} */
 
 .appointments_container {
-width: 100%;
-/* max-width: 600px; */
-
-margin: 0 auto;
 padding: 10px;
 background-color: #f4f4f4;
 border-radius: 25px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-/* padding-top: 2px ; */
 }
 
 .appointments_title {
@@ -166,6 +163,8 @@ margin-bottom: 20px;
 position: sticky;
 top: 0;
 background-color:#f4f4f4 ;
+line-height: 0.8;
+text-align: center;
 }
 
 .appointments_list {
@@ -196,5 +195,5 @@ color: #555;
 
 .graph{
     background-color: white !important;
-    margin-top: 5% !important;
+    margin-top: 9% !important;
 }

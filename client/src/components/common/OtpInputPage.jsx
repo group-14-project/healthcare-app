@@ -16,7 +16,8 @@ const OtpInputPage = () => {
 	const firstTimeLogin = useSelector((state) => state[role].firstTimeLogin);
 	const dispatch = useDispatch();
 	const isFirstRender = useRef(true);
-	const state = useSelector((state) => state);
+	const statePatient = useSelector((state) => state.patient);
+	const stateDoctor = useSelector((state) => state.doctor);
 
 
 	useEffect(() => {
@@ -72,10 +73,9 @@ const OtpInputPage = () => {
 	};
 	useEffect(() => {
 		if (isFirstRender.current) {
-			console.log("hi")
 			isFirstRender.current = false; // it's no longer the first render
 			return;
-		  }
+		}
 		if (role === "patient") {
 		  if (location.state.type === "signup") {
 			navigate("/login");
@@ -89,7 +89,7 @@ const OtpInputPage = () => {
 		} else {
 		  navigate(`/${role}/dashboard`);
 		}
-	  }, [role, location.state.type, firstTimeLogin, navigate,state]);
+	  }, [location.state.type, navigate,statePatient,stateDoctor]);
 
 	return (
 		<div

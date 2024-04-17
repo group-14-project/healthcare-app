@@ -18,6 +18,8 @@ import {
 	AboutUs,
 	ContactSection,
 	ChangePassword,
+	Departments,
+	Calender
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
@@ -81,6 +83,7 @@ const router = createBrowserRouter([
 		path: "/doctor/changepwd",
 		element: <ChangePassword />,
 	},
+	
 
 	{
 		path: "/admin/changepwd",
@@ -141,12 +144,21 @@ const router = createBrowserRouter([
 				element: <DocPatients />,
 			},
 			{
+				path: "/doctor/calendar",
+				element: <Calender />,
+			},
+			{
 				path: "/doctor/feedback",
 				element: <Feedback />,
 			},
 			{
 				path: "/doctor/refer",
 				element: <Refer />,
+			},
+			{	
+				path: "/doctor/departments",
+				element: <Departments/>
+		
 			},
 		],
 	},
