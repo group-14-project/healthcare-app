@@ -13,7 +13,7 @@ import Stomp from "stompjs";
 import Button from "@mui/material/Button";
 import { store } from "../../Store/store";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { doctorActions } from "../../Store/doctorSlice";
+import { doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
@@ -28,7 +28,9 @@ function DoctorDashboard() {
 	const [localID, setLocalID] = useState(state.doctor.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
-
+	useEffect(() => {
+		dispatch(handleGetAllPatients())
+	}, []);
 
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctor.doctorId);

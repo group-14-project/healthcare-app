@@ -10,6 +10,7 @@ const initialState = {
 		role: "patient",
 		email: "",
 		password: "",
+		isAuthenticated: false,
 	},
 };
 
@@ -76,6 +77,31 @@ export const handleSignUp = (signUpData) => {
 	};
 };
 
+export const formatDate = (inputDate) => {
+	// Split the input date into year, month, and day
+	const [year, month, day] = inputDate.split('-');
+
+	// Create a new Date object
+	const date = new Date(year, month - 1, day);
+
+	// Get the day, month, and year components
+	const dayOfMonth = date.getDate();
+	const monthIndex = date.getMonth();
+	const yearValue = date.getFullYear();
+
+	// Define an array of month names
+	const monthNames = [
+		'January', 'February', 'March', 'April', 'May', 'June', 
+		'July', 'August', 'September', 'October', 'November', 'December'
+	];
+
+	// Get the month name using the month index
+	const monthName = monthNames[monthIndex];
+
+	// Return the formatted date string
+	return `${dayOfMonth} ${monthName} ${yearValue}`;
+}
+
 // export const handleOTPverification = createAsyncThunk(
 // 	"login/verifyOTP",
 // 	async (otpdata, { getState, dispatch }) => {
@@ -140,13 +166,14 @@ export const handleOTPverification = (otpdata) => {
 		};
 		try {
 			const response = await fetchData();
-			console.log("login Slice after verify", response.data);
+			// console.log("login Slice after verify", response.data);
 			// console.log("login Slice after verify state", getState());
 			if (otpdata.type === "login") {
 				localStorage.setItem(
 					"Authorization",
 					response.headers.get("authorization")
 				);
+				dispatch(loginActions.updateAuthenticated(true));
 				const state = getState();
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
@@ -177,6 +204,9 @@ const loginSlice = createSlice({
 				[action.payload.name]: action.payload.value,
 			};
 		},
+		updateAuthenticated: (state, action) => {
+			state.user.isAuthenticated = action.payload;
+		}
 	},
 });
 

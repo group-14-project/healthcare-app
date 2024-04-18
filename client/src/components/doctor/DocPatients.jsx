@@ -11,9 +11,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { handleGetAllPatients } from "../../Store/doctorSlice";
+// import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import {Prescription} from "../index";
+import formatDate from "../../Utility Data/dateChangeFunc";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -87,7 +88,7 @@ function AppointmentsModal(props) {
 							{AppointmentDetails.map((appointment, index) => (
 								<StyledTableRow key={index}>
 									<StyledTableCell component="th" scope="row">
-										{appointment.appointmentDateAndTime.split("T")[0]}
+										{formatDate(appointment.appointmentDateAndTime.split("T")[0])}
 									</StyledTableCell>
 									<StyledTableCell align="center">
 										{appointment.mainSymptom}
@@ -120,9 +121,7 @@ function DocPatients() {
 		(state) => state.doctor.pastAppointments
 	);
 	const [patientDetails, setPatientDetails] = useState([]);
-	useEffect(() => {
-		dispatch(handleGetAllPatients());
-	}, []);
+	
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
 	const handleViewDetails = (patientEmail) => {
 		setModalShow(true);
@@ -150,7 +149,7 @@ function DocPatients() {
 									{patient.firstName + " " + patient.lastName}
 								</StyledTableCell>
 								<StyledTableCell align="center">
-									{patient.date.split("T")[0]}
+									{formatDate(patient.date.split("T")[0])}
 								</StyledTableCell>
 								<StyledTableCell align="right">
 									<Button

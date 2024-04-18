@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { handlehospitalAndSpecializationAndDoctor } from "../../Store/doctorSlice";
+import { doctorActions, handlehospitalAndSpecializationAndDoctor, consentRegistration } from "../../Store/doctorSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -39,8 +39,7 @@ function Refer() {
 	const [specializationName, setSpecialization] = useState("");
 	const [doctor, setDoctor] = useState("");
 	const dispatch = useDispatch();
-	console.log(hospitalName);
-	// console.log(patientList)
+	
 	useEffect(() => {
 		dispatch(handlehospitalAndSpecializationAndDoctor());
 	}, []);
@@ -48,7 +47,17 @@ function Refer() {
 	const hospitalList = useSelector(
 		(state) => state.doctor.hospitalAndSpecializationAndDoctor
 	);
-	console.log(hospitalList);
+	const handleConsentRegisteration = (e,patient) => {
+		e.preventDefault();
+		const data = {
+			patientEmail: patient,
+			newDoctorEmail: doctor,
+		};
+		console.log(data);
+		// dispatch(handleConsentRegisteration(data));
+		dispatch(consentRegistration(data) );
+
+	}
 	return (
 		<Box sx={{ display: "flex", marginLeft: "65px" }}>
 			<TableContainer component={Paper}>
@@ -123,7 +132,7 @@ function Refer() {
 													specialization.specialization === specializationName
 											)
 											?.doctors.map((doctor, index) => (
-												<option value={doctor.firstName} key={index}>
+												<option value={doctor.email} key={index}>
 													{doctor.firstName} {doctor.lastName}
 												</option>
 											))}
@@ -133,6 +142,7 @@ function Refer() {
 									<Button
 										style={{ backgroundColor: "#00ACB9" }}
 										variant="contained"
+										onClick={(e) => handleConsentRegisteration(e,patient.email)}
 									>
 										Share
 									</Button>

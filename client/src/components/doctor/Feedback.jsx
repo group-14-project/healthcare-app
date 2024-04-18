@@ -43,7 +43,7 @@ const rows = [
 ];
 function Feedback() {
 	return (
-		<Box sx={{ display: "flex", marginLeft: "65px", padding: "20px"}}>
+		<Box sx={{ display: "flex", marginLeft: "65px"}}>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 700 }} aria-label="customized table">
 					<TableHead>

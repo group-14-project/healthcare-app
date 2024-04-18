@@ -19,7 +19,8 @@ import {
 	ContactSection,
 	ChangePassword,
 	Departments,
-	Calender
+	Calender,
+	ViewConsents,
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
@@ -83,7 +84,6 @@ const router = createBrowserRouter([
 		path: "/doctor/changepwd",
 		element: <ChangePassword />,
 	},
-	
 
 	{
 		path: "/admin/changepwd",
@@ -120,6 +120,7 @@ const router = createBrowserRouter([
 						"Feedback",
 						"Refer",
 						"Logout",
+						"View Consents"
 					],
 				}}
 				user={{ type: "doctor" }}
@@ -155,10 +156,13 @@ const router = createBrowserRouter([
 				path: "/doctor/refer",
 				element: <Refer />,
 			},
-			{	
+			{
 				path: "/doctor/departments",
-				element: <Departments/>
-		
+				element: <Departments />,
+			},
+			{
+				path: "/doctor/viewConsents",
+				element: <ViewConsents />,
 			},
 		],
 	},

@@ -14,6 +14,7 @@ const PatientDashboard = (props) => {
 	console.log("From patient dashboard",state);
 	const heads = ["Date", "Doctor Name", "Symptom"];
 	return (
+		
 		<Box
 			sx={{ display: "flex", marginLeft: "65px", backgroundColor: "#F9F9F9" }}
 		>

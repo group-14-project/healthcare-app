@@ -7,19 +7,20 @@ const initialState = {
 	pastAppointments: [],
 	futureAppointments: [],
 	doctorId: null,
-	registrationId:null,
-	degree:null,
+	registrationId: null,
+	degree: null,
 	firstTimeLogin: false,
-	totalPatients:0,
-	totalAppointments:0,
-	eachDayCounts:[],
-	quote:{
-		quote:"",
-		author:"",
-		category:""
+	totalPatients: 0,
+	totalAppointments: 0,
+	eachDayCounts: [],
+	quote: {
+		quote: "",
+		author: "",
+		category: "",
 	},
-	AllpatientsList:[],
-	hospitalAndSpecializationAndDoctor:[]
+	AllpatientsList: [],
+	hospitalAndSpecializationAndDoctor: [],
+	consentsShared: [],
 };
 
 // export const handleUpdateDoctorDetails = () => {
@@ -50,7 +51,7 @@ const initialState = {
 // };
 
 export const handlehospitalAndSpecializationAndDoctor = () => {
-		return async (dispatch,getState) => {
+	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
 				"http://localhost:9090/doctor/viewHospitalsAndDoctors",
@@ -68,37 +69,81 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 		try {
 			const response = await fetchData();
 			// console.log("All patients fetched", response.data);
-			dispatch(doctorActions.updateDoctorDetails({name:"hospitalAndSpecializationAndDoctor",value:response.data}))
+			dispatch(
+				doctorActions.updateDoctorDetails({
+					name: "hospitalAndSpecializationAndDoctor",
+					value: response.data,
+				})
+			);
 		} catch (error) {
-			console.error("Error getting hospitalAndSpecializationAndDoctor management", error);
+			console.error(
+				"Error getting hospitalAndSpecializationAndDoctor management",
+				error
+			);
 		}
 	};
-}
-
-export const handleGetAllPatients  = () => {
-	return async (dispatch,getState) => {
-	const fetchData = async () => {
-		const response = await axios.get(
-			"http://localhost:9090/doctor/patientsLastAppointment",
-			{
-				headers: {
-					Authorization: localStorage.getItem("Authorization"),
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		return response;
-	};
-	try {
-		const response = await fetchData();
-		dispatch(doctorActions.updateDoctorDetails({name:"AllpatientsList",value:response.data}))
-	} catch (error) {
-		console.error("Error getting patients list", error);
-	}
 };
-}
+
+export const handleGetAllPatients = () => {
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/doctor/patientsLastAppointment",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			const response = await fetchData();
+			dispatch(
+				doctorActions.updateDoctorDetails({
+					name: "AllpatientsList",
+					value: response.data,
+				})
+			);
+		} catch (error) {
+			console.error("Error getting patients list", error);
+		}
+	};
+};
+
+export const consentRegistration = (data) => {	
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.post(
+				"http://localhost:9090/doctor/registerConsent",
+				data,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			const existingConsent = getState().doctor.consentsShared.find((consent) => {
+				return (consent.patientEmail === data.patientEmail && consent.newDoctorEmail === data.newDoctorEmail);
+			})
+			if (!existingConsent){
+				const response = await fetchData();
+				console.log("Consent shared", response.data);
+			}
+		} catch (error) {
+			console.error("Error sharing consent", error);
+		}
+	};
+};
 
 const doctorSlice = createSlice({
 	name: "doctor",
@@ -129,6 +174,9 @@ const doctorSlice = createSlice({
 		},
 		updateQuote: (state, { payload }) => {
 			state.quote = payload;
+		},
+		addConsentShared: (state, { payload }) => {
+			state.consentsShared.push(payload);
 		},
 	},
 });

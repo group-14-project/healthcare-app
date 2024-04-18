@@ -140,7 +140,7 @@ function SideBar(props) {
 										marginBottom: "10px"
 									}}
 									component={Link}
-									to={`${userType}/${text.toLowerCase()}`}
+									to={`${userType}/${text.replace(/\s+/g, '').toLowerCase()}`}
 									patient={patientData}
 								>
 									<ListItemIcon

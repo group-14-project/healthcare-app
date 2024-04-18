@@ -27,6 +27,7 @@ import ChangePassword from "./common/ChangePassword";
 import Prescription from "./doctor/Prescription"
 import Departments from "./doctor/Departments";
 import Calender from "./doctor/Calender";
+import ViewConsents from "./doctor/ViewConsents";
 export {
 	MidNavbar,
 	SideBar,
@@ -56,5 +57,6 @@ export {
 	ChangePassword,
 	Prescription,
 	Departments,
-	Calender
+	Calender,
+	ViewConsents
 };
