@@ -12,10 +12,15 @@ const initialState = {
 	futureAppointments: [],
 	patientId: null,
 	firstTimeLogin: false,
+	quote: {
+		quote: "",
+		author: "",
+		category: ""
+	},
 };
 
 export const handleUpdatePatientDetails = () => {
-	return async (dispatch,getState) => {
+	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const state = getState();
 			const response = await axios.put(
@@ -66,6 +71,9 @@ const patientSlice = createSlice({
 				...state,
 				[payload.name]: payload.value,
 			};
+		},
+		updateQuote: (state, { payload }) => {
+			state.quote = payload;
 		},
 	},
 });

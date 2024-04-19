@@ -26,6 +26,7 @@ import largeLogo from "../../assets/logo_full.png";
 import { Link } from "react-router-dom";
 import './Sidebar.css';
 import { useLocation } from "react-router-dom";
+import ShieldIcon from '@mui/icons-material/Shield';
 
 const drawerWidth = 240;
 
@@ -79,7 +80,7 @@ function SideBar(props) {
 	const userType = props.type.user.user.type;
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
-	const [logo,setLogo] = React.useState(smallLogo);
+	const [logo, setLogo] = React.useState(smallLogo);
 	const location = useLocation();
 	const patientData = location.state;
 	console.log(location.state);
@@ -110,7 +111,7 @@ function SideBar(props) {
 				<Drawer variant="permanent" open={open}>
 					<DrawerHeader className="logo">
 						<IconButton>
-							<img src={logo} alt="logo" className={logo===smallLogo ? "small_logo_img": "large_logo_img"}/>
+							<img src={logo} alt="logo" className={logo === smallLogo ? "small_logo_img" : "large_logo_img"} />
 						</IconButton>
 					</DrawerHeader>
 
@@ -158,12 +159,21 @@ function SideBar(props) {
 										) : index == 2 ? (
 											<MedicationSharpIcon style={{ color: "#fff" }} />
 										) : index == 3 ? (
-											<UndoSharpIcon style={{ color: "#fff" }} />
-										) : index == 4 ? (
 											<UpdateSharpIcon style={{ color: "#fff" }} />
-										) : (
-											<LogoutSharpIcon style={{ color: "#fff" }} />
-										)}
+										) : index == 4 && userType === "doctor" ? (
+											<UndoSharpIcon style={{ color: "#fff" }} />
+										)
+
+											: index == 5 ? (
+												<ShieldIcon style={{ color: "#fff" }} />
+											)
+
+												: (
+													<LogoutSharpIcon style={{ color: "#fff" }} />
+												)
+
+
+										}
 									</ListItemIcon>
 									<ListItemText primary={text} sx={{ ...(!open && { display: "none" }), color: "#fff" }} />
 								</ListItemButton>

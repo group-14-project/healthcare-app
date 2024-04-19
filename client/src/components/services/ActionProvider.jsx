@@ -1,7 +1,14 @@
 // in ActionProvider.jsx
 import React from "react";
+import { consultActions } from "../../Store/consultSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+
+	const patientState = useSelector(state=>state.patient);
+	const dispatch = useDispatch();
+
+
 	const handleHello = () => {
 		const botMessage = createChatBotMessage(
 			`Please pick a symptom that trouble you most`,
@@ -20,6 +27,8 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Headache"}));
+
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -43,6 +52,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Backache"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -67,6 +77,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 			widget: "secsymptoms",
 		});
 		console.log("fever");
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Fever"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -90,6 +101,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Cough"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -113,6 +125,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Heart Pain"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -136,6 +149,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Runny Nose"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -159,6 +173,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Sore Throat"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -182,6 +197,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
+		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Vomitting"}));
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
@@ -203,7 +219,10 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 	};
 
 	const handleConvertToString = (options) => {
+		
 		console.log(options)
+
+		dispatch(consultActions.updateConsultDetails({name:"secondarySymptom",value:options.join(',')}));
 	}
 
 	return (

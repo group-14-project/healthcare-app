@@ -24,7 +24,7 @@ function Prescription(props) {
 				</div>
 			</div>
 			<div className={styles.main_body}>
-				<table>
+				<table className={styles.prescription_table}>
 					<tr>
 						<th>Medicine Name</th>
 						<th>Dosage</th>

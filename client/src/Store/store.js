@@ -6,6 +6,8 @@ import storageSession from 'redux-persist/lib/storage/session'
 import { persistReducer, persistStore } from "redux-persist";
 import {thunk} from "redux-thunk";
 import { seniorDoctorReducer } from "./seniorDoctorSlice";
+import { consultReducer } from "./consultSlice";
+
 const persistConfig = {
 	key: "root",
 	storage:storageSession,
@@ -15,6 +17,7 @@ const combinedReducer = combineReducers({
 	login: loginReducer,
 	patient: patientReducer,
 	doctor: doctorReducer,
+	consult: consultReducer,
 	seniorDoctor: seniorDoctorReducer
 });
 const persistedReducer = persistReducer(persistConfig, combinedReducer);

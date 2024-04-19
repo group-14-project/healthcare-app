@@ -1,0 +1,81 @@
+:root {
+     --fc-button-border-color: white;
+     --fc-button-active-border-color: white;
+     --fc-button-hover-border-color: #37A3AF;
+     --fc-event-border-color: #37A3AF;
+}
+
+
+.fc {
+     font-family: Arial, sans-serif;
+     border-radius: 8px;
+     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+     padding: 20px;
+}
+
+
+.fc-col-header-cell-cushion {
+     text-decoration-skip: none;
+     color: black;
+}
+
+.fc-daygrid-day-number {
+     text-decoration: none;
+     color: black;
+}
+
+.fc-event {
+     color: black;
+}
+
+.fc-button,
+.fc-button:hover {
+     background-color: #3C9A8D !important;
+     border-color: none;
+     /* border: 2px solid wheat; */
+}
+
+.tab-label {
+     color: #3C9A8D !important;
+}
+
+.MuiTabs-indicator {
+     background-color: #3C9A8D !important;
+}
+
+.side_divs {
+     width: 95%;
+     height: 30%;
+     border-radius: 25px;
+     display: flex;
+     box-sizing: border-box;
+     flex-direction: column;
+     overflow: scroll;
+}
+
+.side_divs::-webkit-scrollbar {
+     display: none;
+}
+
+.quote_box {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     overflow: scroll;
+}
+
+
+.lead {
+     overflow: scroll;
+     height: 50%;
+}
+
+.lead::-webkit-scrollbar {
+     display: none;
+}
+
+.card_body {
+     width: 100% !important;
+     height: 100% !important;
+}

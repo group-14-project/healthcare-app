@@ -26,8 +26,10 @@ import ContactSection from "./landing/ContactSection";
 import ChangePassword from "./common/ChangePassword";
 import Prescription from "./doctor/Prescription"
 import Departments from "./doctor/Departments";
-import Calender from "./doctor/Calender";
 import ViewConsents from "./doctor/ViewConsents";
+import Reports from "./Patient/Reports";
+import PatientPrescription from "./Patient/PatientPrescription";
+import MyCalendar from "./common/MyCalendar";
 export {
 	MidNavbar,
 	SideBar,
@@ -57,6 +59,8 @@ export {
 	ChangePassword,
 	Prescription,
 	Departments,
-	Calender,
-	ViewConsents
+	ViewConsents,
+	Reports,
+	PatientPrescription,
+	MyCalendar
 };

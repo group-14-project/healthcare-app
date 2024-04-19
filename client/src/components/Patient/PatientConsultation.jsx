@@ -17,27 +17,50 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../Store/store.js";
+import { consultActions } from "../../Store/consultSlice.js";
 
 
 function PatientConsultation(props) {
 
-	const location = useLocation();
-	console.log(location.state);
+	// const location = useLocation();
+	// console.log(location.state);
 	const navigate = useNavigate();
-	const patientId = localStorage.getItem("patientId");
-	const patientName = localStorage.getItem("patientName");
+	// const patientId = localStorage.getItem("patientId");
+	// const patientName = localStorage.getItem("patientName");
+	// console.log(patientId);
+
+	// const patientId = useSelector((state)=>{state.patient.patientId})
+	const consult = useSelector(state=>state.consult);
+
+	const state = store.getState();
+
+	const patientId = state.patient.patientId;
+	const patientName = state.patient.firstName;
+
 	console.log(patientId);
 
 	const [socket, setSocket] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const [remoteID, setRemoteID] = useState("");
+	// const mysoc = useRef();
 
 	const [localID, setLocalId] = useState(patientId);
 	let stompClient = useRef();
 
+	const dispatch = useDispatch();
+
+	useEffect(()=>{
+
+		dispatch(consultActions.updateEmail(state.patient.email));
+
+	},[])
+
+
 	const handleCall = (doctorId, doctorName) => {
 		var conn = new SockJS("http://localhost:9090/socket");
+		dispatch(consultActions.updateConsultDetails({name: "appointmentTimeDate", value: new Date().toISOString()}));
 		stompClient.current = new Stomp.over(conn);
 		setRemoteID(doctorId.toString());
 		stompClient.current.connect({}, (frame) => {
@@ -48,31 +71,37 @@ function PatientConsultation(props) {
 				const initiatedBy = JSON.parse(acceptBody.initiatedBy);
 				acceptedBy.callee = localID;
 				initiatedBy.caller = doctorId;
-				acceptedBy.name = patientName.slice(1, patientName.length - 1);
+				acceptedBy.name = patientName
 				initiatedBy.name = doctorName;
 				console.log(acceptBody);
 				navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
 			})
 
+			console.log("consult: ",consult);
+
 			stompClient.current.send("/app/call", {}, JSON.stringify({
 				"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
-				"callFrom": JSON.stringify({ "patientName": patientName, "localId": localID })
+				"callFrom": JSON.stringify({ "patientName": patientName, "localId": localID.toString() }),
+				"consultState": JSON.stringify(consult)
 			}));
 		})
 	}
 
 	const createWebSocket = () => {
 		const newSocket = new WebSocket("ws://localhost:9090/doctor-status");
-
+		// console.log(newSocket);
 		newSocket.onopen = () => {
 			console.log("WebSocket connection established");
 		};
 
+		console.log(state.consult);
+
 		setSocket(newSocket);
 		document.getElementById("active-docs").style.display = "block";
 	};
+
 	useEffect(() => {
-		if (socket) {
+		if(socket) {
 			socket.onmessage = (event) => {
 				const message = JSON.parse(event.data);
 				setMessages(message);
@@ -82,6 +111,7 @@ function PatientConsultation(props) {
 			};
 		}
 	}, [messages, socket, setMessages]);
+
 
 	return (
 		<Box className="patient-consultation">

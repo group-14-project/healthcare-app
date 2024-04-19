@@ -14,6 +14,23 @@ import Button from "@mui/material/Button";
 import { store } from "../../Store/store";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
+import IncomingCall from "./IncomingCall";
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";;
+import listPlugin from '@fullcalendar/list';
+// import styled from "@emotion/styled";
+import CalendarModal from "../Patient/CalendarModal";
+import { consultActions } from "../../Store/consultSlice";
+import { makeConnection } from "../../Store/consultSlice";
+
+const events = [
+	{ id: 1, title: 'Appointment-1', start: "2024-04-23 14:30", allDay: false },
+	{ id: 2, title: 'Appointment-2', start: "2024-04-22 12:30", allDay: false },
+	{ id: 3, title: 'Appointment-3', start: "2024-04-30 11:00", allDay: false },
+	{ id: 4, title: 'Appointment-4', start: "2024-04-25 16:15", allDay: false }
+]
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
@@ -28,16 +45,31 @@ function DoctorDashboard() {
 	const [localID, setLocalID] = useState(state.doctor.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
+
+	const [modalOpen, setModalOpen] = useState(false);
+	const [consultState, setConsultState] = useState({});
+
 	useEffect(() => {
 		dispatch(handleGetAllPatients())
 	}, []);
+
+	const handleDateClick = () => {
+		setModalOpen((prev) => !prev);
+	}
 
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctor.doctorId);
 		localStorage.setItem("doctorName", state.doctor.firstName);
 	}, []);
 
-	const handleAcceptCall = () => {
+	const handleAcceptCall = async () => {
+
+		console.log("consult state: ", consultState);
+
+
+		const res = dispatch(makeConnection(consultState));
+
+
 		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
 			/[018]/g,
 			(c) =>
@@ -81,10 +113,16 @@ function DoctorDashboard() {
 					// console.log("remote id: " + call.body);
 					const userData = JSON.parse(call.body);
 					console.log(userData);
+					// console.log("consult state in doc dashboard: ", state.consult);
+					const consultationData = JSON.parse(userData["consultState"]);
+					const callFrom = JSON.parse(userData["callFrom"]);
+					console.log(consultationData);
+					console.log(callFrom.localId)
+					setConsultState(consultationData);
 
-					setRemoteId(userData.localId);
+					setRemoteId(callFrom.localId);
 					setPatientName(
-						userData.patientName.slice(1, userData.patientName.length - 1)
+						callFrom.patientName
 					);
 
 					setIncomingCall(true);
@@ -92,6 +130,7 @@ function DoctorDashboard() {
 			);
 		});
 	}, []);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -113,7 +152,7 @@ function DoctorDashboard() {
 		};
 		fetchData();
 	}, []);
-	
+
 	return (
 		<>
 			<Box
@@ -194,7 +233,40 @@ function DoctorDashboard() {
 					</Box>
 				</Box>
 				<Box className={styles.side_box}>
-					<Box className={`${styles.side_divs } ${styles.calender}`}>Calender</Box>
+					{/* <Box className={`${styles.side_divs} ${styles.calender}`}>Calender</Box> */}
+					<Box sx={{
+						marginBottom: "40px"
+					}}>
+						<FullCalendar
+							schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
+
+							// ref={calendarComponentRef}
+							initialView='dayGridMonth'
+							displayEventTime={true}
+							headerToolbar={{
+								left: "prev,next,today",
+								center: "title",
+								right: "dayGridMonth"
+							}}
+							selectable={true}
+							plugins={[
+								dayGridPlugin,
+								interactionPlugin,
+								timeGridPlugin,
+								listPlugin
+							]}
+							eventClick={(event) => { console.log(event.event.id) }}
+							events={events}
+							contentHeight="auto"
+							themeSystem="standard"
+							// event
+							// eventContent={(info) => <EventItem info={info} />}
+							selectOverlap={false}
+							eventOverlap={false}
+							dateClick={handleDateClick}
+
+						/>
+					</Box>
 					<Box
 						className={`${styles.appointments_container} ${styles.side_divs}`}
 					>
@@ -215,78 +287,40 @@ function DoctorDashboard() {
 					</Box>
 
 					<Box className={`${styles.quote_box} ${styles.side_divs} card text-white height`} style={{ backgroundColor: "#009AAA" }}>
-						
-							<div className="card-body " style = {{height:"100%" ,width: "100%"}}>
-								<i className="fas fa-quote-left fa-2x mb-4"></i>
 
-								<p className={`lead ${styles.lead}`}>
-									{state.doctor.quote.quote}
-								</p>
+						<div className="card-body " style={{ height: "100%", width: "100%" }}>
+							<i className="fas fa-quote-left fa-2x mb-4"></i>
 
-								<hr />
+							<p className={`lead ${styles.lead}`}>
+								{state.doctor.quote.quote}
+							</p>
 
-								<div className="d-flex justify-content-between">
-									<p className="mb-0">{state.doctor.quote.author}</p>
-									<h6 className="mb-0">
-										<span
-											className="badge rounded-pill"
-											style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
-										>
-											876
-										</span>{" "}
-										<i className="fas fa-heart ms-2"></i>
-									</h6>
-								</div>
+							<hr />
+
+							<div className="d-flex justify-content-between">
+								<p className="mb-0">{state.doctor.quote.author}</p>
+								<h6 className="mb-0">
+									<span
+										className="badge rounded-pill"
+										style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
+									>
+										876
+									</span>{" "}
+									<i className="fas fa-heart ms-2"></i>
+								</h6>
 							</div>
+						</div>
 					</Box>
 				</Box>
 			</Box>
 
 			{incomingCall ? (
-				<div
-					style={{
-						position: "fixed",
-						width: "100%",
-						height: "100%",
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "center",
-						alignItems: "center",
-						backgroundColor: "rgb(0,0,0,0.9)",
-						backdropFilter: blur("10px"),
-						zIndex: "2",
-						top: 0,
-						bottom: 0,
-						right: 0,
-						left: 0,
-					}}
-				>
-					<h4 style={{ color: "#fff" }}>
-						Patient {patientName} is calling you
-					</h4>
-					<div
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "space-evenly",
-							width: "20%",
-						}}
-					>
-						<Button
-							variant="contained"
-							color="success"
-							onClick={handleAcceptCall}
-						>
-							Accept
-						</Button>
-						<Button variant="outlined" color="error">
-							Reject
-						</Button>
-					</div>
-				</div>
+				<IncomingCall utils={handleAcceptCall} vars={patientName} />
 			) : (
 				<></>
 			)}
+			{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
+			
 		</>
 	);
 }
