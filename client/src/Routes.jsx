@@ -22,7 +22,8 @@ import {
 	ViewConsents,
 	Reports,
 	PatientPrescription,
-	MyCalendar
+	MyCalendar,
+	PrivateRoute,
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
@@ -32,10 +33,10 @@ const Common = (props) => {
 	const user = props.user;
 	const store = props.store;
 	return (
-		<>
+		<PrivateRoute>
 			<Nav sidebar={{ sidebar }} user={{ user }} store={{ store }} />
 			<Outlet />
-		</>
+		</PrivateRoute>
 	);
 };
 const LandingNav = (props) => {
@@ -71,11 +72,23 @@ const router = createBrowserRouter([
 				path: "/contact-s",
 				element: <Landing />,
 			},
+			{
+				path: "/login",
+				element: <Login store={store} />,
+			},
+			{
+				path: "/doctor/logout",
+				element: <Landing store={store} />,
+			},
+			{
+				path: "/patient/logout",
+				element: <Landing store={store} />,
+			},
+			{
+				path: "/admin/logout",
+				element: <Landing store={store} />,
+			},
 		],
-	},
-	{
-		path: "/login",
-		element: <Login store={store} />,
 	},
 
 	{
@@ -84,16 +97,20 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/doctor/changepwd",
-		element: <ChangePassword />,
+		element: <PrivateRoute> <ChangePassword /> </PrivateRoute>,
 	},
 
 	{
 		path: "/admin/changepwd",
-		element: <ChangePassword />,
+		element:<PrivateRoute> <ChangePassword /> </PrivateRoute>,
 	},
 	{
 		path: "patient/details",
-		element: <PatientDetails store={store} />,
+		element: (
+			<PrivateRoute>
+				<PatientDetails store={store} />
+			</PrivateRoute>
+		),
 	},
 	{
 		path: "/room/:roomId",
@@ -103,14 +120,7 @@ const router = createBrowserRouter([
 		path: "/endCall",
 		element: <EndCall store={store} />,
 	},
-	{
-		path: "/doctor/logout",
-		element: <Landing store={store} />,
-	},
-	{
-		path: "/patient/logout",
-		element: <Landing store={store} />,
-	},
+
 	{
 		element: (
 			<Common
@@ -122,7 +132,7 @@ const router = createBrowserRouter([
 						"Feedback",
 						"Refer",
 						"View Consents",
-						"Logout"
+						"Logout",
 					],
 				}}
 				user={{ type: "doctor" }}
@@ -132,39 +142,39 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/doctor/dashboard",
-				element: <DoctorDashboard />,
+				element: (
+					<PrivateRoute>
+						<DoctorDashboard />
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/feedback",
-				element: <Feedback />,
-			},
-			{
-				path: "/doctor/refer",
-				element: <Refer />,
+				element:<PrivateRoute> <Feedback /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/patients",
-				element: <DocPatients />,
+				element:<PrivateRoute> <DocPatients /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/calendar",
-				element: <MyCalendar />,
+				element: <PrivateRoute> <MyCalendar /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/feedback",
-				element: <Feedback />,
+				element: <PrivateRoute> <Feedback /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/refer",
-				element: <Refer />,
+				element:<PrivateRoute> <Refer /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/departments",
-				element: <Departments />,
+				element:<PrivateRoute> <Departments /> </PrivateRoute>,
 			},
 			{
 				path: "/doctor/viewConsents",
-				element: <ViewConsents />,
+				element:<PrivateRoute> <ViewConsents /> </PrivateRoute>,
 			},
 		],
 	},
@@ -187,24 +197,24 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "patient/dashboard",
-				element: <PatientDashboard />,
+				element:<PrivateRoute> <PatientDashboard /> </PrivateRoute>,
 			},
 			{
 				path: "patient/consult",
-				element: <PatientConsultation />,
+				element: <PrivateRoute> <PatientConsultation /> </PrivateRoute>,
 			},
 			{
 				path: "patient/reports",
-				element: <Reports />
+				element:<PrivateRoute> <Reports /> </PrivateRoute>,
 			},
 			{
 				path: "patient/prescriptions",
-				element: <PatientPrescription />
+				element:<PrivateRoute> <PatientPrescription /> </PrivateRoute>,
 			},
 			{
 				path: "patient/upcomingappointments",
-				element: <MyCalendar />
-			}
+				element:<PrivateRoute> <MyCalendar /> </PrivateRoute>,
+			},
 		],
 	},
 ]);

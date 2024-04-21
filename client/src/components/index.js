@@ -30,6 +30,7 @@ import ViewConsents from "./doctor/ViewConsents";
 import Reports from "./Patient/Reports";
 import PatientPrescription from "./Patient/PatientPrescription";
 import MyCalendar from "./common/MyCalendar";
+import PrivateRoute from "./common/PrivateRoute";
 export {
 	MidNavbar,
 	SideBar,
@@ -62,5 +63,6 @@ export {
 	ViewConsents,
 	Reports,
 	PatientPrescription,
-	MyCalendar
+	MyCalendar,
+	PrivateRoute
 };

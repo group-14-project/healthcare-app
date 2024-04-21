@@ -31,6 +31,7 @@ height: 100vh;
 min-height: 100vh;
 overflow: hidden;
 width: 100vw;
+
 }
 
 .row {
@@ -270,11 +271,13 @@ border-top-left-radius: max(50vw, 50vh);
 .container.sign-in::before {
 transform: translate(0, 0);
 right: 50%;
+z-index: 2;
 }
 
 .container.sign-up::before {
 transform: translate(100%, 0);
 right: 50%;
+z-index: 2;
 }
 
 /* RESPONSIVE */

@@ -102,45 +102,6 @@ export const formatDate = (inputDate) => {
 	return `${dayOfMonth} ${monthName} ${yearValue}`;
 }
 
-// export const handleOTPverification = createAsyncThunk(
-// 	"login/verifyOTP",
-// 	async (otpdata, { getState, dispatch }) => {
-// 		const state = getState();
-// 		const userData = {
-// 			user: {
-// 				email: state.login.user.email,
-// 				otp: otpdata.otp,
-// 			},
-// 		};
-// 		try {
-// 			const response = await axios.post(
-// 				`http://localhost:9090/${state.login.user.role}/${otpdata.type}`,
-// 				userData
-// 			);
-// 			console.log("login Slice after verify", response.data);
-// 			console.log("login Slice after verify state", getState());
-// 			if (otpdata.type === "login") {
-// 				localStorage.setItem(
-// 					"Authorization",
-// 					response.headers.get("authorization")
-// 				);
-// 				if (state.login.user.role === "patient") {
-// 					dispatch(patientActions.addPatientDetails(response.data));
-// 				} else if (state.login.user.role === "doctor") {
-// 					dispatch(doctorActions.addDoctorDetails(response.data));
-// 				}
-// 				// else{
-// 				// 	// dispatch(adminActions.updateAdminDetails(response.data));
-// 				// }
-// 			}
-// 			return response.data;
-// 		} catch (error) {
-// 			console.error("Error logging in:", error);
-// 			throw error;
-// 		}
-// 	}
-// );
-
 export const handleOTPverification = (otpdata) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
