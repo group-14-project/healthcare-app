@@ -36,14 +36,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 function ViewConsents() {
 	
-	const dispatch = useDispatch();
 	const seniorDoctorConsents = useSelector(
 		(state) => state.seniorDoctor.consents
 	);
 
 	const options = { month: 'long' }; 
 	useEffect(() => {
-		// dispatch(fetchConsents());
+	
 		console.log("seniorDoctorConsents",seniorDoctorConsents)
 	}, []);
 	return (
