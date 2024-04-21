@@ -14,7 +14,7 @@
 
 .quick_actions{
     display: flex;
-    margin-top: 9%;
+    margin-top: -5%;
     justify-content: space-around;
     box-sizing: border-box;
 }
@@ -68,8 +68,8 @@
 }
 
 .graph{
-    margin-top: 5%;
-    height: 300px;
+    /* margin-top: 5%; */
+    height: 550px;
     width: 100%;
     border-radius: 30px;
     background-color: white;
@@ -101,6 +101,7 @@
 
 .calender{
     height: 30%;
+    border: 2px solid black;
 }
 
 .side_divs::-webkit-scrollbar {
@@ -196,5 +197,5 @@ color: #555;
 
 .graph{
     background-color: white !important;
-    margin-top: 9% !important;
+    /* margin-top: 9% !important; */
 }

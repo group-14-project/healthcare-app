@@ -72,10 +72,7 @@ const router = createBrowserRouter([
 				path: "/contact-s",
 				element: <Landing />,
 			},
-			{
-				path: "/login",
-				element: <Login store={store} />,
-			},
+			
 			{
 				path: "/doctor/logout",
 				element: <Landing store={store} />,
@@ -89,6 +86,10 @@ const router = createBrowserRouter([
 				element: <Landing store={store} />,
 			},
 		],
+	},
+	{
+		path: "/login",
+		element: <Login store={store} />,
 	},
 
 	{
@@ -126,7 +127,7 @@ const router = createBrowserRouter([
 			<Common
 				sidebar={{
 					content: [
-						"Patients",
+						"All Patients",
 						"Calendar",
 						"Departments",
 						"Feedback",
@@ -153,7 +154,7 @@ const router = createBrowserRouter([
 				element:<PrivateRoute> <Feedback /> </PrivateRoute>,
 			},
 			{
-				path: "/doctor/patients",
+				path: "/doctor/allpatients",
 				element:<PrivateRoute> <DocPatients /> </PrivateRoute>,
 			},
 			{

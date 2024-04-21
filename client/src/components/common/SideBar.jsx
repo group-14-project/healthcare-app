@@ -23,10 +23,12 @@ import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import smallLogo from "../../assets/logo.png";
 import largeLogo from "../../assets/logo_full.png";
-import { Link } from "react-router-dom";
-import './Sidebar.css';
+import { Link, useNavigate } from "react-router-dom";
+import "./Sidebar.css";
 import { useLocation } from "react-router-dom";
-import ShieldIcon from '@mui/icons-material/Shield';
+import ShieldIcon from "@mui/icons-material/Shield";
+import { useSelector } from "react-redux";
+import { loginActions } from "../../Store/loginSlice";
 
 const drawerWidth = 240;
 
@@ -84,6 +86,12 @@ function SideBar(props) {
 	const location = useLocation();
 	const patientData = location.state;
 	console.log(location.state);
+	const navigate = useNavigate();
+	const role = useSelector((state) => state.login.user.role);
+
+	const showDashboard = () => {
+		navigate(`/${role}/dashboard`);
+	};
 
 	React.useEffect(() => {
 		function handleClickOutside(event) {
@@ -103,6 +111,13 @@ function SideBar(props) {
 		setLogo(largeLogo);
 	};
 
+	const handleLogout = () => {
+		localStorage.clear();
+		dispatch(loginActions.resetState());
+
+		navigate("/");
+	};
+
 	return (
 		<Box className="sidebar-parent" ref={sidebarRef}>
 			<CssBaseline />
@@ -110,13 +125,18 @@ function SideBar(props) {
 			<ThemeProvider theme={SidebarTheme}>
 				<Drawer variant="permanent" open={open}>
 					<DrawerHeader className="logo">
-						<IconButton>
-							<img src={logo} alt="logo" className={logo === smallLogo ? "small_logo_img" : "large_logo_img"} />
+						<IconButton onClick={showDashboard}>
+							<img
+								src={logo}
+								alt="logo"
+								className={
+									logo === smallLogo ? "small_logo_img" : "large_logo_img"
+								}
+							/>
 						</IconButton>
 					</DrawerHeader>
 
 					<DrawerHeader className="burger-btn">
-
 						<IconButton
 							color="#fff"
 							aria-label="open drawer"
@@ -128,7 +148,6 @@ function SideBar(props) {
 						>
 							<MenuIcon style={{ color: "#fff" }} />
 						</IconButton>
-
 					</DrawerHeader>
 					<Divider />
 					<List>
@@ -138,10 +157,10 @@ function SideBar(props) {
 									className="sidebar-btn"
 									sx={{
 										justifyContent: open ? "initial" : "center",
-										marginBottom: "10px"
+										marginBottom: "10px",
 									}}
 									component={Link}
-									to={`${userType}/${text.replace(/\s+/g, '').toLowerCase()}`}
+									to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
 									patient={patientData}
 								>
 									<ListItemIcon
@@ -149,7 +168,7 @@ function SideBar(props) {
 											minWidth: 0,
 											mr: open ? 3 : "auto",
 											justifyContent: "center",
-											color: "#fff"
+											color: "#fff",
 										}}
 									>
 										{index == 0 ? (
@@ -162,20 +181,16 @@ function SideBar(props) {
 											<UpdateSharpIcon style={{ color: "#fff" }} />
 										) : index == 4 && userType === "doctor" ? (
 											<UndoSharpIcon style={{ color: "#fff" }} />
-										)
-
-											: index == 5 ? (
-												<ShieldIcon style={{ color: "#fff" }} />
-											)
-
-												: (
-													<LogoutSharpIcon style={{ color: "#fff" }} />
-												)
-
-
-										}
+										) : index == 5 ? (
+											<ShieldIcon style={{ color: "#fff" }} />
+										) : (
+											<LogoutSharpIcon style={{ color: "#fff" }} />
+										)}
 									</ListItemIcon>
-									<ListItemText primary={text} sx={{ ...(!open && { display: "none" }), color: "#fff" }} />
+									<ListItemText
+										primary={text}
+										sx={{ ...(!open && { display: "none" }), color: "#fff" }}
+									/>
 								</ListItemButton>
 							</ListItem>
 						))}

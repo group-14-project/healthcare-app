@@ -9,28 +9,24 @@ import bloodType from "../../assets/blood-type.png";
 import weight from "../../assets/weight.png";
 import PatientTable from "./PatientTable";
 import { store } from "../../Store/store";
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";;
-import listPlugin from '@fullcalendar/list';
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
 import styled from "@emotion/styled";
-import './PatientDashboard.css'
+import "./PatientDashboard.css";
 import CalendarModal from "./CalendarModal";
 import { patientActions } from "../../Store/patientSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
-
-
 const events = [
-	{ id: 1, title: 'Appointment-1', start: "2024-04-23 14:30", allDay: false },
-	{ id: 2, title: 'Appointment-2', start: "2024-04-22 12:30", allDay: false },
-	{ id: 3, title: 'Appointment-3', start: "2024-04-30 11:00", allDay: false },
-	{ id: 4, title: 'Appointment-4', start: "2024-04-25 16:15", allDay: false }
-]
-
-
+	{ id: 1, title: "Appointment-1", start: "2024-04-23 14:30", allDay: false },
+	{ id: 2, title: "Appointment-2", start: "2024-04-22 12:30", allDay: false },
+	{ id: 3, title: "Appointment-3", start: "2024-04-30 11:00", allDay: false },
+	{ id: 4, title: "Appointment-4", start: "2024-04-25 16:15", allDay: false },
+];
 
 const PatientDashboard = (props) => {
 	// const state = store.getState().patient;
@@ -40,16 +36,11 @@ const PatientDashboard = (props) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	var category = "health";
 
-
 	const dispatch = useDispatch();
 
-
-
-
 	const handleDateClick = () => {
-		setModalOpen((prev) => prev = true);
-	}
-
+		setModalOpen((prev) => (prev = true));
+	};
 
 	function renderEventContent(eventInfo) {
 		// return (
@@ -62,10 +53,8 @@ const PatientDashboard = (props) => {
 		console.log(eventInfo);
 	}
 
-
 	useEffect(() => {
-
-		console.log("hello")
+		console.log("hello");
 
 		const fetchData = async () => {
 			try {
@@ -78,8 +67,8 @@ const PatientDashboard = (props) => {
 					}
 				);
 				console.log("Quote Fetched:", response.data[0]);
-				const quoteData = (response.data[0]);
-				console.log(quoteData)
+				const quoteData = response.data[0];
+				console.log(quoteData);
 				dispatch(patientActions.updateQuote(quoteData));
 			} catch (error) {
 				console.error("Error fetching quote", error);
@@ -87,7 +76,6 @@ const PatientDashboard = (props) => {
 		};
 		fetchData();
 	}, []);
-
 
 	return (
 		<Box
@@ -255,41 +243,55 @@ const PatientDashboard = (props) => {
 					</Box>
 
 					<Box sx={{ padding: "40px" }}>
-						<PatientTable pastApp={state.patient.pastAppointments} heads={heads} />
+						<PatientTable
+							pastApp={state.patient.pastAppointments}
+							heads={heads}
+						/>
 					</Box>
 				</Box>
 			</Box>
-			<Box sx={{
-				flex: 1,
-				backgroundColor: "white",
-				justifyContent: "center",
-				alignItems: "center",
-			}}>
+			<Box
+				sx={{
+					flex: 1,
+					backgroundColor: "white",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
 				<Box
-					sx={{padding:"30px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}
+					sx={{
+						padding: "30px",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						justifyContent: "center",
+					}}
 				>
-					<Box sx={{
-						marginBottom:"40px"
-					}}>
+					<Box
+						sx={{
+							marginBottom: "40px",
+						}}
+					>
 						<FullCalendar
 							schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
-
 							// ref={calendarComponentRef}
-							initialView='dayGridMonth'
+							initialView="dayGridMonth"
 							displayEventTime={true}
 							headerToolbar={{
 								left: "prev,next,today",
 								center: "title",
-								right: "dayGridMonth"
+								right: "dayGridMonth",
 							}}
 							selectable={true}
 							plugins={[
 								dayGridPlugin,
 								interactionPlugin,
 								timeGridPlugin,
-								listPlugin
+								listPlugin,
 							]}
-							eventClick={(event) => { console.log(event.event.id) }}
+							eventClick={(event) => {
+								console.log(event.event.id);
+							}}
 							events={events}
 							contentHeight="auto"
 							themeSystem="standard"
@@ -298,18 +300,20 @@ const PatientDashboard = (props) => {
 							selectOverlap={false}
 							eventOverlap={false}
 							dateClick={handleDateClick}
-
 						/>
 					</Box>
 
-					<Box className="quote_box side_divs card text-white height" style={{ backgroundColor: "#009AAA", padding:"20px" }}>
-
-						<div className="card_body " style={{ height: "100%", width: "100%" }}>
+					<Box
+						className="quote_box side_divs card text-white height"
+						style={{ backgroundColor: "#009AAA", padding: "20px" }}
+					>
+						<div
+							className="card_body "
+							style={{ height: "100%", width: "100%" }}
+						>
 							<i className="fas fa-quote-left fa-2x mb-4"></i>
 
-							<p className="lead">
-								{state.patient.quote.quote}
-							</p>
+							<p className="lead">{state.patient.quote.quote}</p>
 
 							<hr />
 
@@ -329,10 +333,7 @@ const PatientDashboard = (props) => {
 					</Box>
 				</Box>
 				{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
-
-
-
-			</Box >
+			</Box>
 		</Box>
 	);
 };

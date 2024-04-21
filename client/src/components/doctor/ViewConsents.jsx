@@ -43,7 +43,8 @@ function ViewConsents() {
 
 	const options = { month: 'long' }; 
 	useEffect(() => {
-		dispatch(fetchConsents());
+		// dispatch(fetchConsents());
+		console.log("seniorDoctorConsents",seniorDoctorConsents)
 	}, []);
 	return (
 		<>

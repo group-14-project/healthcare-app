@@ -10,6 +10,8 @@ function Login() {
 	const dispatch = useDispatch();
 	const data = useSelector((state) => state.login.user);
 	const [containerClass, setContainerClass] = useState("sign-in");
+	const role = useSelector((state) => state.login.user.role);
+    const isAuthenticated = useSelector((state) => state.login.user.isAuthenticated);
 
 	const handleSignInChange = (e) => {
 		const { name, value } = e.target;
@@ -53,6 +55,7 @@ function Login() {
 
 	useEffect(() => {
 		// Set 'sign-in' class after 200 milliseconds
+
 		const timeoutId = setTimeout(() => {
 			setContainerClass("sign-in");
 		}, 200);
@@ -60,6 +63,12 @@ function Login() {
 		// Clean up the timeout
 		return () => clearTimeout(timeoutId);
 	}, []); // Run this effect only once after the component mounts
+
+	useEffect(() => {
+		if(isAuthenticated){
+			navigate(`/${role}/dashboard`);
+		}
+	},[isAuthenticated,navigate])
 
 	return (
 		<div id="container" className={`container ${containerClass}`}>

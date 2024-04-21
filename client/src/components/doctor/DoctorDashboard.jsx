@@ -1,41 +1,26 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Banner, Graph } from "../index";
+import { Banner, Graph, SmallCalender } from "../index";
 import { Box } from "@mui/material";
 import patient from "../../assets/patient.png";
 import appointments from "../../assets/appointments.png";
 import next_app from "../../assets/next_app.png";
 import prescription from "../../assets/prescription.png";
 import styles from "./DoctorDashboard.module.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import Button from "@mui/material/Button";
-import { store } from "../../Store/store";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
+import {fetchConsents } from "../../Store/seniorDoctorSlice";
 import IncomingCall from "./IncomingCall";
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";;
-import listPlugin from '@fullcalendar/list';
-// import styled from "@emotion/styled";
 import CalendarModal from "../Patient/CalendarModal";
 import { consultActions } from "../../Store/consultSlice";
 import { makeConnection } from "../../Store/consultSlice";
 
-const events = [
-	{ id: 1, title: 'Appointment-1', start: "2024-04-23 14:30", allDay: false },
-	{ id: 2, title: 'Appointment-2', start: "2024-04-22 12:30", allDay: false },
-	{ id: 3, title: 'Appointment-3', start: "2024-04-30 11:00", allDay: false },
-	{ id: 4, title: 'Appointment-4', start: "2024-04-25 16:15", allDay: false }
-]
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
-	// const location = useLocation();
-	// const d = location.state.doctor;
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state);
@@ -45,12 +30,12 @@ function DoctorDashboard() {
 	const [localID, setLocalID] = useState(state.doctor.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
-
 	const [modalOpen, setModalOpen] = useState(false);
 	const [consultState, setConsultState] = useState({});
 
 	useEffect(() => {
 		dispatch(handleGetAllPatients())
+		dispatch(fetchConsents());
 	}, []);
 
 	const handleDateClick = () => {
@@ -63,13 +48,8 @@ function DoctorDashboard() {
 	}, []);
 
 	const handleAcceptCall = async () => {
-
 		console.log("consult state: ", consultState);
-
-
 		const res = dispatch(makeConnection(consultState));
-
-
 		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
 			/[018]/g,
 			(c) =>
@@ -233,11 +213,11 @@ function DoctorDashboard() {
 					</Box>
 				</Box>
 				<Box className={styles.side_box}>
-					{/* <Box className={`${styles.side_divs} ${styles.calender}`}>Calender</Box> */}
-					<Box sx={{
+					<Box className={`${styles.side_divs} ${styles.calender}`}><SmallCalender/></Box>
+					{/* <Box sx={{
 						marginBottom: "40px"
 					}}>
-						<FullCalendar
+						{/* <FullCalendar
 							schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
 
 							// ref={calendarComponentRef}
@@ -263,10 +243,11 @@ function DoctorDashboard() {
 							// eventContent={(info) => <EventItem info={info} />}
 							selectOverlap={false}
 							eventOverlap={false}
-							dateClick={handleDateClick}
+							dateClick={handleDateClick} */}
 
-						/>
-					</Box>
+						{/* /> 
+						
+					</Box> */}
 					<Box
 						className={`${styles.appointments_container} ${styles.side_divs}`}
 					>

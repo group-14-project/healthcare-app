@@ -79,7 +79,7 @@ export const handleSignUp = (signUpData) => {
 
 export const formatDate = (inputDate) => {
 	// Split the input date into year, month, and day
-	const [year, month, day] = inputDate.split('-');
+	const [year, month, day] = inputDate.split("-");
 
 	// Create a new Date object
 	const date = new Date(year, month - 1, day);
@@ -91,8 +91,18 @@ export const formatDate = (inputDate) => {
 
 	// Define an array of month names
 	const monthNames = [
-		'January', 'February', 'March', 'April', 'May', 'June', 
-		'July', 'August', 'September', 'October', 'November', 'December'
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
 	];
 
 	// Get the month name using the month index
@@ -100,7 +110,7 @@ export const formatDate = (inputDate) => {
 
 	// Return the formatted date string
 	return `${dayOfMonth} ${monthName} ${yearValue}`;
-}
+};
 
 export const handleOTPverification = (otpdata) => {
 	return async (dispatch, getState) => {
@@ -167,7 +177,10 @@ const loginSlice = createSlice({
 		},
 		updateAuthenticated: (state, action) => {
 			state.user.isAuthenticated = action.payload;
-		}
+		},
+		logout: (state) => {
+			state.user.isAuthenticated = false;
+		},
 	},
 });
 

@@ -31,6 +31,7 @@ import Reports from "./Patient/Reports";
 import PatientPrescription from "./Patient/PatientPrescription";
 import MyCalendar from "./common/MyCalendar";
 import PrivateRoute from "./common/PrivateRoute";
+import SmallCalender from "./common/SmallCalender";
 export {
 	MidNavbar,
 	SideBar,
@@ -64,5 +65,6 @@ export {
 	Reports,
 	PatientPrescription,
 	MyCalendar,
-	PrivateRoute
+	PrivateRoute,
+	SmallCalender
 };

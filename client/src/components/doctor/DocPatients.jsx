@@ -13,7 +13,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 // import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
-import {Prescription} from "../index";
+import { Prescription } from "../index";
 import formatDate from "../../Utility Data/dateChangeFunc";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -38,22 +38,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function PrescriptionModal(props) {
-	// console.log("PM",props);
 	return (
 		<Modal
-		{...props}
+			{...props}
 			size="lg"
-			// show={lgShow}
-			// onHide={() => setLgShow(false)}
 			aria-labelledby="example-modal-sizes-title-lg"
-			sx = {{width:"100%"}}
+			sx={{ width: "100%" }}
 		>
 			<Modal.Header closeButton>
 				<Modal.Title id="example-modal-sizes-title-lg">
 					Prescription
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body><Prescription props = {props} /></Modal.Body>
+			<Modal.Body>
+				<Prescription props={props} />
+			</Modal.Body>
 		</Modal>
 	);
 }
@@ -88,13 +87,17 @@ function AppointmentsModal(props) {
 							{AppointmentDetails.map((appointment, index) => (
 								<StyledTableRow key={index}>
 									<StyledTableCell component="th" scope="row">
-										{formatDate(appointment.appointmentDateAndTime.split("T")[0])}
+										{formatDate(
+											appointment.appointmentDateAndTime.split("T")[0]
+										)}
 									</StyledTableCell>
 									<StyledTableCell align="center">
 										{appointment.mainSymptom}
 									</StyledTableCell>
 									<StyledTableCell align="right">
-										<Button onClick={() => setLgShow(true)}>View Prescription</Button>
+										<Button onClick={() => setLgShow(true)}>
+											View Prescription
+										</Button>
 										<PrescriptionModal
 											show={lgShow}
 											onHide={() => setLgShow(false)}
@@ -114,17 +117,74 @@ function AppointmentsModal(props) {
 		</Modal>
 	);
 }
+function ReportsModal(props) {
+	const AppointmentDetails = props.patientDetails;
+	const [lgShow, setLgShow] = useState(false);
+	return (
+		<Modal
+			{...props}
+			size="lg"
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">Reports</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 700 }} aria-label="customized table">
+						<TableHead>
+							<TableRow>
+								<StyledTableCell>Report Date</StyledTableCell>
+								<StyledTableCell align="center">Report Name</StyledTableCell>
+								<StyledTableCell align="right">View</StyledTableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{AppointmentDetails.map((appointment, index) => (
+								<StyledTableRow key={index}>
+									<StyledTableCell component="th" scope="row">
+										{formatDate(
+											appointment.appointmentDateAndTime.split("T")[0]
+										)}
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										{appointment.mainSymptom}
+									</StyledTableCell>
+									<StyledTableCell align="right">
+										<Button onClick={() => setLgShow(true)}>View Report</Button>
+									</StyledTableCell>
+								</StyledTableRow>
+							))}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button onClick={props.onHide}>Close</Button>
+			</Modal.Footer>
+		</Modal>
+	);
+}
 function DocPatients() {
-	const [modalShow, setModalShow] = useState(false);
+	const [appModalShow, setappModalShow] = useState(false);
+	const [repModalShow, setrepModalShow] = useState(false);
 	const dispatch = useDispatch();
 	const pastAppointments = useSelector(
 		(state) => state.doctor.pastAppointments
 	);
 	const [patientDetails, setPatientDetails] = useState([]);
-	
+
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
 	const handleViewDetails = (patientEmail) => {
-		setModalShow(true);
+		setappModalShow(true);
+		const patientsDetailsRecv = pastAppointments.filter(
+			(appointment) => appointment.patientEmail === patientEmail
+		);
+		setPatientDetails(patientsDetailsRecv);
+	};
+	const handleViewReports = (patientEmail) => {
+		setrepModalShow(true);
 		const patientsDetailsRecv = pastAppointments.filter(
 			(appointment) => appointment.patientEmail === patientEmail
 		);
@@ -139,7 +199,8 @@ function DocPatients() {
 						<TableRow>
 							<StyledTableCell>Patient Name</StyledTableCell>
 							<StyledTableCell align="center">Last Visit</StyledTableCell>
-							<StyledTableCell align="right">View Details</StyledTableCell>
+							<StyledTableCell align="center">View Reports</StyledTableCell>
+							<StyledTableCell align="center">View Details</StyledTableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -151,7 +212,20 @@ function DocPatients() {
 								<StyledTableCell align="center">
 									{formatDate(patient.date.split("T")[0])}
 								</StyledTableCell>
-								<StyledTableCell align="right">
+								<StyledTableCell align="center">
+									<Button
+										variant="primary"
+										onClick={() => handleViewReports(patient.email)}
+									>
+										View Reports
+									</Button>
+									<ReportsModal
+										show={repModalShow}
+										onHide={() => setrepModalShow(false)}
+										patientDetails={patientDetails}
+									/>
+								</StyledTableCell>
+								<StyledTableCell align="center">
 									<Button
 										variant="primary"
 										onClick={() => handleViewDetails(patient.email)}
@@ -159,8 +233,8 @@ function DocPatients() {
 										View Details
 									</Button>
 									<AppointmentsModal
-										show={modalShow}
-										onHide={() => setModalShow(false)}
+										show={appModalShow}
+										onHide={() => setappModalShow(false)}
 										patientDetails={patientDetails}
 									/>
 								</StyledTableCell>
