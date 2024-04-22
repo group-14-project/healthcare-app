@@ -27,7 +27,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 import { useLocation } from "react-router-dom";
 import ShieldIcon from "@mui/icons-material/Shield";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../Store/loginSlice";
 
 const drawerWidth = 240;
@@ -88,6 +88,9 @@ function SideBar(props) {
 	console.log(location.state);
 	const navigate = useNavigate();
 	const role = useSelector((state) => state.login.user.role);
+	const state= useSelector(state=>state.login);
+
+	const dispatch = useDispatch();
 
 	const showDashboard = () => {
 		navigate(`/${role}/dashboard`);
@@ -111,10 +114,11 @@ function SideBar(props) {
 		setLogo(largeLogo);
 	};
 
-	const handleLogout = () => {
+	const handleLogout = (e) => {
+		e.preventDefault();
 		localStorage.clear();
-		dispatch(loginActions.resetState());
-
+		loginActions.updateDetails(dispatch(loginActions.resetState()));
+		
 		navigate("/");
 	};
 
@@ -154,6 +158,7 @@ function SideBar(props) {
 						{sidebarContent.map((text, index) => (
 							<ListItem key={text} disablePadding className="sidebar-list-item">
 								<ListItemButton
+									onClick={(e)=>{text==="Logout"? handleLogout(e):""}}
 									className="sidebar-btn"
 									sx={{
 										justifyContent: open ? "initial" : "center",
@@ -169,7 +174,7 @@ function SideBar(props) {
 											mr: open ? 3 : "auto",
 											justifyContent: "center",
 											color: "#fff",
-										}}
+											}}
 									>
 										{index == 0 ? (
 											<DuoSharpIcon style={{ color: "#fff" }} />

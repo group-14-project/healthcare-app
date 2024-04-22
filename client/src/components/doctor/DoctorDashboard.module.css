@@ -101,7 +101,7 @@
 
 .calender{
     height: 30%;
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 
 .side_divs::-webkit-scrollbar {
