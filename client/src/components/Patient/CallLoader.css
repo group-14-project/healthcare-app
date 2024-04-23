@@ -1,0 +1,51 @@
+.bouncing-loader {
+     display: flex;
+     justify-content:center;
+}
+
+.main-loader{
+     display: flex;
+     flex-direction: column;
+     justify-content:center;
+     align-items:center;
+     position:fixed;
+     width: 100%;
+     height: 100%;
+     background-color: rgb(0,0,0,0.9);
+     backdrop-filter: blur(3px);
+     z-index: 2;
+     top: 0;
+     bottom: 0;
+     right: 0;
+     left: 0;
+}
+
+.request h3{
+     color: #fff;
+     margin: 30px;
+}
+
+.bouncing-loader>div {
+     width: 16px;
+     height: 16px;
+     margin: 3px 6px;
+     border-radius: 50%;
+     background-color: #a3a1a1;
+     opacity: 1;
+     animation: bouncing-loader 0.6s infinite alternate;
+}
+
+@keyframes bouncing-loader {
+     to {
+          opacity: 0.1;
+          transform: translateY(-16px);
+     }
+}
+
+.bouncing-loader>div:nth-child(2) {
+     animation-delay: 0.2s;
+}
+
+.bouncing-loader>div:nth-child(3) {
+     animation-delay: 0.4s;
+}

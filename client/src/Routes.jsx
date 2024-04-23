@@ -1,3 +1,4 @@
+import { SnackbarProvider } from "notistack";
 import {
 	Nav,
 	Landing,
@@ -27,6 +28,7 @@ import {
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+
 
 const Common = (props) => {
 	const sidebar = props.sidebar;
@@ -202,7 +204,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "patient/consult",
-				element: <PrivateRoute> <PatientConsultation /> </PrivateRoute>,
+				element: <PrivateRoute> <SnackbarProvider> <PatientConsultation /> </SnackbarProvider>  </PrivateRoute>,
 			},
 			{
 				path: "patient/reports",

@@ -36,6 +36,7 @@ function DoctorDashboard() {
 	useEffect(() => {
 		dispatch(handleGetAllPatients())
 		dispatch(fetchConsents());
+		
 	}, []);
 
 	const handleDateClick = () => {
@@ -50,6 +51,9 @@ function DoctorDashboard() {
 	const handleAcceptCall = async () => {
 		console.log("consult state: ", consultState);
 		const res = dispatch(makeConnection(consultState));
+
+		console.log("make connection res: ",res);
+
 		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
 			/[018]/g,
 			(c) =>
@@ -80,6 +84,24 @@ function DoctorDashboard() {
 
 		navigate(`/room/${newUuid}`, { state: { acceptedBy, initiatedBy } });
 	};
+
+
+	const handleRejectCall = () => {
+		setIncomingCall(false);
+		const rejectedBy = { name: state.doctor.firstName, callee: localID, message: "Doctor is Busy right now" };
+		const initiatedBy = { name: patientName, caller: remoteID };
+
+		stompClient.current.send(
+			"/app/rejectCall",
+			{},
+			JSON.stringify({
+				rejectedBy: JSON.stringify(rejectedBy),
+				initiatedBy: JSON.stringify(initiatedBy),
+			})
+		);
+		
+	}
+
 
 	useEffect(() => {
 		var conn = new SockJS("http://localhost:9090/socket");
@@ -296,7 +318,7 @@ function DoctorDashboard() {
 			</Box>
 
 			{incomingCall ? (
-				<IncomingCall utils={handleAcceptCall} vars={patientName} />
+				<IncomingCall acceptUtil={handleAcceptCall} rejectUtil={handleRejectCall} vars={patientName} />
 			) : (
 				<></>
 			)}

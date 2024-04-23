@@ -20,6 +20,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../Store/store.js";
 import { consultActions } from "../../Store/consultSlice.js";
+import { useSnackbar } from 'notistack';
+import CallLoader from "./CallLoader.jsx";
 
 
 function PatientConsultation(props) {
@@ -32,7 +34,7 @@ function PatientConsultation(props) {
 	// console.log(patientId);
 
 	// const patientId = useSelector((state)=>{state.patient.patientId})
-	const consult = useSelector(state=>state.consult);
+	const consult = useSelector(state => state.consult);
 
 	const state = store.getState();
 
@@ -44,28 +46,33 @@ function PatientConsultation(props) {
 	const [socket, setSocket] = useState(null);
 	const [messages, setMessages] = useState([]);
 	const [remoteID, setRemoteID] = useState("");
+
+	const [calling, setCalling] = useState(false);
 	// const mysoc = useRef();
 
 	const [localID, setLocalId] = useState(patientId);
 	let stompClient = useRef();
+	const { enqueueSnackbar } = useSnackbar();
 
 	const dispatch = useDispatch();
 
-	useEffect(()=>{
+	useEffect(() => {
 
 		dispatch(consultActions.updateEmail(state.patient.email));
 
-	},[])
+	}, [])
 
 
 	const handleCall = (doctorId, doctorName) => {
+		setCalling(true);
 		var conn = new SockJS("http://localhost:9090/socket");
-		dispatch(consultActions.updateConsultDetails({name: "appointmentTimeDate", value: new Date().toISOString()}));
+		dispatch(consultActions.updateConsultDetails({ name: "appointmentTimeDate", value: new Date().toISOString() }));
 		stompClient.current = new Stomp.over(conn);
 		setRemoteID(doctorId.toString());
 		stompClient.current.connect({}, (frame) => {
 			stompClient.current.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
 				// console.log(accept);
+				setCalling(false);
 				const acceptBody = JSON.parse(accept.body);
 				const acceptedBy = JSON.parse(acceptBody.acceptedBy);
 				const initiatedBy = JSON.parse(acceptBody.initiatedBy);
@@ -75,9 +82,18 @@ function PatientConsultation(props) {
 				initiatedBy.name = doctorName;
 				console.log(acceptBody);
 				navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
+			});
+
+			stompClient.current.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
+				setCalling(false);
+				const acceptBody = JSON.parse(accept.body);
+				const rejectedBy = JSON.parse(acceptBody.rejectedBy);
+				console.log(rejectedBy.message);
+				const variant="error"
+				enqueueSnackbar(rejectedBy.message, {variant});
 			})
 
-			console.log("consult: ",consult);
+			console.log("consult: ", consult);
 
 			stompClient.current.send("/app/call", {}, JSON.stringify({
 				"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
@@ -101,7 +117,7 @@ function PatientConsultation(props) {
 	};
 
 	useEffect(() => {
-		if(socket) {
+		if (socket) {
 			socket.onmessage = (event) => {
 				const message = JSON.parse(event.data);
 				setMessages(message);
@@ -114,6 +130,7 @@ function PatientConsultation(props) {
 
 
 	return (
+
 		<Box className="patient-consultation">
 			<Chatbot
 				socketFunc={createWebSocket}
@@ -152,6 +169,13 @@ function PatientConsultation(props) {
 					</Table>
 				</TableContainer>
 			</Box>
+			{
+				calling
+				?
+				<CallLoader/>
+				:
+				<></>
+			}
 		</Box>
 	);
 }

@@ -17,7 +17,7 @@ const IncomingCall = (props) => {
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: "rgb(0,0,0,0.9)",
-                    backdropFilter: blur("10px"),
+                    backdropFilter: "blur(5px)",
                     zIndex: "2",
                     top: 0,
                     bottom: 0,
@@ -39,11 +39,11 @@ const IncomingCall = (props) => {
                     <Button
                          variant="contained"
                          color="success"
-                         onClick={props.utils}
+                         onClick={props.acceptUtil}
                     >
                          Accept
                     </Button>
-                    <Button variant="outlined" color="error">
+                    <Button variant="outlined" color="error" onClick={props.rejectUtil}>
                          Reject
                     </Button>
                </div>

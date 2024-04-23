@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { doctorActions } from "./doctorSlice";
 
 const initialState = {
      email: "",
@@ -7,7 +8,6 @@ const initialState = {
      secondarySymptom: "",
      appointmentTimeDate: new Date().toString()
 }
-
 
 export const makeConnection = (data) => {
      return async (dispatch, getState) => {
@@ -28,12 +28,26 @@ export const makeConnection = (data) => {
                               },
                          }
 
-                    );
-               return response;
+                    ).then((res)=>{
+                         console.log(res);
+                         const data = JSON.parse(res.config.data);
+
+                         // dispatch(doctorActions.updatePastAppointments(data));
+
+                         return res;
+                    })
+
+               // console.log(response.data);
+
+
+
+               
+               
           };
           try {
                const response = await fetchData();
-               console.log("appointment added", response.data);
+               // console.log("appointment added", response.data);
+               return response;
           } catch (error) {
                console.error("Error adding appointment", error);
           }

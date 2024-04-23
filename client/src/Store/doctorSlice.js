@@ -178,6 +178,9 @@ const doctorSlice = createSlice({
 		addConsentShared: (state, { payload }) => {
 			state.consentsShared.push(payload);
 		},
+		updatePastAppointments: (state, action) => {
+			state.pastAppointments = [...state.pastAppointments, action.payload];
+		}
 	},
 });
 
