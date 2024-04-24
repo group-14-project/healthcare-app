@@ -88,7 +88,7 @@ function SideBar(props) {
 	console.log(location.state);
 	const navigate = useNavigate();
 	const role = useSelector((state) => state.login.user.role);
-	const state= useSelector(state=>state.login);
+	const state = useSelector(state => state.login);
 
 	const dispatch = useDispatch();
 
@@ -119,7 +119,7 @@ function SideBar(props) {
 		localStorage.clear();
 		sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
-		
+
 		navigate("/");
 	};
 
@@ -159,7 +159,7 @@ function SideBar(props) {
 						{sidebarContent.map((text, index) => (
 							<ListItem key={text} disablePadding className="sidebar-list-item">
 								<ListItemButton
-									onClick={(e)=>{text==="Logout"? handleLogout(e):""}}
+									onClick={(e) => { text === "Logout" ? handleLogout(e) : "" }}
 									className="sidebar-btn"
 									sx={{
 										justifyContent: open ? "initial" : "center",
@@ -175,7 +175,7 @@ function SideBar(props) {
 											mr: open ? 3 : "auto",
 											justifyContent: "center",
 											color: "#fff",
-											}}
+										}}
 									>
 										{index == 0 ? (
 											<DuoSharpIcon style={{ color: "#fff" }} />
@@ -185,9 +185,13 @@ function SideBar(props) {
 											<MedicationSharpIcon style={{ color: "#fff" }} />
 										) : index == 3 ? (
 											<UpdateSharpIcon style={{ color: "#fff" }} />
-										) : index == 4 && userType === "doctor" ? (
-											<UndoSharpIcon style={{ color: "#fff" }} />
-										) : index == 5 ? (
+										) : index == 4 ?
+										userType === "doctor"
+											?
+											(<UndoSharpIcon style={{ color: "#fff" }} />)
+											:
+											<ShieldIcon style={{ color: "#fff" }} />
+										: index == 5 && userType==="doctor"?(
 											<ShieldIcon style={{ color: "#fff" }} />
 										) : (
 											<LogoutSharpIcon style={{ color: "#fff" }} />

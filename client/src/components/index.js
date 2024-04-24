@@ -36,6 +36,7 @@ import PrescriptionForm from "./doctor/PrescriptionForm";
 import HospitalDashboard from "./hospital/HospitalDashboard";
 import AddDepartment from "./hospital/AddDepartment";
 import AddDoctor from "./hospital/AddDoctor";
+import Consents from "./Patient/Consents";
 export {
 	MidNavbar,
 	SideBar,
@@ -74,5 +75,6 @@ export {
 	PrescriptionForm,
 	HospitalDashboard,
 	AddDepartment,
-	AddDoctor
+	AddDoctor,
+	Consents
 };
