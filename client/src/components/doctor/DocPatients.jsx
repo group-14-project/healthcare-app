@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-// import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Prescription } from "../index";
 import formatDate from "../../Utility Data/dateChangeFunc";

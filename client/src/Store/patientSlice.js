@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
 	bloodGroup: "",
@@ -140,9 +140,6 @@ export const downloadReport = (reportId, reportName) => {
 			link.setAttribute("download", reportName);
 			document.body.appendChild(link);
 			link.click();
-			// setFileData(null);
-			// setFileName("");
-
 		} catch (error) {
 			console.log("Error downloading report", error);
 		}
@@ -169,7 +166,6 @@ const patientSlice = createSlice({
 			state.futureAppointments = payload.futureAppointments;
 			state.patientId = payload.patientId;
 			state.firstTimeLogin = payload.firstTimeLogin;
-			// state.reports = [];
 		},
 		updatePatientDetails: (state, { payload }) => {
 			console.log(payload);
@@ -182,7 +178,6 @@ const patientSlice = createSlice({
 			state.quote = payload;
 		},
 		updateReports: (state, action) => {
-			console.log(action.payload);
 			state.reports = action.payload;
 		}
 	},

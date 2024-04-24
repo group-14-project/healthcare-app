@@ -10,9 +10,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from '@mui/material/Button';
 import ReportForm from './ReportForm';
-import axios from 'axios';
-import { patientActions, fetchReports, downloadReport } from '../../Store/patientSlice';
+import { fetchReports, downloadReport } from '../../Store/patientSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import formatDate from '../../Utility Data/dateChangeFunc';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
      [`&.${tableCellClasses.head}`]: {
@@ -34,18 +34,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
           border: 0,
      },
 }));
-
-function createData(repordId, reportName, reportLink, date) {
-     return { repordId, reportName, reportLink, date };
-}
-
-const rows = [
-     createData(1, "Blood Test", "Download", "25 May 2024"),
-     createData(2, "Blood Test", "Download", "25 May 2024"),
-     createData(3, "Blood Test", "Download", "25 May 2024"),
-     createData(4, "Blood Test", "Download", "25 May 2024"),
-];
-
 
 
 const Reports = (props) => {
@@ -70,10 +58,7 @@ const Reports = (props) => {
 
           const data = dispatch(downloadReport(reportId, reportName));
 
-
      }
-
-   
 
 
      const handleShow = () => setShow(true);
@@ -113,7 +98,7 @@ const Reports = (props) => {
                                              {row.doctorFirstName + ' ' + row.doctorLastName}
                                         </StyledTableCell>
                                         <StyledTableCell component="td" scope="row" align="center">
-                                             {row.localDateTime.slice(0,10)}
+                                             {formatDate(row.localDateTime.slice(0,10))}
                                         </StyledTableCell>
 
                                    </StyledTableRow>
