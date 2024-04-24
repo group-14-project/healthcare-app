@@ -365,7 +365,7 @@ z-index: 2;
     border-right:1px solid var(--gray-2);
 }
 
-#admin,#doctor,#patient{
+#hospital,#doctor,#patient{
     background-color: #efefef;
     border-radius: 0rem ;
     color:black;

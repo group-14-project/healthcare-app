@@ -21,34 +21,8 @@ const initialState = {
 	AllpatientsList: [],
 	hospitalAndSpecializationAndDoctor: [],
 	consentsShared: [],
+	reviews: [],
 };
-
-// export const handleUpdateDoctorDetails = () => {
-// 	return async (dispatch,getState) => {
-// 		const fetchData = async () => {
-// 			const state = getState();
-// 			const response = await axios.put(
-// 				"http://localhost:9090/patient/updateDetail",
-// 				state.patient,
-// 				{
-// 					headers: {
-// 						Authorization: localStorage.getItem("Authorization"),
-// 						"Access-Control-Allow-Origin": "*",
-// 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-// 						"Content-Type": "application/json",
-// 					},
-// 				}
-// 			);
-// 			return response;
-// 		};
-// 		try {
-// 			const response = await fetchData();
-// 			console.log("details added", response.data);
-// 		} catch (error) {
-// 			console.error("Error adding details", error);
-// 		}
-// 	};
-// };
 
 export const handlehospitalAndSpecializationAndDoctor = () => {
 	return async (dispatch, getState) => {
@@ -84,6 +58,36 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 	};
 };
 
+export const fetchReviews = () => {
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/doctor/viewReviews",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			const response = await fetchData();
+			dispatch(
+				doctorActions.updateDoctorDetails({
+					name: "reviews",
+					value: response.data,
+				})
+			);
+		} catch (error) {
+			console.error("Error getting reviews", error);
+		}
+	};
+};
+
 export const handleGetAllPatients = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
@@ -114,7 +118,7 @@ export const handleGetAllPatients = () => {
 	};
 };
 
-export const consentRegistration = (data) => {	
+export const consentRegistration = (data) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.post(
@@ -132,10 +136,15 @@ export const consentRegistration = (data) => {
 			return response;
 		};
 		try {
-			const existingConsent = getState().doctor.consentsShared.find((consent) => {
-				return (consent.patientEmail === data.patientEmail && consent.newDoctorEmail === data.newDoctorEmail);
-			})
-			if (!existingConsent){
+			const existingConsent = getState().doctor.consentsShared.find(
+				(consent) => {
+					return (
+						consent.patientEmail === data.patientEmail &&
+						consent.newDoctorEmail === data.newDoctorEmail
+					);
+				}
+			);
+			if (!existingConsent) {
 				const response = await fetchData();
 				console.log("Consent shared", response.data);
 			}
@@ -180,7 +189,7 @@ const doctorSlice = createSlice({
 		},
 		updatePastAppointments: (state, action) => {
 			state.pastAppointments = [...state.pastAppointments, action.payload];
-		}
+		},
 	},
 });
 

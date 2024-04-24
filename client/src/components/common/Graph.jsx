@@ -8,13 +8,14 @@ import {
 	LinearScale,
 	PointElement,
 } from "chart.js";
+import formatDate from "../../Utility Data/dateChangeFunc";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 function Graph(props) {
-	console.log(props);
+	// console.log(props);
 	// Extract dates and counts into separate arrays
-	const dates = props.data.map((item) => item.date);
+	const dates = props.data.map((item) => formatDate(item.date.split("T")[0]) );
 	const counts = props.data.map((item) => item.count);
 	const data = {
 		labels: dates,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -8,7 +8,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import star from "../../assets/star.png";
+import { useDispatch,useSelector } from "react-redux";
+import { fetchReviews } from "../../Store/doctorSlice";
+import { store } from "../../Store/store";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -31,42 +33,32 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 	},
 }));
 
-function createData(name, rating, feedback) {
-	return { name, rating, feedback };
-}
-const rows = [
-	createData("Frozen yoghurt", 4, "Click Here"),
-	createData("Ice cream sandwich", 3, "Click Here"),
-	createData("Eclair", 5, "Click Here"),
-	createData("Cupcake", 5, "Click Here"),
-	createData("Gingerbread", 5, "Click Here"),
-];
+
 function Feedback() {
+	const reviews = useSelector((state) => state.doctor.reviews);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchReviews());
+	}, []);
+
 	return (
 		<Box sx={{ display: "flex", marginLeft: "65px"}}>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 700 }} aria-label="customized table">
 					<TableHead>
 						<TableRow>
-							<StyledTableCell>Patient Name</StyledTableCell>
-							<StyledTableCell align="center">Rating</StyledTableCell>
-							<StyledTableCell align="right">Feedback</StyledTableCell>
+							<StyledTableCell align="center">Patient Name</StyledTableCell>
+							<StyledTableCell align="center">Feedback</StyledTableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{rows.map((row) => (
-							<StyledTableRow key={row.name}>
-								<StyledTableCell component="th" scope="row">
-									{row.name}
+						{reviews.map((review,index) => (
+							<StyledTableRow key={index}>
+								<StyledTableCell component="th" scope="row" align="center">
+									{review.patientFirstName} {review.patientLastName}
 								</StyledTableCell>
-								<StyledTableCell align="center">
-									{[...Array(row.rating)].map((_, index) => (
-										<span key={index}>
-											<img src={star} alt="star" />
-										</span> // Unicode character for star
-									))}
-								</StyledTableCell>
-								<StyledTableCell align="right">{row.feedback}</StyledTableCell>
+								<StyledTableCell align="center"><i>“{review.review}”</i></StyledTableCell>
 							</StyledTableRow>
 						))}
 					</TableBody>

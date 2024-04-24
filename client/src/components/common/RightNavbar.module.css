@@ -1,0 +1,73 @@
+/* html {
+	font-family: sans-serif;
+	font-size: 16px;
+  padding: 2em;
+} */
+
+.input_switch{
+	display: none;
+    
+}
+
+
+.label_switch{
+	display: inline-block;
+	position: relative;
+    margin-left: 10%;
+}
+
+.label_switch::before, .label_switch::after{
+	content: "";
+	display: inline-block;
+	cursor: pointer;
+	transition: all 0.5s;
+}
+
+.label_switch::before {
+    width: 3em;
+    height: 1em;
+    border: 1px solid #757575;
+    border-radius: 4em;
+    background: #888888;
+}
+
+.label_switch::after {
+    position: absolute;
+    left: 0;
+    top: -12%;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid #757575;
+    border-radius: 4em;
+    background: #ffffff;
+    
+}
+
+.input_switch:checked ~ .label_switch::before {
+    background: #04A9B7;
+    border-color: #04A9B7;
+}
+
+.input_switch:checked ~ .label_switch::after {
+    left: unset;
+    right: 0;
+    background: #04A9B7;
+    border-color: #04A9B7;
+}
+
+.info_text {
+	display: inline-block;
+}
+
+.info-_ext::before{
+	content: "Not active";
+}
+
+.input_switch:checked ~ .info_text::before{
+	content: "Active";
+    z-index: 2;
+    position: absolute;
+    top:20px;
+    /* right: 3px; */
+    font-weight: 700;
+}

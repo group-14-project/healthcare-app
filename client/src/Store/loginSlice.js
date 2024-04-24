@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { patientActions } from "./patientSlice";
 import { doctorActions } from "./doctorSlice";
 import axios from "axios";
+import { hospitalActions } from "./hospitalSlice";
 
 const initialState = {
 	user: {
@@ -137,8 +138,6 @@ export const handleOTPverification = (otpdata) => {
 		};
 		try {
 			const response = await fetchData();
-			// console.log("login Slice after verify", response.data);
-			// console.log("login Slice after verify state", getState());
 			if (otpdata.type === "login") {
 				localStorage.setItem(
 					"Authorization",
@@ -151,9 +150,9 @@ export const handleOTPverification = (otpdata) => {
 				} else if (state.login.user.role === "doctor") {
 					dispatch(doctorActions.addDoctorDetails(response.data));
 				}
-				// else{
-				// 	// dispatch(adminActions.updateAdminDetails(response.data));
-				// }
+				else{
+					dispatch(hospitalActions.addHospitalDetails(response.data));
+				}
 			}
 		} catch (error) {
 			console.error("Error logging in:", error);

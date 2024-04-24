@@ -9,9 +9,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Button from "react-bootstrap/Button";
+import { Button } from "@mui/material";
 import Modal from "react-bootstrap/Modal";
-// import { handleGetAllPatients } from "../../Store/doctorSlice";
+import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Prescription } from "../index";
 import formatDate from "../../Utility Data/dateChangeFunc";
@@ -45,7 +45,7 @@ function PrescriptionModal(props) {
 			aria-labelledby="example-modal-sizes-title-lg"
 			sx={{ width: "100%" }}
 		>
-			<Modal.Header closeButton>
+			<Modal.Header closeButton onClick={props.onHide}>
 				<Modal.Title id="example-modal-sizes-title-lg">
 					Prescription
 				</Modal.Title>
@@ -58,7 +58,7 @@ function PrescriptionModal(props) {
 }
 
 function AppointmentsModal(props) {
-	const AppointmentDetails = props.patientDetails;
+	const AppointmentDetails = props.patientdetails;
 	const [lgShow, setLgShow] = useState(false);
 	return (
 		<Modal
@@ -67,7 +67,7 @@ function AppointmentsModal(props) {
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
 		>
-			<Modal.Header closeButton>
+			<Modal.Header closeButton onClick={props.onHide}>
 				<Modal.Title id="contained-modal-title-vcenter">
 					Past Consultations
 				</Modal.Title>
@@ -95,7 +95,7 @@ function AppointmentsModal(props) {
 										{appointment.mainSymptom}
 									</StyledTableCell>
 									<StyledTableCell align="right">
-										<Button onClick={() => setLgShow(true)}>
+										<Button variant="contained" color="success" onClick={() => setLgShow(true)}>
 											View Prescription
 										</Button>
 										<PrescriptionModal
@@ -112,13 +112,13 @@ function AppointmentsModal(props) {
 				</TableContainer>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button onClick={props.onHide}>Close</Button>
+				<Button variant="contained" color="success" onClick={props.onHide}>Close</Button>
 			</Modal.Footer>
 		</Modal>
 	);
 }
 function ReportsModal(props) {
-	const AppointmentDetails = props.patientDetails;
+	const AppointmentDetails = props.patientdetails;
 	const [lgShow, setLgShow] = useState(false);
 	return (
 		<Modal
@@ -127,7 +127,7 @@ function ReportsModal(props) {
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
 		>
-			<Modal.Header closeButton>
+			<Modal.Header closeButton onClick={props.onHide}>
 				<Modal.Title id="contained-modal-title-vcenter">Reports</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
@@ -152,7 +152,7 @@ function ReportsModal(props) {
 										{appointment.mainSymptom}
 									</StyledTableCell>
 									<StyledTableCell align="right">
-										<Button onClick={() => setLgShow(true)}>View Report</Button>
+										<Button variant="contained" color="success" onClick={() => setLgShow(true)}>View Report</Button>
 									</StyledTableCell>
 								</StyledTableRow>
 							))}
@@ -161,7 +161,7 @@ function ReportsModal(props) {
 				</TableContainer>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button onClick={props.onHide}>Close</Button>
+				<Button variant="contained" color="success" onClick={props.onHide}>Close</Button>
 			</Modal.Footer>
 		</Modal>
 	);
@@ -191,6 +191,10 @@ function DocPatients() {
 		setPatientDetails(patientsDetailsRecv);
 	};
 
+	useEffect(() => {
+		dispatch(handleGetAllPatients());
+	},[]);
+
 	return (
 		<Box sx={{ display: "flex", marginLeft: "65px" }}>
 			<TableContainer component={Paper}>
@@ -214,7 +218,8 @@ function DocPatients() {
 								</StyledTableCell>
 								<StyledTableCell align="center">
 									<Button
-										variant="primary"
+										variant="contained" color="success"
+										// style  ={{backgroundColor:"#1A5E20"}}
 										onClick={() => handleViewReports(patient.email)}
 									>
 										View Reports
@@ -222,12 +227,12 @@ function DocPatients() {
 									<ReportsModal
 										show={repModalShow}
 										onHide={() => setrepModalShow(false)}
-										patientDetails={patientDetails}
+										patientdetails={patientDetails}
 									/>
 								</StyledTableCell>
 								<StyledTableCell align="center">
 									<Button
-										variant="primary"
+										variant="contained" color="success"
 										onClick={() => handleViewDetails(patient.email)}
 									>
 										View Details
@@ -235,7 +240,7 @@ function DocPatients() {
 									<AppointmentsModal
 										show={appModalShow}
 										onHide={() => setappModalShow(false)}
-										patientDetails={patientDetails}
+										patientdetails={patientDetails}
 									/>
 								</StyledTableCell>
 							</StyledTableRow>

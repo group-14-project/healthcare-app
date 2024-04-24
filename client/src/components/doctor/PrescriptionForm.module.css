@@ -1,0 +1,111 @@
+.main_box {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+}
+.patient_name{
+    position: relative;
+    left: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 2%;
+}
+
+.header_divs {
+    width: 50%;
+}
+
+.logo img {
+    height: 4rem;
+    width: 20rem;
+}
+
+.doctor_details {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.main_body {
+    display: flex;
+    width: 100%;
+    /* height: 30rem; */
+    margin-bottom: 5%;
+    /* border: 2px solid black; */
+    /* padding: 20px; */
+}
+
+.prescription_table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.prescription_table td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.prescription_table tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2%;
+}
+
+.footer Button {
+    font-size: 15px;
+    margin-right: 10px;
+}
+
+/* .formfields tbody td{
+    padding: 0 !important;
+    height: 35px !important;
+} */
+tbody input{
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    padding: 0 !important;
+}
+
+tbody input:focus{
+    outline: none;
+}
+.description{
+    width: 100%;
+    height: 80px;
+    /* border: none; */
+    background-color: transparent;
+    text-align: center;
+    padding: 0 !important;
+}   
+
+.button_container{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    width: 100%;
+}
+
+.button_container Button{
+    margin-left: 2%;
+    position: relative;
+    right: 0;
+}

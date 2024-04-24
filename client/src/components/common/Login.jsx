@@ -17,7 +17,7 @@ function Login() {
 		const { name, value } = e.target;
 		dispatch(loginActions.updateDetails({name,value}));
 		const { id } = e.target;
-		const buttons = ["admin", "doctor", "patient"];
+		const buttons = ["hospital", "doctor", "patient"];
 		if(id){
 			buttons.forEach((button) => {
 				document.getElementById(button).style.backgroundColor = button === id ? "#4FA786" : "#efefef";
@@ -146,15 +146,15 @@ function Login() {
 									Patient
 								</button>
 								<button
-									id="admin"
+									id="hospital"
 									className="roles"
 									name = "role"
-									value = "admin"
+									value = "hospital"
 									variant="contained"
 									
 									onClick={handleSignInChange}
 								>
-									Admin
+									Hospital
 								</button>
 								<button
 									id="doctor"

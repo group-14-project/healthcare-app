@@ -1,0 +1,44 @@
+.banner_box{
+    display: flex;
+    /* border:2px solid green; */
+    justify-content: space-between;
+    /* margin-top: 2%; */
+    border-radius: 25px;
+    background-color: #FFFFFF;
+    height: 180px;
+}
+.banner_sub_box{
+    flex: 1;
+    box-sizing: border-box;
+    padding: 15px;
+    padding-left: 30px;
+    padding-top: 35px;
+    align-items: center;
+}
+
+.greeting{
+    color: #555555;
+    font-weight: 450;
+}
+
+.doctor_name{
+    color: #3F50B5;
+    font-weight: 450;
+}
+
+.nice_day{
+    color: #b6b3b3;
+    font-weight: 450;
+}
+
+.right_side{
+    position: relative;
+}
+
+.right_side img{
+    width: 70%;
+    height: 144%;
+    position: absolute;
+    top: -34px;
+    right: 19px;
+}

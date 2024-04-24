@@ -32,6 +32,10 @@ import PatientPrescription from "./Patient/PatientPrescription";
 import MyCalendar from "./common/MyCalendar";
 import PrivateRoute from "./common/PrivateRoute";
 import SmallCalender from "./common/SmallCalender";
+import PrescriptionForm from "./doctor/PrescriptionForm";
+import HospitalDashboard from "./hospital/HospitalDashboard";
+import AddDepartment from "./hospital/AddDepartment";
+import AddDoctor from "./hospital/AddDoctor";
 export {
 	MidNavbar,
 	SideBar,
@@ -66,5 +70,9 @@ export {
 	PatientPrescription,
 	MyCalendar,
 	PrivateRoute,
-	SmallCalender
+	SmallCalender,
+	PrescriptionForm,
+	HospitalDashboard,
+	AddDepartment,
+	AddDoctor
 };

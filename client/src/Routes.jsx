@@ -25,6 +25,9 @@ import {
 	PatientPrescription,
 	MyCalendar,
 	PrivateRoute,
+	HospitalDashboard,
+	AddDepartment,
+	AddDoctor,
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
@@ -84,7 +87,7 @@ const router = createBrowserRouter([
 				element: <Landing store={store} />,
 			},
 			{
-				path: "/admin/logout",
+				path: "/hospital/logout",
 				element: <Landing store={store} />,
 			},
 		],
@@ -104,7 +107,7 @@ const router = createBrowserRouter([
 	},
 
 	{
-		path: "/admin/changepwd",
+		path: "/hospital/changepwd",
 		element:<PrivateRoute> <ChangePassword /> </PrivateRoute>,
 	},
 	{
@@ -217,6 +220,35 @@ const router = createBrowserRouter([
 			{
 				path: "patient/upcomingappointments",
 				element:<PrivateRoute> <MyCalendar /> </PrivateRoute>,
+			},
+		],
+	},
+	{
+		element: (
+			<Common
+				sidebar={{
+					content: [
+						"Add Department",
+						"Add Doctor",
+						"Logout",
+					],
+				}}
+				user={{ type: "hospital" }}
+				store={{ store }}
+			/>
+		),
+		children: [
+			{
+				path: "hospital/dashboard",
+				element:<PrivateRoute> <HospitalDashboard /> </PrivateRoute>,
+			},
+			{
+				path: "hospital/adddepartment",
+				element:<PrivateRoute> <AddDepartment /> </PrivateRoute>,
+			},
+			{
+				path: "hospital/adddoctor",
+				element:<PrivateRoute> <AddDoctor /> </PrivateRoute>,
 			},
 		],
 	},

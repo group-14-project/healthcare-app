@@ -1,4 +1,7 @@
 const formatDate = (inputDate) => {
+	if (inputDate === undefined) {
+		return;
+	}
 	// Split the input date into year, month, and day
 	const [year, month, day] = inputDate.split("-");
 

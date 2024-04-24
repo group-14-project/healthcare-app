@@ -12,6 +12,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "@mui/material";
 import { useSelector } from "react-redux";
 import { store } from "../../Store/store";
+import styles from "./RightNavbar.module.css";
 
 const RightNavbar = () => {
 	const state = store.getState();
@@ -28,6 +29,9 @@ const RightNavbar = () => {
 						<IconButton>
 							<NotificationsNoneIcon className="rgt-navbar-notif-btn" />
 						</IconButton>
+						<input className={styles.input_switch} type="checkbox" id="demo" />
+						<label className={styles.label_switch} htmlFor="demo"></label>
+						<span className={styles.info_text}></span>
 					</Toolbar>
 					<Toolbar>
 						<Box>
