@@ -76,7 +76,7 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 				})
 			);
 		} catch (error) {
-			console.error(
+			console.log(
 				"Error getting hospitalAndSpecializationAndDoctor management",
 				error
 			);
@@ -144,6 +144,12 @@ export const consentRegistration = (data) => {
 		}
 	};
 };
+
+
+
+
+
+
 
 const doctorSlice = createSlice({
 	name: "doctor",

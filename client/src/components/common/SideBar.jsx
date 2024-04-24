@@ -117,6 +117,7 @@ function SideBar(props) {
 	const handleLogout = (e) => {
 		e.preventDefault();
 		localStorage.clear();
+		sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
 		
 		navigate("/");

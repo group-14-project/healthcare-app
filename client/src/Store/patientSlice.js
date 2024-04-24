@@ -17,6 +17,7 @@ const initialState = {
 		author: "",
 		category: ""
 	},
+	reports: []
 };
 
 export const handleUpdatePatientDetails = () => {
@@ -46,6 +47,109 @@ export const handleUpdatePatientDetails = () => {
 	};
 };
 
+
+export const fetchReports = () => {
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/patient/viewReports",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			return response;
+
+		};
+
+		try {
+			const response = await fetchData();
+
+			dispatch(patientActions.updateReports(response.data));
+
+			console.log("reports fetched: ", response.data);
+		}
+		catch (err) {
+			console.error("error fetching reports: ", err);
+		}
+
+	}
+}
+
+
+export const uploadReport = (data) => {
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.post(
+				"http://localhost:9090/patient/uploadReport",
+				data,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "multipart/form-data"
+					},
+				}
+			);
+			return response;
+		};
+		try {
+
+			const response = await fetchData();
+
+			console.log(response);
+
+		} catch (error) {
+			console.log("Error uploading report", error);
+		}
+	}
+}
+
+
+export const downloadReport = (reportId, reportName) => {
+	return async (dispatch, getState) => {
+		const helper = async () => {
+			const response = await axios.get(
+				`http://localhost:9090/patient/downloadFile/${reportId}`,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+					},
+					responseType: "blob"
+				}
+			);
+			return response;
+		};
+		try {
+
+			const response = await helper();
+			console.log(response);
+
+			const blob = new Blob([response.data], { type: response.headers["content-type"] });
+			const url = window.URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = url;
+			link.setAttribute("download", reportName);
+			document.body.appendChild(link);
+			link.click();
+			// setFileData(null);
+			// setFileName("");
+
+		} catch (error) {
+			console.log("Error downloading report", error);
+		}
+	}
+}
+
+
 const patientSlice = createSlice({
 	name: "patient",
 	initialState,
@@ -65,8 +169,10 @@ const patientSlice = createSlice({
 			state.futureAppointments = payload.futureAppointments;
 			state.patientId = payload.patientId;
 			state.firstTimeLogin = payload.firstTimeLogin;
+			// state.reports = [];
 		},
 		updatePatientDetails: (state, { payload }) => {
+			console.log(payload);
 			return {
 				...state,
 				[payload.name]: payload.value,
@@ -75,6 +181,10 @@ const patientSlice = createSlice({
 		updateQuote: (state, { payload }) => {
 			state.quote = payload;
 		},
+		updateReports: (state, action) => {
+			console.log(action.payload);
+			state.reports = action.payload;
+		}
 	},
 });
 
