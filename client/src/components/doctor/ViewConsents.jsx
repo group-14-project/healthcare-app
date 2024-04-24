@@ -149,10 +149,7 @@ function ViewConsents() {
 											<StyledTableCell align="center">{consent.newDoctorHospitalName}</StyledTableCell>
 											<StyledTableCell align="center">{consent.patientConsent === false ? <span>Rejected</span> : <span>Approved</span>}</StyledTableCell>
 											<StyledTableCell align="center">{formatDate(consent.date)}</StyledTableCell>
-											{/* <StyledTableCell align="center">
-									<Button variant="contained" color="success" style = {{marginRight:"15px"}}>Approve</Button>
-									<Button variant="outlined" color="error">Reject</Button>
-								</StyledTableCell> */}
+											
 										</StyledTableRow>
 									))}
 								</TableBody>

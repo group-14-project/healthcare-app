@@ -17,7 +17,9 @@ const initialState = {
 		author: "",
 		category: ""
 	},
-	reports: []
+	reports: [],
+	pendingConsents: [],
+	approvedConsents: []
 };
 
 export const handleUpdatePatientDetails = () => {
@@ -147,6 +149,139 @@ export const downloadReport = (reportId, reportName) => {
 }
 
 
+
+export const fetchPatientConsents = () => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/patient/viewConsents",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			const response = await fetchData();
+			console.log(response.data);
+			const pending = [], approved = [];
+			response.data.map((consent) => {
+				console.log(consent);
+				if (consent.patientConsent === "pending")
+					pending.push(consent);
+				else if (consent.patientConsent === "accepted")
+					approved.push(consent);
+			});
+
+			dispatch(patientActions.updatePendingConsents(pending));
+			dispatch(patientActions.updateApprovedConsents(approved));
+
+
+		} catch (error) {
+			console.error("Error fetching consents", error);
+		}
+	}
+}
+
+
+
+export const approveConsent = (data) => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			const response = await axios.put(
+				"http://localhost:9090/patient/giveConsent",
+				data,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json"
+					},
+				}
+			);
+			return response;
+		};
+		try {
+
+			const response = await fetchData();
+			console.log(response);
+			dispatch(fetchPatientConsents());
+
+		} catch (error) {
+			console.log("Error providing consent", error);
+		}
+	}
+}
+
+
+
+export const withdrawConsent = (data) => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			const response = await axios.put(
+				"http://localhost:9090/patient/withdrawConsent",
+				data,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json"
+					},
+				}
+			);
+			return response;
+		};
+		try {
+
+			const response = await fetchData();
+			console.log(response);
+			dispatch(fetchPatientConsents());
+
+		} catch (error) {
+			console.log("Error withdrawing consent", error);
+		}
+	}
+}
+
+export const rejectConsentRequest = (data) => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			const response = await axios.put(
+				"http://localhost:9090/patient/rejectConsent",
+				data,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json"
+					},
+				}
+			);
+			return response;
+		};
+		try {
+
+			const response = await fetchData();
+			console.log(response);
+			dispatch(fetchPatientConsents());
+
+		} catch (error) {
+			console.log("Error rejecting consent", error);
+		}
+	}
+}
+
+
+
+
 const patientSlice = createSlice({
 	name: "patient",
 	initialState,
@@ -179,6 +314,12 @@ const patientSlice = createSlice({
 		},
 		updateReports: (state, action) => {
 			state.reports = action.payload;
+		},
+		updatePendingConsents: (state, action) => {
+			state.pendingConsents = action.payload;
+		},
+		updateApprovedConsents: (state, action) => {
+			state.approvedConsents = action.payload;
 		}
 	},
 });

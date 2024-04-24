@@ -63,7 +63,7 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 						"Content-Type": "application/json",
 					},
 				}
-			);
+			);																																																																																																																																																																																																																
 			return response;
 		};
 		try {
