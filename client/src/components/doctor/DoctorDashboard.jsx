@@ -25,13 +25,14 @@ function DoctorDashboard() {
 	const state = useSelector((state) => state.doctor);
 	const seniorDoctorState = useSelector((state) => state.seniorDoctor);
 	var category = "health";
-	let stompClient = useRef();
+	const stompClient = useSelector(state=>state.doctor.stompRef);
 	const [remoteID, setRemoteId] = useState("");
 	const [localID, setLocalID] = useState(state.doctorId);
 	const [roomID, setRoomID] = useState("");
 	const [patientName, setPatientName] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [consultState, setConsultState] = useState({});
+	const isFirstRender = useRef(true)
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
@@ -103,32 +104,42 @@ function DoctorDashboard() {
 	};
 
 	useEffect(() => {
-		var conn = new SockJS("http://localhost:9090/socket");
-		stompClient.current = new Stomp.over(conn);
 
-		stompClient.current.connect({}, (frame) => {
-			stompClient.current.subscribe(
+		
+		if (isFirstRender.current) {
+			isFirstRender.current = false; // it's no longer the first render
+			return;
+		}
+		// var conn = new SockJS("http://localhost:9090/socket");
+		// stompClient.current = new Stomp.over(conn);
+		// console.log("fidbfisdbfidsbf");
+		console.log("fijwdifbijf",stompClient);
+		
+		stompClient.connect({}, (frame) => {
+			// console.log("inside connect")
+			stompClient.subscribe(
 				"/user/" + localID + "/topic/call",
 				(call) => {
+					console.log(call);
 					console.log("call from: " + call.body);
 					// console.log("remote id: " + call.body);
 					const userData = JSON.parse(call.body);
 					console.log(userData);
 					// console.log("consult state in doc dashboard: ", state.consult);
-					const consultationData = JSON.parse(userData["consultState"]);
-					const callFrom = JSON.parse(userData["callFrom"]);
-					console.log(consultationData);
-					console.log(callFrom.localId);
-					setConsultState(consultationData);
+					// const consultationData = JSON.parse(userData["consultState"]);
+					// const callFrom = JSON.parse(userData["callFrom"]);
+					// console.log(consultationData)/;
+					// console.log(callFrom);
+					// setConsultState(consultationData);
 
-					setRemoteId(callFrom.localId);
-					setPatientName(callFrom.patientName);
+					setRemoteId(call.body);
+					// setPatientName(callFrom.patientName);
 
 					setIncomingCall(true);
 				}
 			);
 		});
-	}, []);
+	}, [stompClient, state]);
 
 	useEffect(() => {
 		const fetchData = async () => {

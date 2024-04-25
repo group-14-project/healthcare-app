@@ -3,6 +3,8 @@ import { patientActions } from "./patientSlice";
 import { doctorActions } from "./doctorSlice";
 import axios from "axios";
 import { hospitalActions } from "./hospitalSlice";
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 
 const initialState = {
 	user: {
@@ -113,6 +115,15 @@ export const formatDate = (inputDate) => {
 	return `${dayOfMonth} ${monthName} ${yearValue}`;
 };
 
+const createSocket = () => {
+	var conn = new SockJS("http://localhost:9090/socket");
+
+	const stompClient = new Stomp.over(conn);
+
+	return stompClient;
+}
+
+
 export const handleOTPverification = (otpdata) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
@@ -148,9 +159,16 @@ export const handleOTPverification = (otpdata) => {
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
+					const stompClient = createSocket();
+					response.data = {
+						...response.data,
+						stompRef: stompClient
+					}
 					dispatch(doctorActions.addDoctorDetails(response.data));
+					// dispatch(doctorActions.updateSocketRef(stompClient));
+
 				}
-				else{
+				else {
 					dispatch(hospitalActions.addHospitalDetails(response.data));
 				}
 			}

@@ -13,6 +13,7 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { useNavigate } from 'react-router-dom';
 import { useReactMediaRecorder } from "react-media-recorder";
 import "./Room.css";
+import { useSelector } from 'react-redux';
 
 const Room = () => {
 
@@ -39,12 +40,11 @@ const Room = () => {
      const [recordingStart, setRecordingStart] = useState(false);
      const [recordingStop, setRecordingStop] = useState(true);
      const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ video: true });
+     const role = useSelector(state=>state.login.user.role);
 
 
 
      const navigate = useNavigate();
-
-     const role = localStorage.getItem("role");
 
 
      useEffect(() => {
@@ -230,7 +230,8 @@ const Room = () => {
 
           stompClient.current.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
-               "initiatedBy": remoteID.toString()
+               "initiatedBy": remoteID.toString(),
+               "role": role
           }))
 
           peerConnection.current = null;

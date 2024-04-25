@@ -87,8 +87,9 @@ const OtpInputPage = () => {
 					navigate("/patient/dashboard");
 				}
 			}
-		} else {	
+		} else {
 			if (firstTimeLogin === false) {
+				console.log("firstTimeLogin: ",firstTimeLogin);
 				navigate(`/${role}/changepwd`);
 			} else {
 				navigate(`/${role}/dashboard`);

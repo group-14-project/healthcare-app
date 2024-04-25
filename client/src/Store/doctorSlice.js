@@ -22,6 +22,7 @@ const initialState = {
 	hospitalAndSpecializationAndDoctor: [],
 	consentsShared: [],
 	reviews: [],
+	stompRef: null
 };
 
 export const handlehospitalAndSpecializationAndDoctor = () => {
@@ -180,6 +181,7 @@ const doctorSlice = createSlice({
 			state.totalAppointments = payload.totalAppointments;
 			state.firstTimeLogin = payload.firstTimeLogin;
 			state.eachDayCounts = payload.eachDayCounts;
+			state.stompRef = payload.stompRef;
 		},
 		updateDoctorDetails: (state, { payload }) => {
 			return {
@@ -196,6 +198,9 @@ const doctorSlice = createSlice({
 		updatePastAppointments: (state, action) => {
 			state.pastAppointments = [...state.pastAppointments, action.payload];
 		},
+		updateSocketRef: (state,action) => {
+			state.stompRef = action.payload;
+		}
 	},
 });
 

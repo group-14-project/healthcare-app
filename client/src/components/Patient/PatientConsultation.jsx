@@ -69,7 +69,16 @@ function PatientConsultation(props) {
 		dispatch(consultActions.updateConsultDetails({ name: "appointmentTimeDate", value: new Date().toISOString() }));
 		stompClient.current = new Stomp.over(conn);
 		setRemoteID(doctorId.toString());
+
 		stompClient.current.connect({}, (frame) => {
+
+
+			stompClient.current.subscribe("/user/" + localID + "/topic/call", (data) => {
+
+				console.log("Queue Size: ",data.body);
+
+			})
+
 			stompClient.current.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
 				// console.log(accept);
 				setCalling(false);
