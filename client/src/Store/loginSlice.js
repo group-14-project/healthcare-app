@@ -3,6 +3,14 @@ import { patientActions } from "./patientSlice";
 import { doctorActions } from "./doctorSlice";
 import axios from "axios";
 import { hospitalActions } from "./hospitalSlice";
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css'; 
+const notyf = new Notyf({
+	position: {
+		x: 'right',
+		y: 'top',
+	  },
+});
 
 const initialState = {
 	user: {
@@ -13,9 +21,11 @@ const initialState = {
 		password: "",
 		isAuthenticated: false,
 	},
+	errorMsg: false
 };
 
 export const handleLogin = (loginData) => {
+	
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const userData = {
@@ -39,8 +49,13 @@ export const handleLogin = (loginData) => {
 		};
 		try {
 			const res = await fetchData();
+			// dispatch(loginActions.updateErrorMsg(false));
+			return true;
 		} catch (error) {
-			console.error("Error signing in:", error);
+			notyf.error(error.response.data.errorMessage);
+			dispatch(loginActions.updateErrorMsg(true));
+			return false;
+
 		}
 	};
 };
@@ -72,8 +87,11 @@ export const handleSignUp = (signUpData) => {
 		};
 		try {
 			await fetchData();
+			return true;
+			
 		} catch (error) {
-			console.error("Error signing up:", error);
+			notyf.error(error.response.data.errorMessage);
+			return false;
 		}
 	};
 };
@@ -154,9 +172,10 @@ export const handleOTPverification = (otpdata) => {
 					dispatch(hospitalActions.addHospitalDetails(response.data));
 				}
 			}
+			return true;
 		} catch (error) {
-			console.error("Error logging in:", error);
-			throw error;
+			notyf.error(error.response.data.errorMessage);
+			return false;
 		}
 	};
 };
@@ -179,6 +198,9 @@ const loginSlice = createSlice({
 		},
 		logout: (state) => {
 			state.user.isAuthenticated = false;
+		},
+		updateErrorMsg: (state, action) => {
+			state.errorMsg = action.payload;
 		},
 	},
 });

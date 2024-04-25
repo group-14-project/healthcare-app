@@ -30,7 +30,7 @@ function ChangePassword() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		await changePwd();
-		navigate(`/${role}/dashboard`);
+		// navigate(`/${role}/dashboard`);
 	};
 	const handleChange = (e) => {
 		setPassword(e.target.value);

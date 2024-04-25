@@ -1,9 +1,12 @@
 import { React, useState, useEffect } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { handleLogin,handleSignUp ,loginActions } from "../../Store/loginSlice";
-import {useDispatch, useSelector} from "react-redux"
-import { Button } from '@mui/material';
+import {
+	handleLogin,
+	handleSignUp,
+	loginActions,
+} from "../../Store/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Login() {
 	const navigate = useNavigate();
@@ -11,42 +14,51 @@ function Login() {
 	const data = useSelector((state) => state.login.user);
 	const [containerClass, setContainerClass] = useState("sign-in");
 	const role = useSelector((state) => state.login.user.role);
-    const isAuthenticated = useSelector((state) => state.login.user.isAuthenticated);
+	const isAuthenticated = useSelector(
+		(state) => state.login.user.isAuthenticated
+	);
+	const errorMsg = useSelector((state) => state.login.errorMsg);
 
 	const handleSignInChange = (e) => {
 		const { name, value } = e.target;
-		dispatch(loginActions.updateDetails({name,value}));
+		dispatch(loginActions.updateDetails({ name, value }));
 		const { id } = e.target;
 		const buttons = ["hospital", "doctor", "patient"];
-		if(id){
+		if (id) {
 			buttons.forEach((button) => {
-				document.getElementById(button).style.backgroundColor = button === id ? "#4FA786" : "#efefef";
+				document.getElementById(button).style.backgroundColor =
+					button === id ? "#4FA786" : "#efefef";
 			});
 		}
 	};
 	const handleSignIn = async (e) => {
 		e.preventDefault();
-		if(data.role !== ""){
-			dispatch(handleLogin(data));
-			navigate("/verify-otp", {
-				state: {type: "login" },
-			});
+		console.log(data);
+		if (data.role !== "") {
+			const loginSuccess = await dispatch(handleLogin(data));
+			if (loginSuccess) {
+				console.log(errorMsg);
+				navigate("/verify-otp", {
+					state: { type: "login" },
+				});
+			}
 		}
 	};
 
 	const handleSignUpChange = (e) => {
 		const { name, value } = e.target;
-		dispatch(loginActions.updateDetails({name,value}));
+		dispatch(loginActions.updateDetails({ name, value }));
 	};
 
 	const handlingSignUp = async (e) => {
 		e.preventDefault();
-		
-		dispatch(handleSignUp(data));
-		navigate("/verify-otp", {
-			state: {type: "signup"},
-		});
-		
+
+		const signInSucess = await dispatch(handleSignUp(data));
+		if (signInSucess) {
+			navigate("/verify-otp", {
+				state: { type: "signup" },
+			});
+		}
 	};
 
 	const toggle = () => {
@@ -65,10 +77,10 @@ function Login() {
 	}, []); // Run this effect only once after the component mounts
 
 	useEffect(() => {
-		if(isAuthenticated){
+		if (isAuthenticated) {
 			navigate(`/${role}/dashboard`);
 		}
-	},[isAuthenticated,navigate])
+	}, [isAuthenticated, navigate]);
 
 	return (
 		<div id="container" className={`container ${containerClass}`}>
@@ -137,21 +149,20 @@ function Login() {
 								<button
 									id="patient"
 									className="roles"
-									name = "role"
-									value = "patient"
+									name="role"
+									value="patient"
 									variant="contained"
 									onClick={handleSignInChange}
-									style = {{backgroundColor: "#4FA786"}}
+									style={{ backgroundColor: "#4FA786" }}
 								>
 									Patient
 								</button>
 								<button
 									id="hospital"
 									className="roles"
-									name = "role"
-									value = "hospital"
+									name="role"
+									value="hospital"
 									variant="contained"
-									
 									onClick={handleSignInChange}
 								>
 									Hospital
@@ -159,21 +170,20 @@ function Login() {
 								<button
 									id="doctor"
 									className="roles"
-									name = "role"
-									value = "doctor"
+									name="role"
+									value="doctor"
 									variant="contained"
 									onClick={handleSignInChange}
 								>
 									Doctor
 								</button>
-								
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-user"></i>
 								<input
 									name="email"
 									type="text"
-									placeholder="Username"	
+									placeholder="Username"
 									onChange={handleSignInChange}
 								/>
 							</div>

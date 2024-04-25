@@ -17,6 +17,7 @@ const OtpInputPage = () => {
 	const statePatient = useSelector((state) => state.patient);
 	const stateDoctor = useSelector((state) => state.doctor);
 	const stateHospital = useSelector((state) => state.hospital);
+	const [error,setError] = useState(false);
 	const isAuthenticated = useSelector(
 		(state) => state.login.user.isAuthenticated
 	);
@@ -59,48 +60,58 @@ const OtpInputPage = () => {
 		}
 	};
 
-	const fetchData = () => {
+	const fetchData = async() => {
 		console.log(role);
-		dispatch(
+		const res = await dispatch(
 			handleOTPverification({
 				otp: otp.join(""),
 				type: location.state.type,
 			})
 		);
-		// console.log("fetchData",state[role])
-		if (role === "patient" && location.state.type === "signup") {
-			navigate("/login");
+		setError(res);
+		if(res){
+			if (role === "patient" && location.state.type === "signup") {
+				navigate("/login");
+			}
 		}
+		else{
+			return
+		}
+		
 	};
 	useEffect(() => {
 		if (isFirstRender.current) {
-			isFirstRender.current = false; // it's no longer the first render
+			isFirstRender.current = false; 
 			return;
 		}
-		if (role === "patient") {
-			if (location.state.type === "signup") {
-				navigate("/login");
-			} else if (location.state.type === "login") {
-				if (firstTimeLogin === false) {
-					navigate("/patient/details");
-				} else {
-					navigate("/patient/dashboard");
+		if(!error){
+			if (role === "patient") {
+				if (location.state.type === "signup") {
+					navigate("/login");
+				} else if (location.state.type === "login") {
+					if (firstTimeLogin === false) {
+						navigate("/patient/details");
+					} else {
+						navigate("/patient/dashboard");
+					}
 				}
-			}
-		} else {	
-			if (firstTimeLogin === false) {
-				navigate(`/${role}/changepwd`);
-			} else {
-				navigate(`/${role}/dashboard`);
+			} else {	
+				if (firstTimeLogin === false) {
+					console.log("firstTimeLogin",firstTimeLogin);
+					console.log(role);
+					navigate(`/${role}/changepwd`);
+				} else {
+					navigate(`/${role}/dashboard`);
+				}
 			}
 		}
 	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital]);
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			navigate(`/${role}/dashboard`);
-		}
-	}, [isAuthenticated, navigate]);
+	// useEffect(() => {
+	// 	if (isAuthenticated) {
+	// 		navigate(`/${role}/dashboard`);
+	// 	}
+	// }, [isAuthenticated, navigate]);
 
 	return (
 		<div
