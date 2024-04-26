@@ -14,6 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useReactMediaRecorder } from "react-media-recorder";
 import "./Room.css";
 import { useSelector } from 'react-redux';
+import getstomClient from '../Patient/MySocket';
+
 
 const Room = () => {
 
@@ -40,31 +42,35 @@ const Room = () => {
      const [recordingStart, setRecordingStart] = useState(false);
      const [recordingStop, setRecordingStop] = useState(true);
      const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ video: true });
-     const role = useSelector(state=>state.login.user.role);
+     const role = useSelector(state => state.login.user.role);
 
 
 
      const navigate = useNavigate();
 
 
+
+
+
      useEffect(() => {
 
+          const handlewebrtc = async () => {
 
-          var configuration = {
-               iceServers: [{
-                    urls: [
-                         "stun:stun.l.google.com:19302",
-                         "stun:global.stun.twilio.com:3478",
-                    ]
-               }]
-          };
+               var configuration = {
+                    iceServers: [{
+                         urls: [
+                              "stun:stun.l.google.com:19302",
+                              "stun:global.stun.twilio.com:3478",
+                         ]
+                    }]
+               };
 
-          peerConnection.current = new RTCPeerConnection(configuration);
-          var conn = new SockJS("http://localhost:9090/socket");
-          stompClient.current = new Stomp.over(conn);
+               peerConnection.current = new RTCPeerConnection(configuration);
+               // var conn = new SockJS("http://localhost:9090/socket");
+               stompClient.current = getstomClient().client;
 
 
-          stompClient.current.connect({}, async (frame) => {
+               // stompClient.current.connect({}, async (frame) => {
 
                await navigator.mediaDevices.getUserMedia({
                     video: true,
@@ -170,8 +176,10 @@ const Room = () => {
                     remoteVideoRef.current.srcObject = event.streams[0];
                     setRemoteStream(event.streams);
                }
+          }
+     
+          handlewebrtc();
 
-          })
 
      }, [])
 
@@ -231,15 +239,17 @@ const Room = () => {
           stompClient.current.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
                "initiatedBy": remoteID.toString(),
-               // "role": role
+               "role": role
           }))
 
           peerConnection.current = null;
 
 
-          stompClient.current = null;
+          // stompClient.current = null;
 
-          navigate('/endCall');
+          navigate("/endCall");
+          // if (role === "doctor") navigate("/doctor/dashboard");
+          // else navigate("/patient/dashboard");
 
      }
 

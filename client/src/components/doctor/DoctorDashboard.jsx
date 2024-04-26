@@ -26,6 +26,7 @@ import stompClient from "../Patient/stomVariable";
 
 function DoctorDashboard() {
 	// const [incomingCall, setIncomingCall] = useState(false);
+	// location.reload();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);

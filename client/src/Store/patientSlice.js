@@ -301,6 +301,8 @@ export const makeCall = (patientId, patientName, doctorId, doctorName) => {
 		// "consultState": JSON.stringify(consult)
 	}));
 
+	
+
 	return {
 		type: "call",
 		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),

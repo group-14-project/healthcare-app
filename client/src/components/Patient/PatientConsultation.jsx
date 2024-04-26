@@ -66,7 +66,7 @@ function PatientConsultation(props) {
 			console.log(stompClient.current);
 
 			stompClient.current.subscribe("/user/" + localID + "/topic/call", (data) => {
-
+				
 				console.log("Queue Size: ", data.body);
 
 			})

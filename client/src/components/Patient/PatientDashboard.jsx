@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import CallLoader from "./CallLoader";
 
+
 const events = [
 	{ id: 1, title: "Appointment-1", start: "2024-04-23 14:30", allDay: false },
 	{ id: 2, title: "Appointment-2", start: "2024-04-22 12:30", allDay: false },

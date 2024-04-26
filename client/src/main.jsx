@@ -15,7 +15,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<Provider store={store}>
 		<PersistGate loading={null} persistor={persistor}>
-			{/* <WebSocketProvider> Wrap your entire application with WebSocketProvider */}
+			{/* <WebSocketProvider> */}
 				<RouterProvider router={router} />
 			{/* </WebSocketProvider> */}
 		</PersistGate>
