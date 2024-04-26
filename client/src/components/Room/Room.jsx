@@ -145,6 +145,8 @@ const Room = () => {
 
                     peerConnection.current.close();
 
+                    navigate('/endCall');
+
                })
 
 
@@ -245,7 +247,7 @@ const Room = () => {
           peerConnection.current = null;
 
 
-          // stompClient.current = null;
+          stompClient.current = null;
 
           navigate("/endCall");
           // if (role === "doctor") navigate("/doctor/dashboard");

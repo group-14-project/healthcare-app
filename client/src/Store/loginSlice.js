@@ -5,6 +5,7 @@ import axios from "axios";
 import { hospitalActions } from "./hospitalSlice";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import getstomClient from "../components/Patient/MySocket";
 
 const initialState = {
 	user: {

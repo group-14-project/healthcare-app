@@ -32,27 +32,78 @@ const EndCall = () => {
           console.log(state)
           stompClient.current = getstomClient().client
 
+          if (!stompClient.current.connected) {
+               stompClient.current.connect({}, () => {
+                    console.log("connection is establissssssssshed")
+                    console.log(stompClient.current);
+
+
+                    stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+                         // console.log('Received message:', message.body);
+                         console.log("call from: " + call.body);
+                         // console.log("remote id: " + call.body);
+                         const userData = JSON.parse(call.body);
+                         // console.log(userData);
+                         // // console.log("consult state in doc dashboard: ", state.consult);
+                         // const consultationData = JSON.parse(userData["consultState"]);
+                         const callFrom = JSON.parse(userData["callFrom"]);
+                         // console.log(consultationData);
+                         // console.log(callFrom.localId);
+                         // setConsultState(consultationData);
+
+                         dispatch(doctorActions.updateRemoteId(callFrom.localId));
+
+                         dispatch(doctorActions.updatePatientName(callFrom.patientName))
+
+                         dispatch(doctorActions.updateIncomingCall(true));
+                    });
+
+               })
+          }
+          else {
+               stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+                    // console.log('Received message:', message.body);
+                    console.log("call from: " + call.body);
+                    // console.log("remote id: " + call.body);
+                    const userData = JSON.parse(call.body);
+                    // console.log(userData);
+                    // // console.log("consult state in doc dashboard: ", state.consult);
+                    // const consultationData = JSON.parse(userData["consultState"]);
+                    const callFrom = JSON.parse(userData["callFrom"]);
+                    // console.log(consultationData);
+                    // console.log(callFrom.localId);
+                    // setConsultState(consultationData);
+
+                    dispatch(doctorActions.updateRemoteId(callFrom.localId));
+
+                    dispatch(doctorActions.updatePatientName(callFrom.patientName))
+
+                    dispatch(doctorActions.updateIncomingCall(true));
+               });
+          }
+
+
           // stompClient.current.connect({}, (frame) => {
-          stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
-               // console.log('Received message:', message.body);
-               console.log("call from: " + call.body);
-               // console.log("remote id: " + call.body);
-               const userData = JSON.parse(call.body);
-               // console.log(userData);
-               // // console.log("consult state in doc dashboard: ", state.consult);
-               // const consultationData = JSON.parse(userData["consultState"]);
-               const callFrom = JSON.parse(userData["callFrom"]);
-               // console.log(consultationData);
-               // console.log(callFrom.localId);
-               // setConsultState(consultationData);
+          // stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+          //      // console.log('Received message:', message.body);
+          //      console.log("call from: " + call.body);
+          //      // console.log("remote id: " + call.body);
+          //      const userData = JSON.parse(call.body);
+          //      // console.log(userData);
+          //      // // console.log("consult state in doc dashboard: ", state.consult);
+          //      // const consultationData = JSON.parse(userData["consultState"]);
+          //      const callFrom = JSON.parse(userData["callFrom"]);
+          //      // console.log(consultationData);
+          //      // console.log(callFrom.localId);
+          //      // setConsultState(consultationData);
 
-               dispatch(doctorActions.updateRemoteId(callFrom.localId));
+          //      dispatch(doctorActions.updateRemoteId(callFrom.localId));
 
-               dispatch(doctorActions.updatePatientName(callFrom.patientName))
+          //      dispatch(doctorActions.updatePatientName(callFrom.patientName))
 
-               dispatch(doctorActions.updateIncomingCall(true));
-          });
+          //      dispatch(doctorActions.updateIncomingCall(true));
           // });
+          // // });
      }, []);
 
 
@@ -73,7 +124,7 @@ const EndCall = () => {
                     <Button variant='contained' color="success" onClick={handleClick}>Go to Dashboard</Button>
                </Box>
                {state.doctor.incomingCall ? (
-                    <IncomingCall/>
+                    <IncomingCall />
                ) : (
                     <></>
                )}

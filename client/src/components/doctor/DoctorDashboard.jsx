@@ -52,7 +52,7 @@ function DoctorDashboard() {
 
 	const stompClient = useRef();
 
-	const patientName = useSelector(state=>state.doctor.patientName);
+	const patientName = useSelector(state => state.doctor.patientName);
 
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctorId);
@@ -60,9 +60,36 @@ function DoctorDashboard() {
 		console.log(state)
 		stompClient.current = getstomClient().client
 		console.log("this si stompClient: ", stompClient.current)
-		stompClient.current.connect({}, () => {
-			console.log("connection is establissssssssshed")
-			console.log(stompClient.current);
+		console.log("connected state: ", stompClient.current.connected);
+		if (!stompClient.current.connected) {
+			stompClient.current.connect({}, () => {
+				console.log("connection is establissssssssshed")
+				console.log(stompClient.current);
+
+
+				stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+					// console.log('Received message:', message.body);
+					console.log("call from: " + call.body);
+					// console.log("remote id: " + call.body);
+					const userData = JSON.parse(call.body);
+					// console.log(userData);
+					// // console.log("consult state in doc dashboard: ", state.consult);
+					// const consultationData = JSON.parse(userData["consultState"]);
+					const callFrom = JSON.parse(userData["callFrom"]);
+					// console.log(consultationData);
+					// console.log(callFrom.localId);
+					// setConsultState(consultationData);
+
+					dispatch(doctorActions.updateRemoteId(callFrom.localId));
+
+					dispatch(doctorActions.updatePatientName(callFrom.patientName))
+
+					dispatch(doctorActions.updateIncomingCall(true));
+				});
+
+			})
+		}
+		else {
 			stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
 				// console.log('Received message:', message.body);
 				console.log("call from: " + call.body);
@@ -77,13 +104,12 @@ function DoctorDashboard() {
 				// setConsultState(consultationData);
 
 				dispatch(doctorActions.updateRemoteId(callFrom.localId));
-				
+
 				dispatch(doctorActions.updatePatientName(callFrom.patientName))
 
 				dispatch(doctorActions.updateIncomingCall(true));
 			});
-
-		})
+		}
 	}, []);
 
 	const handleAcceptCall = async () => {
@@ -405,7 +431,7 @@ function DoctorDashboard() {
 			</Box>
 
 			{state.incomingCall ? (
-				<IncomingCall/>
+				<IncomingCall />
 			) : (
 				<></>
 			)}
