@@ -15,6 +15,8 @@ import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Prescription } from "../index";
 import formatDate from "../../Utility Data/dateChangeFunc";
+import IncomingCall from "./IncomingCall";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -167,6 +169,7 @@ function ReportsModal(props) {
 	);
 }
 function DocPatients() {
+	const doctorState = useSelector(state => state.doctor);
 	const [appModalShow, setappModalShow] = useState(false);
 	const [repModalShow, setrepModalShow] = useState(false);
 	const dispatch = useDispatch();
@@ -193,7 +196,7 @@ function DocPatients() {
 
 	useEffect(() => {
 		dispatch(handleGetAllPatients());
-	},[]);
+	}, []);
 
 	return (
 		<Box sx={{ display: "flex", marginLeft: "65px" }}>
@@ -248,6 +251,11 @@ function DocPatients() {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{doctorState.incomingCall ? (
+				<IncomingCall />
+			) : (
+				<></>
+			)}
 		</Box>
 	);
 }

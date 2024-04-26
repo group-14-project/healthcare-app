@@ -20,6 +20,7 @@ import CalendarModal from "./CalendarModal";
 import { patientActions } from "../../Store/patientSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import CallLoader from "./CallLoader";
 
 const events = [
 	{ id: 1, title: "Appointment-1", start: "2024-04-23 14:30", allDay: false },
@@ -35,6 +36,8 @@ const PatientDashboard = (props) => {
 	const heads = ["Date", "Doctor Name", "Symptom"];
 	const [modalOpen, setModalOpen] = useState(false);
 	var category = "health";
+
+	const patientState = useSelector(state=>state.patient);
 
 	const dispatch = useDispatch();
 
@@ -334,6 +337,13 @@ const PatientDashboard = (props) => {
 				</Box>
 				{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
 			</Box>
+			{
+                    patientState.calling
+                         ?
+                         <CallLoader />
+                         :
+                         <></>
+               }
 		</Box>
 	);
 };

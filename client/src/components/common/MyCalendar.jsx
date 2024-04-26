@@ -16,6 +16,13 @@ import { v4 as uuidv4 } from 'uuid';
 // import loadingGif from '../images/loading.gif';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
+import getstomClient from '../Patient/MySocket';
+import { useDispatch, useSelector } from 'react-redux';
+import IncomingCall from '../doctor/IncomingCall';
+import { acceptCall } from '../../Store/doctorSlice';
+
+
+
 // import "@fullcalendar/core/main.css";  
 // import "@fullcalendar/daygrid/main.css";  
 
@@ -38,6 +45,14 @@ const MyCalendar = () => {
 
   const [event, setEvents] = useState(null);
 
+  const doctorState = useSelector(state => state.doctor);
+  const dispatch = useDispatch();
+
+  // let stompClient;
+  // useEffect(() => {
+  //   stompClient = getstomClient()
+  //   console.log("this is stompClient in calender: ", stompClient)
+  // }, [])
   const fetchData = async (id) => {
 
     return new Promise((resolve, reject) => {
@@ -49,7 +64,11 @@ const MyCalendar = () => {
 
   const navigate = useNavigate();
 
-  window.history.forward();
+
+  
+
+
+  // window.history.forward();
 
 
   //   useEffect(() => {
@@ -110,8 +129,8 @@ const MyCalendar = () => {
 
 
   return (
-    <Box sx={{display:"flex", justifyContent:"space-between", marginLeft:"65px", padding:"20px"}}>
-      <Box sx={{width:"100%",marginRight:"20px" }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", marginLeft: "65px", padding: "20px" }}>
+      <Box sx={{ width: "100%", marginRight: "20px" }}>
         <FullCalendar
           schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
 
@@ -138,6 +157,11 @@ const MyCalendar = () => {
 
         />
       </Box>
+      {doctorState.incomingCall ? (
+        <IncomingCall/>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }

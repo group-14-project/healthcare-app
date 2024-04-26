@@ -115,13 +115,35 @@ export const formatDate = (inputDate) => {
 	return `${dayOfMonth} ${monthName} ${yearValue}`;
 };
 
-const createSocket = () => {
-	var conn = new SockJS("http://localhost:9090/socket");
+// const makeSocketConnection = async (stompClient, doctorId, dispatch) => {
+// 	await stompClient.connect({}, (frame) => {
+// 		stompClient.subscribe(
+// 			"/user/" + doctorId + "/topic/call",
+// 			(call) => {
+// 				console.log("call from: " + call.body);
+// 				// console.log("remote id: " + call.body);
+// 				// const userData = JSON.parse(call.body);
+// 				// console.log(userData);
+// 				// // console.log("consult state in doc dashboard: ", state.consult);
+// 				// const consultationData = JSON.parse(userData["consultState"]);
+// 				// const callFrom = JSON.parse(userData["callFrom"]);
+// 				// console.log(consultationData);
+// 				// console.log(callFrom.localId);
 
-	const stompClient = new Stomp.over(conn);
 
-	return stompClient;
-}
+// 				// dispatch(doctorActions.updateConsultState(consultationData));
+
+// 				dispatch(doctorActions.updateRemoteId(call.body));
+// 				// setConsultState(consultationData);
+
+// 				// setRemoteId(callFrom.localId);
+// 				// setPatientName(callFrom.patientName);
+// 				dispatch(doctorActions.updateIncomingCall(true));
+
+// 			}
+// 		);
+// 	});
+// }
 
 
 export const handleOTPverification = (otpdata) => {
@@ -159,13 +181,17 @@ export const handleOTPverification = (otpdata) => {
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
-					const stompClient = createSocket();
-					response.data = {
-						...response.data,
-						stompRef: stompClient
-					}
+					const conn = new SockJS("http://localhost:9090/socket");
+					const stompClient = await new Stomp.over(conn);
+
+					// await makeSocketConnection(stompClient, response.data.doctorId, dispatch);
+
+					// response.data = {
+					// 	...response.data,
+					// 	stompRef: stompClient,
+					// };
+
 					dispatch(doctorActions.addDoctorDetails(response.data));
-					// dispatch(doctorActions.updateSocketRef(stompClient));
 
 				}
 				else {

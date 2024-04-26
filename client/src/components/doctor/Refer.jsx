@@ -20,6 +20,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
+import IncomingCall from "./IncomingCall";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -43,6 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function Refer() {
+	const doctorState = useSelector(state=>state.doctor);
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
 	const [hospitalName, setHospitalName] = useState("");
 	const [specializationName, setSpecialization] = useState("");
@@ -227,6 +230,11 @@ function Refer() {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{doctorState.incomingCall ? (
+				<IncomingCall />
+			) : (
+				<></>
+			)}
 		</Box>
 	);
 }

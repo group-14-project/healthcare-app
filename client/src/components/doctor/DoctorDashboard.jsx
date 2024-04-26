@@ -11,81 +11,123 @@ import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useDispatch, useSelector, useStore } from "react-redux";
-import { doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
+import { acceptCall, doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
 import { fetchConsents, seniorDoctorActions } from "../../Store/seniorDoctorSlice";
 import IncomingCall from "./IncomingCall";
 import CalendarModal from "../Patient/CalendarModal";
 import { makeConnection } from "../../Store/consultSlice";
 import { store } from "../../Store/store";
+import getstomClient from "../Patient/MySocket";
+import stompClient from "../Patient/stomVariable";
+
+// import { useStompClient } from "../common/WebSocketContext";
+// import stompClient from "../Patient/MySocket";
+
 
 function DoctorDashboard() {
-	const [incomingCall, setIncomingCall] = useState(false);
+	// const [incomingCall, setIncomingCall] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
 	const seniorDoctorState = useSelector((state) => state.seniorDoctor);
 	var category = "health";
-	const stompClient = useSelector(state=>state.doctor.stompRef);
+	// const stompClient = useStompClient();
+	// const stompClient = useRef();
+	// stompClient.current = useSelector(state => state.doctor.stompRef);
 	const [remoteID, setRemoteId] = useState("");
 	const [localID, setLocalID] = useState(state.doctorId);
 	const [roomID, setRoomID] = useState("");
-	const [patientName, setPatientName] = useState("");
+	// const [patientName, setPatientName] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [consultState, setConsultState] = useState({});
 	const isFirstRender = useRef(true)
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
-	
+
 	const handleDateClick = () => {
 		setModalOpen((prev) => !prev);
 	};
+
+	const stompClient = useRef();
+
+	const patientName = useSelector(state=>state.doctor.patientName);
 
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctorId);
 		localStorage.setItem("doctorName", state.firstName);
 		console.log(state)
+		stompClient.current = getstomClient().client
+		console.log("this si stompClient: ", stompClient.current)
+		stompClient.current.connect({}, () => {
+			console.log("connection is establissssssssshed")
+			console.log(stompClient.current);
+			stompClient.current.subscribe("/user/" + localID + "/topic/call", (call) => {
+				// console.log('Received message:', message.body);
+				console.log("call from: " + call.body);
+				// console.log("remote id: " + call.body);
+				const userData = JSON.parse(call.body);
+				// console.log(userData);
+				// // console.log("consult state in doc dashboard: ", state.consult);
+				// const consultationData = JSON.parse(userData["consultState"]);
+				const callFrom = JSON.parse(userData["callFrom"]);
+				// console.log(consultationData);
+				// console.log(callFrom.localId);
+				// setConsultState(consultationData);
+
+				dispatch(doctorActions.updateRemoteId(callFrom.localId));
+				
+				dispatch(doctorActions.updatePatientName(callFrom.patientName))
+
+				dispatch(doctorActions.updateIncomingCall(true));
+			});
+
+		})
 	}, []);
 
 	const handleAcceptCall = async () => {
-		console.log("consult state: ", consultState);
-		const res = dispatch(makeConnection(consultState));
 
-		console.log("make connection res: ", res);
+		const obj = dispatch(acceptCall(state.firstName, state.patientName, state.remoteId, state.doctorId));
 
-		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
-			/[018]/g,
-			(c) =>
-				(
-					c ^
-					(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-				).toString(16)
-		);
+		// console.log("consult state: ", consultState);
+		// const res = dispatch(makeConnection(consultState));
 
-		console.log(newUuid);
+		// console.log("make connection res: ", res);
 
-		const doctorName = state.firstName;
+		// const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+		// 	/[018]/g,
+		// 	(c) =>
+		// 		(
+		// 			c ^
+		// 			(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+		// 		).toString(16)
+		// );
 
-		setRoomID(newUuid);
+		// console.log(newUuid);
 
-		const acceptedBy = { name: doctorName, callee: localID };
-		const initiatedBy = { name: patientName, caller: remoteID };
+		// const doctorName = state.firstName;
 
-		stompClient.current.send(
-			"/app/acceptCall",
-			{},
-			JSON.stringify({
-				roomID: newUuid,
-				acceptedBy: JSON.stringify(acceptedBy),
-				initiatedBy: JSON.stringify(initiatedBy),
-			})
-		);
+		// setRoomID(newUuid);
 
-		navigate(`/room/${newUuid}`, { state: { acceptedBy, initiatedBy } });
+		// const acceptedBy = { name: doctorName, callee: localID };
+		// const initiatedBy = { name: patientName, caller: state.remoteId };
+
+		// stompClient.current.send(
+		// 	"/app/acceptCall",
+		// 	{},
+		// 	JSON.stringify({
+		// 		roomID: newUuid,
+		// 		acceptedBy: JSON.stringify(acceptedBy),
+		// 		initiatedBy: JSON.stringify(initiatedBy),
+		// 	})
+		// );
+
+		navigate(`/room/${obj.roomId}`, { state: obj.data });
 	};
 
 	const handleRejectCall = () => {
-		setIncomingCall(false);
+		// setIncomingCall(false);
+		dispatch(doctorActions.updateIncomingCall(false));
 		const rejectedBy = {
 			name: state.firstName,
 			callee: localID,
@@ -103,43 +145,75 @@ function DoctorDashboard() {
 		);
 	};
 
-	useEffect(() => {
 
-		
-		if (isFirstRender.current) {
-			isFirstRender.current = false; // it's no longer the first render
-			return;
-		}
-		// var conn = new SockJS("http://localhost:9090/socket");
-		// stompClient.current = new Stomp.over(conn);
-		// console.log("fidbfisdbfidsbf");
-		console.log("fijwdifbijf",stompClient);
-		
-		stompClient.connect({}, (frame) => {
-			// console.log("inside connect")
-			stompClient.subscribe(
-				"/user/" + localID + "/topic/call",
-				(call) => {
-					console.log(call);
-					console.log("call from: " + call.body);
-					// console.log("remote id: " + call.body);
-					const userData = JSON.parse(call.body);
-					console.log(userData);
-					// console.log("consult state in doc dashboard: ", state.consult);
-					// const consultationData = JSON.parse(userData["consultState"]);
-					// const callFrom = JSON.parse(userData["callFrom"]);
-					// console.log(consultationData)/;
-					// console.log(callFrom);
-					// setConsultState(consultationData);
+	// useEffect(() => {
+	// 	console.log(stompClient);
+	// 	// if (stompClient && stompClient.connected) {
+	// 	// Use stompClient here, e.g., subscribe to topics, send messages, etc.
 
-					setRemoteId(call.body);
-					// setPatientName(callFrom.patientName);
+	// 	// stompClient.connect({})
+	// const subscription = stompClient.subscribe("/user/" + localID + "/topic/call", (call) => {
+	// 	// console.log('Received message:', message.body);
+	// 	console.log("call from: " + call.body);
+	// 	// console.log("remote id: " + call.body);
+	// 	// const userData = JSON.parse(call.body);
+	// 	// console.log(userData);
+	// 	// // console.log("consult state in doc dashboard: ", state.consult);
+	// 	// const consultationData = JSON.parse(userData["consultState"]);
+	// 	// const callFrom = JSON.parse(userData["callFrom"]);
+	// 	// console.log(consultationData);
+	// 	// console.log(callFrom.localId);
+	// 	// setConsultState(consultationData);
 
-					setIncomingCall(true);
-				}
-			);
-		});
-	}, [stompClient, state]);
+	// 	setRemoteId(call.body);
+	// 	// setPatientName(callFrom.patientName);
+
+	// 	setIncomingCall(true);
+	// });
+
+	// 	// return () => {
+	// 	// 	subscription.unsubscribe();
+	// 	// };
+	// 	// }
+	// }, [stompClient]);
+
+
+
+	// useEffect(() => {
+
+	// 	const createConnect = async () => {
+	// 		try {
+	// 			console.log(stompClient.current);
+
+	// 			stompClient.subscribe(
+	// 				"/user/" + localID + "/topic/call",
+	// 				(call) => {
+	// console.log("call from: " + call.body);
+	// // console.log("remote id: " + call.body);
+	// const userData = JSON.parse(call.body);
+	// console.log(userData);
+	// // console.log("consult state in doc dashboard: ", state.consult);
+	// const consultationData = JSON.parse(userData["consultState"]);
+	// const callFrom = JSON.parse(userData["callFrom"]);
+	// console.log(consultationData);
+	// console.log(callFrom.localId);
+	// setConsultState(consultationData);
+
+	// setRemoteId(callFrom.localId);
+	// setPatientName(callFrom.patientName);
+
+	// setIncomingCall(true);
+	// 				}
+	// 			);
+
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 		}
+	// 	};
+	// 	createConnect();
+	// }, [stompClient, state]);
+
+
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -329,12 +403,8 @@ function DoctorDashboard() {
 				</Box>
 			</Box>
 
-			{incomingCall ? (
-				<IncomingCall
-					acceptUtil={handleAcceptCall}
-					rejectUtil={handleRejectCall}
-					vars={patientName}
-				/>
+			{state.incomingCall ? (
+				<IncomingCall/>
 			) : (
 				<></>
 			)}

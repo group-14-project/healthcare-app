@@ -12,6 +12,7 @@ import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { approveConsent, fetchConsents } from "../../Store/seniorDoctorSlice";
 import formatDate from "../../Utility Data/dateChangeFunc";
+import IncomingCall from "./IncomingCall";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -35,6 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function ViewConsents() {
+	const doctorState = useSelector(state=>state.doctor);
 	const dispatch = useDispatch();
 	const pendingConsents = useSelector((state) => state.seniorDoctor.pending);
 	const approvedConsents = useSelector((state) => state.seniorDoctor.approved);
@@ -172,6 +174,11 @@ function ViewConsents() {
 							</TableBody>
 						</Table>
 					</TableContainer>
+				)}
+				{doctorState.incomingCall ? (
+					<IncomingCall />
+				) : (
+					<></>
 				)}
 			</Box>
 		</>

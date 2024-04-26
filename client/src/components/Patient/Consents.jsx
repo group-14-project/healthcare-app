@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { fetchPatientConsents } from '../../Store/patientSlice';
+import React, { useEffect, useRef, useState } from 'react';
+import { fetchPatientConsents, patientActions } from '../../Store/patientSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -13,8 +13,10 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import formatDate from '../../Utility Data/dateChangeFunc';
 import { approveConsent, withdrawConsent, rejectConsentRequest } from '../../Store/patientSlice';
-
-
+import getstomClient from './MySocket';
+import CallLoader from './CallLoader';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,7 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
      "&:nth-of-type(odd)": {
           backgroundColor: theme.palette.action.hover,
      },
-     
+
      "&:last-child td, &:last-child th": {
           border: 0,
      },
@@ -42,13 +44,67 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Consents = () => {
 
+     const stompClient = useRef();
+
+     
+     const { enqueueSnackbar } = useSnackbar();
+
      const dispatch = useDispatch();
      const patientPendingConsents = useSelector(state => state.patient.pendingConsents)
      const patientApprovedConsents = useSelector(state => state.patient.approvedConsents);
 
+     const patientState = useSelector(state => state.patient);
+
      useEffect(() => {
           dispatch(fetchPatientConsents());
      }, []);
+
+
+     // useEffect(() => {
+
+     //      // dispatch(consultActions.updateEmail(state.patient.email));
+
+     //      console.log(patientState.calling);
+
+     //      stompClient.current = getstomClient().client
+     //      console.log("this si stompClient: ", stompClient.current)
+     //      stompClient.current.connect({}, () => {
+     //           console.log("connection is establissssssssshed")
+     //           console.log(stompClient.current);
+
+     //           stompClient.current.subscribe("/user/" + patientState.patientId + "/topic/call", (data) => {
+
+     //                console.log("Queue Size: ", data.body);
+
+     //           })
+
+     //           stompClient.current.subscribe("/user/" + patientState.patientId + "/topic/acceptCall", (accept) => {
+     //                dispatch(patientActions.updateCallingState(false));
+     //                // setCalling(false);
+     //                const acceptBody = JSON.parse(accept.body);
+     //                const acceptedBy = JSON.parse(acceptBody.acceptedBy);
+     //                const initiatedBy = JSON.parse(acceptBody.initiatedBy);
+     //                acceptedBy.callee = patientState.patientId;
+     //                initiatedBy.caller = patientState.remoteId;
+     //                acceptedBy.name = patientState.patientName
+     //                initiatedBy.name = patientState.doctorName;
+     //                console.log(acceptBody);
+     //                navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
+     //           });
+
+     //           stompClient.current.subscribe("/user/" + patientState.patientId + "/topic/rejectCall", (accept) => {
+     //                dispatch(patientActions.updateCallingState(false));
+     //                // setCalling(false);
+     //                const acceptBody = JSON.parse(accept.body);
+     //                const rejectedBy = JSON.parse(acceptBody.rejectedBy);
+     //                console.log(rejectedBy.message);
+     //                const variant = "error"
+     //                enqueueSnackbar(rejectedBy.message, { variant });
+     //           });
+
+     //      })
+
+     // }, [])
 
 
      const handleApproveConsent = (e, consentId) => {
@@ -114,7 +170,8 @@ const Consents = () => {
                                                             {consent.patientConsent}
                                                        </StyledTableCell>
                                                        <StyledTableCell align="center">
-                                                            {formatDate(consent.date)}
+                            
+	const navigate = useNavigate();                                {formatDate(consent.date)}
                                                        </StyledTableCell>
                                                        <StyledTableCell align="center">
                                                             <Button
@@ -125,7 +182,7 @@ const Consents = () => {
                                                             >
                                                                  Approve
                                                             </Button>
-                                                            <Button variant="outlined" color="error" onClick={(e)=>{handleRejectConsentRequest(e, consent.consentId)}}>
+                                                            <Button variant="outlined" color="error" onClick={(e) => { handleRejectConsentRequest(e, consent.consentId) }}>
                                                                  Reject
                                                             </Button>
                                                        </StyledTableCell>
@@ -184,6 +241,13 @@ const Consents = () => {
                                         </TableBody>
                                    </Table>
                               </TableContainer>
+                              {
+                                   patientState.calling
+                                        ?
+                                        <CallLoader />
+                                        :
+                                        <></>
+                              }
                          </Box>
                }
 

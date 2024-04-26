@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import getstomClient from "../components/Patient/MySocket";
+
+const stompClient = getstomClient();
+
+
 const initialState = {
 	email: "",
 	firstName: "",
@@ -22,7 +27,12 @@ const initialState = {
 	hospitalAndSpecializationAndDoctor: [],
 	consentsShared: [],
 	reviews: [],
-	stompRef: null
+	stompRef: {},
+	incomingCall: false,
+	remoteId: "",
+	patientName: "",
+	consultState: "",
+	// roomId: ""
 };
 
 export const handlehospitalAndSpecializationAndDoctor = () => {
@@ -38,7 +48,7 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 						"Content-Type": "application/json",
 					},
 				}
-			);																																																																																																																																																																																																																
+			);
 			return response;
 		};
 		try {
@@ -157,6 +167,67 @@ export const consentRegistration = (data) => {
 
 
 
+export const acceptCall = (doctorName, patientName, remoteId, localId) => {
+
+	const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+		/[018]/g,
+		(c) =>
+			(
+				c ^
+				(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+			).toString(16)
+	);
+
+	console.log(newUuid);
+
+	// const doctorName = state.firstName;
+
+	// setRoomID(newUuid);
+
+	console.log("stomp client in doctor slice: ", stompClient);
+
+	const acceptedBy = { name: doctorName, callee: localId };
+	const initiatedBy = { name: patientName, caller: remoteId };
+
+	stompClient.client.send(
+		"/app/acceptCall",
+		{},
+		JSON.stringify({
+			roomID: newUuid,
+			acceptedBy: JSON.stringify(acceptedBy),
+			initiatedBy: JSON.stringify(initiatedBy),
+		})
+	);
+
+
+
+	return { type: "acceptCall", data: { acceptedBy, initiatedBy }, roomId: newUuid };
+
+}
+
+
+
+export const rejectCall = (doctorName, doctorId, patientName, patientId) => {
+	const rejectedBy = {
+		name: doctorName,
+		callee: doctorId,
+		message: "Doctor is Busy right now",
+	};
+	const initiatedBy = { name: patientName, caller: patientId };
+
+	stompClient.client.send(
+		"/app/rejectCall",
+		{},
+		JSON.stringify({
+			rejectedBy: JSON.stringify(rejectedBy),
+			initiatedBy: JSON.stringify(initiatedBy),
+		})
+	);
+
+	return { type: "rejectCall", data: { rejectedBy, initiatedBy } };
+
+}
+
 
 
 
@@ -198,8 +269,20 @@ const doctorSlice = createSlice({
 		updatePastAppointments: (state, action) => {
 			state.pastAppointments = [...state.pastAppointments, action.payload];
 		},
-		updateSocketRef: (state,action) => {
+		updateSocketRef: (state, action) => {
 			state.stompRef = action.payload;
+		},
+		updateIncomingCall: (state, action) => {
+			state.incomingCall = action.payload;
+		},
+		updateRemoteId: (state, action) => {
+			state.remoteId = action.payload;
+		},
+		updatePatientName: (state, action) => {
+			state.patientName = action.payload;
+		},
+		updateConsultState: (state, action) => {
+			state.consultState = action.payload;
 		}
 	},
 });

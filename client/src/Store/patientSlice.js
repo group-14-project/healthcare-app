@@ -1,5 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import getstomClient from "../components/Patient/MySocket";
+
+
+
+const stompClient = getstomClient();
+
+
 const initialState = {
 	bloodGroup: "",
 	email: "",
@@ -19,8 +26,14 @@ const initialState = {
 	},
 	reports: [],
 	pendingConsents: [],
-	approvedConsents: []
+	approvedConsents: [],
+	calling: false,
+	remoteId: "",
+	doctorName: "",
 };
+
+
+
 
 export const handleUpdatePatientDetails = () => {
 	return async (dispatch, getState) => {
@@ -281,6 +294,23 @@ export const rejectConsentRequest = (data) => {
 
 
 
+export const makeCall = (patientId, patientName, doctorId, doctorName) => {
+	stompClient.client.send("/app/call", {}, JSON.stringify({
+		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
+		"callFrom": JSON.stringify({ "patientName": patientName, "localId": patientId.toString() }),
+		// "consultState": JSON.stringify(consult)
+	}));
+
+	return {
+		type: "call",
+		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
+		"callFrom": JSON.stringify({ "patientName": patientName, "localId": patientId.toString() }),
+		// "consultState": JSON.stringify(consult)
+	}
+
+}
+
+
 
 const patientSlice = createSlice({
 	name: "patient",
@@ -320,7 +350,16 @@ const patientSlice = createSlice({
 		},
 		updateApprovedConsents: (state, action) => {
 			state.approvedConsents = action.payload;
-		}
+		},
+		updateCallingState: (state, action) => {
+			state.calling = action.payload;
+		},
+		updateRemoteId: (state, action) => {
+			state.remoteId = action.payload;
+		},
+		updateDoctorName: (state, action) => {
+			state.doctorName = action.payload;
+		},
 	},
 });
 

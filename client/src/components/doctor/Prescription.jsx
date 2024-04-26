@@ -3,6 +3,8 @@ import styles from "./Prescription.module.css";
 import logo from "../../assets/logo_full_black.png";
 import { useSelector } from "react-redux";
 import { Button } from "@mui/material";
+import IncomingCall from "./IncomingCall";
+
 function Prescription() {
 	const doctorState = useSelector((state) => state.doctor);
 	console.log(doctorState)
@@ -64,6 +66,7 @@ function Prescription() {
 					Close
 				</Button>
 			</div>
+			
 		</div>
 	);
 }

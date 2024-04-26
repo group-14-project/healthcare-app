@@ -24,7 +24,7 @@ const Room = () => {
      let localVideoRef = useRef();
      let remoteVideoRef = useRef();
      let peerConnection = useRef();
-     let myref = useRef();
+     let myref = useRef(null);
      let mediaRecorder = useRef();
 
 
@@ -231,7 +231,7 @@ const Room = () => {
           stompClient.current.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
                "initiatedBy": remoteID.toString(),
-               "role": role
+               // "role": role
           }))
 
           peerConnection.current = null;
