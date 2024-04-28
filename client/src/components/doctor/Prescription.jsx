@@ -60,7 +60,7 @@ function Prescription() {
 				<Button variant="contained" color="success">
 					Print
 				</Button>
-				<Button variant="contained" color="success">
+				<Button variant="contained" color="error">
 					Close
 				</Button>
 			</div>

@@ -14,13 +14,14 @@
 
 .quick_actions{
     display: flex;
-    margin-top: -5%;
-    justify-content: space-around;
+    margin-top: 2rem;
+    justify-content: space-between;
     box-sizing: border-box;
+
 }
 
 .action_btn{
-    flex: 0.2;
+    flex: 0.25;
     border-radius: 25px;
     box-sizing: border-box;
     display: flex;
@@ -28,6 +29,7 @@
     align-items: center;
     padding: 20px;
     background-color: #FFFFFF;
+    height: 15rem;
 }
 
 .patient_icon{
@@ -44,7 +46,8 @@
     justify-content: center;
     align-items: center;
     color: #FFFFFF;
-    font-weight: 600;
+    font-weight: bold;
+    margin-top: 1rem;
 }
 
 .quick_btn_font{
@@ -68,8 +71,8 @@
 }
 
 .graph{
-    /* margin-top: 5%; */
-    height: 550px;
+    margin-top: 2rem;
+    height: 500px;
     width: 100%;
     border-radius: 30px;
     background-color: white;
@@ -77,6 +80,10 @@
     justify-content: center;
     align-items: center;
 }
+
+/* .graph{
+    background-color: white !important;
+    /* margin-top: 9% !important; */
 
 /* side-box */
 .side_box{
@@ -157,6 +164,7 @@ background-color: #f4f4f4;
 border-radius: 25px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 margin-bottom: 40px;
+margin-top: 2rem;
 }
 
 .appointments_title {
@@ -193,9 +201,4 @@ margin-bottom: 5px;
 
 .appointment_date {
 color: #555;
-}
-
-.graph{
-    background-color: white !important;
-    /* margin-top: 9% !important; */
 }

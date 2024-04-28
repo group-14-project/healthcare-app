@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { approveConsent, fetchConsents } from "../../Store/seniorDoctorSlice";
+import { approveConsent, fetchConsents, rejectConsent } from "../../Store/seniorDoctorSlice";
 import formatDate from "../../Utility Data/dateChangeFunc";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -47,6 +47,12 @@ function ViewConsents() {
 		await dispatch(approveConsent(consent.consentId));
 		dispatch(fetchConsents());
 	};
+
+	const handleRejectConsent = async (consent) => {
+		await dispatch(rejectConsent(consent.consentId));
+		dispatch(fetchConsents());
+	
+	}
 
 	return (
 		<>
@@ -108,7 +114,7 @@ function ViewConsents() {
 											>
 												Approve
 											</Button>
-											<Button variant="outlined" color="error">
+											<Button variant="outlined" color="error" onClick={() =>{handleRejectConsent(consent)}}>
 												Reject
 											</Button>
 										</StyledTableCell>

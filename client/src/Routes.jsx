@@ -29,10 +29,11 @@ import {
 	HospitalDashboard,
 	AddDepartment,
 	AddDoctor,
+	ForgotPassword,
+	SetNewPassword
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
-
 
 const Common = (props) => {
 	const sidebar = props.sidebar;
@@ -104,12 +105,22 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/doctor/changepwd",
-		element: <PrivateRoute> <ChangePassword /> </PrivateRoute>,
+		element: (
+			<PrivateRoute>
+				{" "}
+				<ChangePassword />{" "}
+			</PrivateRoute>
+		),
 	},
 
 	{
 		path: "/hospital/changepwd",
-		element:<PrivateRoute> <ChangePassword /> </PrivateRoute>,
+		element: (
+			<PrivateRoute>
+				{" "}
+				<ChangePassword />{" "}
+			</PrivateRoute>
+		),
 	},
 	{
 		path: "patient/details",
@@ -118,6 +129,16 @@ const router = createBrowserRouter([
 				<PatientDetails store={store} />
 			</PrivateRoute>
 		),
+	},
+	{
+		path: "/forgot-password",
+		element: <ForgotPassword/>
+
+	},
+	{
+		path: "/password-reset",
+		element: <SetNewPassword/>
+
 	},
 	{
 		path: "/room/:roomId",
@@ -157,31 +178,66 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "/doctor/feedback",
-				element: <PrivateRoute> <Feedback /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<Feedback />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/allpatients",
-				element: <PrivateRoute> <DocPatients /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<DocPatients />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/calendar",
-				element: <PrivateRoute> <MyCalendar /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<MyCalendar />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/feedback",
-				element: <PrivateRoute> <Feedback /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<Feedback />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/refer",
-				element: <PrivateRoute> <Refer /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<Refer />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/departments",
-				element: <PrivateRoute> <Departments /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<Departments />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "/doctor/viewConsents",
-				element: <PrivateRoute> <ViewConsents /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<ViewConsents />{" "}
+					</PrivateRoute>
+				),
 			},
 		],
 	},
@@ -205,27 +261,59 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "patient/dashboard",
-				element: <PrivateRoute> <PatientDashboard /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<PatientDashboard />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "patient/consult",
-				element: <PrivateRoute> <SnackbarProvider> <PatientConsultation /> </SnackbarProvider>  </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<SnackbarProvider>
+							{" "}
+							<PatientConsultation />{" "}
+						</SnackbarProvider>{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "patient/reports",
-				element: <PrivateRoute> <Reports /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<Reports />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "patient/prescriptions",
-				element: <PrivateRoute> <PatientPrescription /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<PatientPrescription />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "patient/manageConsents",
-				element: <PrivateRoute><Consents /></PrivateRoute>
+				element: (
+					<PrivateRoute>
+						<Consents />
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "patient/upcomingappointments",
-				element:<PrivateRoute> <MyCalendar /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<MyCalendar />{" "}
+					</PrivateRoute>
+				),
 			},
 		],
 	},
@@ -233,11 +321,7 @@ const router = createBrowserRouter([
 		element: (
 			<Common
 				sidebar={{
-					content: [
-						"Add Department",
-						"Add Doctor",
-						"Logout",
-					],
+					content: ["Add Department", "Add Doctor", "Logout"],
 				}}
 				user={{ type: "hospital" }}
 				store={{ store }}
@@ -246,15 +330,30 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "hospital/dashboard",
-				element:<PrivateRoute> <HospitalDashboard /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<HospitalDashboard />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "hospital/adddepartment",
-				element:<PrivateRoute> <AddDepartment /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<AddDepartment />{" "}
+					</PrivateRoute>
+				),
 			},
 			{
 				path: "hospital/adddoctor",
-				element:<PrivateRoute> <AddDoctor /> </PrivateRoute>,
+				element: (
+					<PrivateRoute>
+						{" "}
+						<AddDoctor />{" "}
+					</PrivateRoute>
+				),
 			},
 		],
 	},

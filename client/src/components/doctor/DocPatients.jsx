@@ -11,7 +11,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import Modal from "react-bootstrap/Modal";
-import { handleGetAllPatients } from "../../Store/doctorSlice";
+import {
+	handleGetAllPatients,
+	handleGetPatientReport,
+	handleGetPatientReports,
+	handleRecommendedPatients,
+	handleGetRecPatientReports,
+	handleGetRecPatientReport
+} from "../../Store/doctorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Prescription } from "../index";
 import formatDate from "../../Utility Data/dateChangeFunc";
@@ -95,7 +102,11 @@ function AppointmentsModal(props) {
 										{appointment.mainSymptom}
 									</StyledTableCell>
 									<StyledTableCell align="right">
-										<Button variant="contained" color="success" onClick={() => setLgShow(true)}>
+										<Button
+											variant="contained"
+											color="success"
+											onClick={() => setLgShow(true)}
+										>
 											View Prescription
 										</Button>
 										<PrescriptionModal
@@ -112,14 +123,25 @@ function AppointmentsModal(props) {
 				</TableContainer>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button variant="contained" color="success" onClick={props.onHide}>Close</Button>
+				<Button variant="contained" color="error" onClick={props.onHide}>
+					Close
+				</Button>
 			</Modal.Footer>
 		</Modal>
 	);
 }
 function ReportsModal(props) {
-	const AppointmentDetails = props.patientdetails;
+	const dispatch = useDispatch();
+	const reports = props.reports;
 	const [lgShow, setLgShow] = useState(false);
+	const handleViewReport = (reportId, modalOpen, reportName) => {
+		setLgShow(modalOpen);
+		if(props.rec === "true"){
+			dispatch(handleGetRecPatientReport(reportId, reportName));
+		}else{
+			dispatch(handleGetPatientReport(reportId, reportName));
+		}
+	};
 	return (
 		<Modal
 			{...props}
@@ -141,27 +163,43 @@ function ReportsModal(props) {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{AppointmentDetails.map((appointment, index) => (
-								<StyledTableRow key={index}>
-									<StyledTableCell component="th" scope="row">
-										{formatDate(
-											appointment.appointmentDateAndTime.split("T")[0]
-										)}
-									</StyledTableCell>
-									<StyledTableCell align="center">
-										{appointment.mainSymptom}
-									</StyledTableCell>
-									<StyledTableCell align="right">
-										<Button variant="contained" color="success" onClick={() => setLgShow(true)}>View Report</Button>
+							{reports.length === 0 ? (
+								<StyledTableRow>
+									<StyledTableCell colSpan={3} align="center">
+										No Reports Found
 									</StyledTableCell>
 								</StyledTableRow>
-							))}
+							) : (
+								reports.map((report, index) => (
+									<StyledTableRow key={index}>
+										<StyledTableCell component="th" scope="row">
+											{formatDate(report.localDateTime.split("T")[0])}
+										</StyledTableCell>
+										<StyledTableCell align="center">
+											{report.reportName}
+										</StyledTableCell>
+										<StyledTableCell align="right">
+											<Button
+												variant="contained"
+												color="success"
+												onClick={() =>
+													handleViewReport(report.id, true, report.reportName)
+												}
+											>
+												View Report
+											</Button>
+										</StyledTableCell>
+									</StyledTableRow>
+								))
+							)}
 						</TableBody>
 					</Table>
 				</TableContainer>
 			</Modal.Body>
 			<Modal.Footer>
-				<Button variant="contained" color="success" onClick={props.onHide}>Close</Button>
+				<Button variant="contained" color="error" onClick={props.onHide}>
+					Close
+				</Button>
 			</Modal.Footer>
 		</Modal>
 	);
@@ -169,10 +207,13 @@ function ReportsModal(props) {
 function DocPatients() {
 	const [appModalShow, setappModalShow] = useState(false);
 	const [repModalShow, setrepModalShow] = useState(false);
+	const [reports, setReports] = useState([]);
 	const dispatch = useDispatch();
 	const pastAppointments = useSelector(
 		(state) => state.doctor.pastAppointments
 	);
+	console.log(pastAppointments)
+	const recommendedPatients = useSelector((state) => state.doctor.recommendedPatients);
 	const [patientDetails, setPatientDetails] = useState([]);
 
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
@@ -183,72 +224,146 @@ function DocPatients() {
 		);
 		setPatientDetails(patientsDetailsRecv);
 	};
-	const handleViewReports = (patientEmail) => {
+	const handleViewReports = async (patientEmail) => {
 		setrepModalShow(true);
-		const patientsDetailsRecv = pastAppointments.filter(
-			(appointment) => appointment.patientEmail === patientEmail
-		);
-		setPatientDetails(patientsDetailsRecv);
+		const response = await dispatch(handleGetPatientReports(patientEmail));
+		setReports(response);
+	};
+	const handleViewReportsRecommended = async (connectionId) => {
+		setrepModalShow(true);
+		const response = await dispatch(handleGetRecPatientReports(connectionId));
+		setReports(response);
 	};
 
 	useEffect(() => {
 		dispatch(handleGetAllPatients());
-	},[]);
+		dispatch(handleRecommendedPatients());
+	}, []);
 
 	return (
-		<Box sx={{ display: "flex", marginLeft: "65px" }}>
-			<TableContainer component={Paper}>
-				<Table sx={{ minWidth: 700 }} aria-label="customized table">
-					<TableHead>
-						<TableRow>
-							<StyledTableCell>Patient Name</StyledTableCell>
-							<StyledTableCell align="center">Last Visit</StyledTableCell>
-							<StyledTableCell align="center">View Reports</StyledTableCell>
-							<StyledTableCell align="center">View Details</StyledTableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{patientList.map((patient, index) => (
-							<StyledTableRow key={index}>
-								<StyledTableCell component="th" scope="row">
-									{patient.firstName + " " + patient.lastName}
-								</StyledTableCell>
-								<StyledTableCell align="center">
-									{formatDate(patient.date.split("T")[0])}
-								</StyledTableCell>
-								<StyledTableCell align="center">
-									<Button
-										variant="contained" color="success"
-										// style  ={{backgroundColor:"#1A5E20"}}
-										onClick={() => handleViewReports(patient.email)}
-									>
-										View Reports
-									</Button>
-									<ReportsModal
-										show={repModalShow}
-										onHide={() => setrepModalShow(false)}
-										patientdetails={patientDetails}
-									/>
-								</StyledTableCell>
-								<StyledTableCell align="center">
-									<Button
-										variant="contained" color="success"
-										onClick={() => handleViewDetails(patient.email)}
-									>
-										View Details
-									</Button>
-									<AppointmentsModal
-										show={appModalShow}
-										onHide={() => setappModalShow(false)}
-										patientdetails={patientDetails}
-									/>
-								</StyledTableCell>
-							</StyledTableRow>
-						))}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+		<>
+			<Box
+				sx={{ display: "flex", marginLeft: "66px", flexDirection: "column" }}
+			>
+				<h1
+					style={{ textAlign: "center", marginBottom: "3%", marginTop: "3%" }}
+				>
+					My Patients
+				</h1>
+				{patientList.length === 0 ? <Box sx={{ margin: "auto" }}>
+						You don't have any patients as of now
+					</Box>:<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 700 }} aria-label="customized table">
+						<TableHead>
+							<TableRow>
+								<StyledTableCell>Patient Name</StyledTableCell>
+								<StyledTableCell align="center">Last Visit</StyledTableCell>
+								<StyledTableCell align="center">View Reports</StyledTableCell>
+								<StyledTableCell align="center">View Details</StyledTableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{patientList.map((patient, index) => (
+								<StyledTableRow key={index}>
+									<StyledTableCell component="th" scope="row">
+										{patient.firstName + " " + patient.lastName}
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										{formatDate(patient.date.split("T")[0])}
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										<Button
+											variant="contained"
+											color="success"
+											// style  ={{backgroundColor:"#1A5E20"}}
+											onClick={() => handleViewReports(patient.email)}
+										>
+											View Reports
+										</Button>
+										<ReportsModal
+											show={repModalShow}
+											onHide={() => setrepModalShow(false)}
+											patientdetails={patientDetails}
+											reports={reports}
+											rec = {"false"}
+										/>
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										<Button
+											variant="contained"
+											color="success"
+											onClick={() => handleViewDetails(patient.email)}
+										>
+											View Details
+										</Button>
+										<AppointmentsModal
+											show={appModalShow}
+											onHide={() => setappModalShow(false)}
+											patientdetails={patientDetails}
+										/>
+									</StyledTableCell>
+								</StyledTableRow>
+							))}
+						</TableBody>
+					</Table>
+				</TableContainer>}
+			</Box>
+
+			<Box
+				sx={{ display: "flex", marginLeft: "66px", flexDirection: "column" }}
+			>
+				<h1
+					style={{ textAlign: "center", marginBottom: "3%", marginTop: "3%" }}
+				>
+					Recommended Patients
+				</h1>
+				{recommendedPatients.length === 0 ? <Box sx={{ margin: "auto" }}>
+						You don't have any patients recommended as of now
+					</Box>:<TableContainer component={Paper}>
+					<Table sx={{ minWidth: 700 }} aria-label="customized table">
+						<TableHead>
+							<TableRow>
+								<StyledTableCell>Patient Name</StyledTableCell>
+								<StyledTableCell align="center">From Doctor</StyledTableCell>
+								<StyledTableCell align="center">Date</StyledTableCell>
+								<StyledTableCell align="center">View Reports</StyledTableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{recommendedPatients.map((patient, index) => (
+								<StyledTableRow key={index}>
+									<StyledTableCell  component="th" scope="row">
+										{patient.patientFirstName + " " + patient.patientLastName}
+									</StyledTableCell>
+									<StyledTableCell align="center" component="th" scope="row">
+										{patient.doctorFirstName + " " + patient.doctorLastName}
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										{formatDate(patient.localDate.split("T")[0])}
+									</StyledTableCell>
+									<StyledTableCell align="center">
+										<Button
+											variant="contained"
+											color="success"
+											onClick={() => handleViewReportsRecommended(patient.consentId)}
+										>
+											View Reports
+										</Button>
+										<ReportsModal
+											show={repModalShow}
+											onHide={() => setrepModalShow(false)}
+											patientdetails={patientDetails}
+											reports={reports}
+											rec = {"true"}
+										/>
+									</StyledTableCell>
+								</StyledTableRow>
+							))}
+						</TableBody>
+					</Table>
+				</TableContainer>}
+			</Box>
+		</>
 	);
 }
 

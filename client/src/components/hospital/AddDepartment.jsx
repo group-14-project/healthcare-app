@@ -13,6 +13,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css'; 
+const notyf = new Notyf({
+	position: {
+		x: 'right',
+		y: 'top',
+	  },
+});
 
 const AddDepartment = (props) => {
 	const navigate = useNavigate();
@@ -50,8 +58,10 @@ const AddDepartment = (props) => {
 				}
 			);
 			console.log(response);
+			notyf.success("Department Added Successfully");
 		} catch (error) {
 			console.log(error);
+			notyf.error("Error Adding Department");
 		}
 	};
 

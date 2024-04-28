@@ -21,6 +21,14 @@ const initialState = {
 	pendingConsents: [],
 	approvedConsents: []
 };
+import 'notyf/notyf.min.css'; 
+const notyf = new Notyf({
+	position: {
+		x: 'right',
+		y: 'top',
+	  },
+});
+
 
 export const handleUpdatePatientDetails = () => {
 	return async (dispatch, getState) => {
@@ -71,9 +79,7 @@ export const fetchReports = () => {
 
 		try {
 			const response = await fetchData();
-
 			dispatch(patientActions.updateReports(response.data));
-
 			console.log("reports fetched: ", response.data);
 		}
 		catch (err) {
@@ -104,15 +110,15 @@ export const uploadReport = (data) => {
 		try {
 
 			const response = await fetchData();
-
 			console.log(response);
+			notyf.success("Report Uploaded Successfully");
 
 		} catch (error) {
 			console.log("Error uploading report", error);
+			notyf.error("Error Uploading Report");
 		}
 	}
 }
-
 
 export const downloadReport = (reportId, reportName) => {
 	return async (dispatch, getState) => {
@@ -144,11 +150,10 @@ export const downloadReport = (reportId, reportName) => {
 			link.click();
 		} catch (error) {
 			console.log("Error downloading report", error);
+			notyf.error("Error Downloading Report");
 		}
 	}
 }
-
-
 
 export const fetchPatientConsents = () => {
 	return async (dispatch) => {
@@ -188,8 +193,6 @@ export const fetchPatientConsents = () => {
 	}
 }
 
-
-
 export const approveConsent = (data) => {
 	return async (dispatch) => {
 		const fetchData = async () => {
@@ -212,14 +215,13 @@ export const approveConsent = (data) => {
 			const response = await fetchData();
 			console.log(response);
 			dispatch(fetchPatientConsents());
-
+			notyf.success("Consent Provided Successfully");
 		} catch (error) {
 			console.log("Error providing consent", error);
+			notyf.error(response.data.errorMessage);
 		}
 	}
 }
-
-
 
 export const withdrawConsent = (data) => {
 	return async (dispatch) => {
@@ -243,9 +245,11 @@ export const withdrawConsent = (data) => {
 			const response = await fetchData();
 			console.log(response);
 			dispatch(fetchPatientConsents());
+			notyf.success("Consent Withdrawn Successfully");
 
 		} catch (error) {
 			console.log("Error withdrawing consent", error);
+			notyf.error("Error Withdrawing Consent");
 		}
 	}
 }
@@ -273,14 +277,13 @@ export const rejectConsentRequest = (data) => {
 			console.log(response);
 			dispatch(fetchPatientConsents());
 
+
 		} catch (error) {
 			console.log("Error rejecting consent", error);
+			notyf.error("Error Rejecting Consent");
 		}
 	}
 }
-
-
-
 
 const patientSlice = createSlice({
 	name: "patient",

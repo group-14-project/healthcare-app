@@ -24,7 +24,7 @@ import EndCall from "./Room/EndCall";
 import AboutUs from "./landing/AboutUs";
 import ContactSection from "./landing/ContactSection";
 import ChangePassword from "./common/ChangePassword";
-import Prescription from "./doctor/Prescription"
+import Prescription from "./doctor/Prescription";
 import Departments from "./doctor/Departments";
 import ViewConsents from "./doctor/ViewConsents";
 import Reports from "./Patient/Reports";
@@ -37,6 +37,8 @@ import HospitalDashboard from "./hospital/HospitalDashboard";
 import AddDepartment from "./hospital/AddDepartment";
 import AddDoctor from "./hospital/AddDoctor";
 import Consents from "./Patient/Consents";
+import ForgotPassword from "./common/ForgotPassword";
+import SetNewPassword from "./common/SetNewPassword";
 export {
 	MidNavbar,
 	SideBar,
@@ -76,5 +78,7 @@ export {
 	HospitalDashboard,
 	AddDepartment,
 	AddDoctor,
-	Consents
+	Consents,
+	ForgotPassword,
+	SetNewPassword
 };

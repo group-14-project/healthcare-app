@@ -1,95 +1,92 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography, Grid, TextField, Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css'; 
-import { useNavigate } from "react-router-dom";
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+import { useLocation, useNavigate } from "react-router-dom";
+import { setNewPassword } from "../../Store/loginSlice"
 const notyf = new Notyf({
 	position: {
-		x: 'right',
-		y: 'top',
-	  },
+		x: "right",
+		y: "top",
+	},
 });
 
 function isValidPassword(password) {
 	// Check length
 	if (password.length < 8) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one number
 	if (!/\d/.test(password)) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one special character
 	if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one uppercase letter
 	if (!/[A-Z]/.test(password)) {
-	  return false;
+		return false;
 	}
-  
-	return true;
-  }
 
-function ChangePassword() {
+	return true;
+}
+
+function SetNewPassword() {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+	console.log(location.state)
+	const role = location.state.role;
+	const email = location.state.email;
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const role = useSelector((state) => state.login.user.role);
+	const [otp, setOtp] = useState("");
 	const changePwd = async () => {
-		// console.log(typeof(password))
-		const data = {
-			"password": password
-		}
-		if(isValidPassword(password) === false){
-			notyf.error("Password should contain a specaial character, a number and an uppercase letter and should be atleast 8 characters long");
+		if (isValidPassword(password) === false) {
+			notyf.error(
+				"Password must contain at least 8 characters, one number, one special character and one uppercase letter"
+			);
 			return;
 		}
-		try {
-			if(password !== confirmPassword){
-				notyf.error("Password and Confirm Password do not match");
-				return;
-			}
-			const response = await axios.put(
-				`http://localhost:9090/${role}/updatePassword`,
-				data,
-				{
-					headers: {
-						Authorization: localStorage.getItem("Authorization"),
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			console.log(response);
+		if (password !== confirmPassword) {
+			notyf.error("Passwords do not match");
+			return;
+		}
+		const data = {
+			email: email,
+			role: role,
+			password: password,
+			otp: otp,
+		};
+		const res = await dispatch(setNewPassword(data));
+		if (res) {
 			notyf.success("Password Updated Successfully");
 			navigate(`/${role}/dashboard`);
-			
-		} catch (error) {
-			console.log(error);
-			notyf.error("Error Updating Password");
+		} else {
+			notyf.error("Error in updating password");
+			navigate("/login");
 		}
 	};
-	useEffect(() => {
-	}, []);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		await changePwd();
 	};
 	const handleChange = (e) => {
-		setPassword(e.target.value);
+		const { name, value } = e.target;
+		if (name === "otp") {
+			setOtp(value);
+		} else if (name == "password") {
+			setPassword(value);
+		} else {
+			setConfirmPassword(value);
+		}
 	};
-	const handleConfirmChange = (e) => {
-		setConfirmPassword(e.target.value);
-	
-	}
-
 	return (
 		<Container
 			maxWidth="md"
@@ -106,6 +103,19 @@ function ChangePassword() {
 			</Typography>
 			<form onSubmit={handleSubmit} style={{ width: "100%" }}>
 				<Grid container spacing={2}>
+					<Grid item xs={6} style={{ marginLeft: "25%" }}>
+						<TextField
+							variant="outlined"
+							fullWidth
+							label="Otp"
+							name="otp"
+							type="otp"
+							InputProps={{ style: { borderRadius: 16 } }}
+							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
+							onChange={handleChange}
+							required
+						/>
+					</Grid>
 					<Grid item xs={6} style={{ marginLeft: "25%" }}>
 						<TextField
 							variant="outlined"
@@ -128,7 +138,7 @@ function ChangePassword() {
 							type="password"
 							InputProps={{ style: { borderRadius: 16 } }}
 							InputLabelProps={{ style: { color: "rgb(38, 122, 107)" } }}
-							onChange={handleConfirmChange}
+							onChange={handleChange}
 							required
 						/>
 					</Grid>
@@ -153,4 +163,4 @@ function ChangePassword() {
 	);
 }
 
-export default ChangePassword;
+export default SetNewPassword;

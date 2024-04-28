@@ -4,28 +4,32 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import styles from "./PrescriptionForm.module.css";
 import logo from "../../assets/logo_full_black.png";
-import { useTheme } from "@mui/material/styles";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleAddPrescription } from "../../Store/doctorSlice";
 
 function PrescriptionForm(props) {
-	// const {show,onHide}   = props;
 	const doctorState = useSelector((state) => state.doctor);
-	const [patientName, setpatientName] = useState("");
+	const [patientName, setPatientName] = useState("");
+	const [patientEmail, setPatientEmail] = useState("");
 	const [medicineName, setMedicineName] = useState("");
 	const [medicine, setMedicine] = useState([]);
 	const [dosageCount, setDosageCount] = useState("");
 	const [dosage, setDosage] = useState([]);
 	const [addComment, setaddComment] = useState("");
-	const [names, setNames] = useState([]);
+	const dispatch = useDispatch();
 
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
 
 	const handleChange = (event) => {
-		setpatientName(event.target.value);
+		console.log(event.target.value.email);
+		setPatientName(
+			event.target.value.firstName + " " + event.target.value.lastName
+		);
+		setPatientEmail(event.target.value.email);
 	};
 	const handleClose = () => {
 		// console.log("hide");
@@ -61,16 +65,10 @@ function PrescriptionForm(props) {
 		for (let i = 0; i < medicine.length; i++) {
 			string += medicine[i] + "-" + dosage[i] + "\n";
 		}
-		string += addComment;
+		string += "--"+addComment;
 		console.log(string);
+		dispatch(handleAddPrescription(patientEmail, string));
 	};
-
-	useEffect(() => {
-		const names = patientList.map((patient) => {
-			return patient.firstName + " " + patient.lastName;
-		});
-		setNames(names);
-	}, [patientList]);
 
 	return (
 		<>
@@ -113,9 +111,13 @@ function PrescriptionForm(props) {
 									<MenuItem disabled value="">
 										<em>Patient Name</em>
 									</MenuItem>
-									{names.map((name, index) => (
-										<MenuItem key={index} value={name}>
-											{name}
+									{patientList.map((patient, index) => (
+										<MenuItem
+											key={index}
+											name={patient.firstName + patient.lastName}
+											value={patient}
+										>
+											{patient.firstName} {patient.lastName}
 										</MenuItem>
 									))}
 								</Select>
@@ -156,7 +158,7 @@ function PrescriptionForm(props) {
 
 						<textarea
 							onChange={(e) => setaddComment(e.target.value)}
-                            placeholder="Add additional comments here..."
+							placeholder="Add additional comments here..."
 							className={styles.description}
 						></textarea>
 					</Form>

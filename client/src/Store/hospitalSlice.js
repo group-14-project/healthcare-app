@@ -35,21 +35,10 @@ const hospitalSlice = createSlice({
 			state.reviews = payload.reviews;
             state.specialization = payload.specialization;
 		},
-		// updateDoctorDetails: (state, { payload }) => {
-		// 	return {
-		// 		...state,
-		// 		[payload.name]: payload.value,
-		// 	};
-		// },
 		updateQuote: (state, { payload }) => {
 			state.quote = payload;
 		},
-		// addConsentShared: (state, { payload }) => {
-		// 	state.consentsShared.push(payload);
-		// },
-		// updatePastAppointments: (state, action) => {
-		// 	state.pastAppointments = [...state.pastAppointments, action.payload];
-		// },
+		
 	},
 });
 

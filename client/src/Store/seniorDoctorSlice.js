@@ -3,8 +3,24 @@ import axios from "axios";
 
 const initialState = {
 	pending: [],
-	approved:[]
+	approved: [],
 };
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+const notyf = new Notyf({
+	position: {
+		x: "right",
+		y: "top",
+	},
+	types: [
+		{
+			type: "waiting",
+			background: "orange",
+			duration: 10000,
+			icon:false
+		},
+	],
+});
 
 export const fetchConsents = () => {
 	return async (dispatch) => {
@@ -24,7 +40,7 @@ export const fetchConsents = () => {
 		};
 		try {
 			const response = await fetchData();
-			console.log("consents",response.data)
+			console.log("consents", response.data);
 			dispatch(seniorDoctorActions.addConsents(response.data));
 		} catch (error) {
 			console.error("Error fetching consents", error);
@@ -35,9 +51,10 @@ export const fetchConsents = () => {
 export const approveConsent = (consentId) => {
 	return async (dispatch) => {
 		const fetchData = async () => {
-			console.log(consentId)
+			console.log(consentId);
 			const response = await axios.post(
-				`http://localhost:9090/senior_doctor/approveConsent/${consentId}`,null,
+				`http://localhost:9090/senior_doctor/approveConsent/${consentId}`,
+				null,
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -50,13 +67,53 @@ export const approveConsent = (consentId) => {
 			return response;
 		};
 		try {
+			notyf.open({
+				type: "waiting",
+				message: "Please Wait...",
+			});
 			const response = await fetchData();
 			dispatch(seniorDoctorActions.pendingToApproved(consentId));
+			notyf.success("Consent Approved Successfully");
 		} catch (error) {
 			console.error("Error Approving consents", error);
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
+
+export const rejectConsent = (consentId) => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			console.log(consentId);
+			const response = await axios.post(
+				`http://localhost:9090/senior_doctor/rejectConsent/${consentId}`,
+				null,
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+			notyf.open({
+				type: "waiting",
+				message: "Please Wait...",
+			});
+			const response = await fetchData();
+			dispatch(seniorDoctorActions.pendingToApproved(consentId));
+			notyf.success("Consent Rejected Successfully");
+		} catch (error) {
+			console.error("Error Rejecting consent", error);
+			notyf.error(error.response.data.errorMessage);
+		}
+	};
+};
+
 
 const seniorDoctorSlice = createSlice({
 	name: "seniorDoctor",
@@ -68,7 +125,9 @@ const seniorDoctorSlice = createSlice({
 		},
 		pendingToApproved: (state, action) => {
 			state.approved.push(action.payload);
-			state.pending = state.pending.filter((consentId) => consentId !== action.payload.consentId);
+			state.pending = state.pending.filter(
+				(consentId) => consentId !== action.payload.consentId
+			);
 		},
 	},
 });

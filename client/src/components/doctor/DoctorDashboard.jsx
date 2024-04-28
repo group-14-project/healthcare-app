@@ -3,27 +3,24 @@ import { Banner, Graph, SmallCalender, PrescriptionForm } from "../index";
 import { Box } from "@mui/material";
 import patient from "../../assets/patient.png";
 import appointments from "../../assets/appointments.png";
-import next_app from "../../assets/next_app.png";
 import prescription from "../../assets/prescription.png";
 import styles from "./DoctorDashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { doctorActions, handleGetAllPatients } from "../../Store/doctorSlice";
-import { fetchConsents, seniorDoctorActions } from "../../Store/seniorDoctorSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { doctorActions } from "../../Store/doctorSlice";
 import IncomingCall from "./IncomingCall";
 import CalendarModal from "../Patient/CalendarModal";
 import { makeConnection } from "../../Store/consultSlice";
-import { store } from "../../Store/store";
+import { handleGetAllPatients } from "../../Store/doctorSlice";
 
 function DoctorDashboard() {
 	const [incomingCall, setIncomingCall] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
-	const seniorDoctorState = useSelector((state) => state.seniorDoctor);
 	var category = "health";
 	let stompClient = useRef();
 	const [remoteID, setRemoteId] = useState("");
@@ -35,7 +32,7 @@ function DoctorDashboard() {
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
-	
+
 	const handleDateClick = () => {
 		setModalOpen((prev) => !prev);
 	};
@@ -43,7 +40,8 @@ function DoctorDashboard() {
 	useEffect(() => {
 		localStorage.setItem("doctorId", state.doctorId);
 		localStorage.setItem("doctorName", state.firstName);
-		console.log(state)
+		dispatch(handleGetAllPatients())
+		console.log(state);
 	}, []);
 
 	const handleAcceptCall = async () => {
@@ -185,7 +183,7 @@ function DoctorDashboard() {
 							>
 								Prescription
 							</Box>
-							<Box className={styles.btn_div} onClick={handleShow}>
+							<Box sx = {{cursor: "pointer"}} className={styles.btn_div} onClick={handleShow}>
 								Template &nbsp;
 								{/* <span className={styles.template_icon}>
 									<i className="fa-solid fa-circle-arrow-right"></i>
@@ -204,25 +202,9 @@ function DoctorDashboard() {
 									marginBottom: "6px",
 								}}
 							>
-								Appointments
+								Total Appointments
 							</Box>
-							<Box className={styles.quick_btn_font}>
-								{state.totalAppointments}
-							</Box>
-						</Box>
-						<Box className={`${styles.action_btn} ${styles.action_btn_4}`}>
-							<Box className={styles.patient_icon}>
-								<img src={next_app} alt="next_app" />
-							</Box>
-							<Box
-								sx={{
-									fontWeight: 600,
-									marginBottom: "6px",
-								}}
-							>
-								Clock
-							</Box>
-							<Box className={styles.btn_div}>Join Now</Box>
+							<Box className={styles.btn_div}>{state.totalAppointments}</Box>
 						</Box>
 					</Box>
 
@@ -234,40 +216,6 @@ function DoctorDashboard() {
 					<Box className={`${styles.side_divs} ${styles.calender}`}>
 						<SmallCalender />
 					</Box>
-					{/* <Box sx={{
-						marginBottom: "40px"
-					}}>
-						{/* <FullCalendar
-							schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
-
-							// ref={calendarComponentRef}
-							initialView='dayGridMonth'
-							displayEventTime={true}
-							headerToolbar={{
-								left: "prev,next,today",
-								center: "title",
-								right: "dayGridMonth"
-							}}
-							selectable={true}
-							plugins={[
-								dayGridPlugin,
-								interactionPlugin,
-								timeGridPlugin,
-								listPlugin
-							]}
-							eventClick={(event) => { console.log(event.event.id) }}
-							events={events}
-							contentHeight="auto"
-							themeSystem="standard"
-							// event
-							// eventContent={(info) => <EventItem info={info} />}
-							selectOverlap={false}
-							eventOverlap={false}
-							dateClick={handleDateClick} */}
-
-					{/* /> 
-						
-					</Box> */}
 					<Box
 						className={`${styles.appointments_container} ${styles.side_divs}`}
 					>

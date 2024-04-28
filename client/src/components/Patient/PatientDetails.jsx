@@ -12,17 +12,34 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { store } from "../../Store/store";
-import { handleUpdatePatientDetails, patientActions } from "../../Store/patientSlice";
+import {
+	handleUpdatePatientDetails,
+	patientActions,
+} from "../../Store/patientSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+const notyf = new Notyf({
+	position: {
+		x: "right",
+		y: "top",
+	},
+});
 
-const PatientDetails = (props) => {
+const PatientDetails = async (props) => {
 	const navigate = useNavigate();
 	const formData = useSelector((state) => state.patient);
 	const dispatch = useDispatch();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		dispatch(handleUpdatePatientDetails())
-		navigate("/patient/dashboard");
+		const res = await dispatch(handleUpdatePatientDetails());
+		if(res){
+			notyf.success("Details added successfully");
+			navigate("/patient/dashboard");
+		}
+		else{
+			notyf.error("Something went wrong");
+		}
 	};
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -30,7 +47,7 @@ const PatientDetails = (props) => {
 	};
 
 	return (
-		<Container style = {{marginTop: "70px"}} maxWidth="md">
+		<Container style={{ marginTop: "70px" }} maxWidth="md">
 			<Typography variant="h4" align="center" gutterBottom>
 				Add Details
 			</Typography>

@@ -17,7 +17,7 @@ const OtpInputPage = () => {
 	const statePatient = useSelector((state) => state.patient);
 	const stateDoctor = useSelector((state) => state.doctor);
 	const stateHospital = useSelector((state) => state.hospital);
-	const [error,setError] = useState(false);
+	const [error, setError] = useState(false);
 	const isAuthenticated = useSelector(
 		(state) => state.login.user.isAuthenticated
 	);
@@ -60,7 +60,7 @@ const OtpInputPage = () => {
 		}
 	};
 
-	const fetchData = async() => {
+	const fetchData = async () => {
 		console.log(role);
 		const res = await dispatch(
 			handleOTPverification({
@@ -69,49 +69,33 @@ const OtpInputPage = () => {
 			})
 		);
 		setError(res);
-		if(res){
+		if (res) {
 			if (role === "patient" && location.state.type === "signup") {
 				navigate("/login");
 			}
+		} else {
+			return;
 		}
-		else{
-			return
-		}
-		
 	};
 	useEffect(() => {
 		if (isFirstRender.current) {
-			isFirstRender.current = false; 
+			isFirstRender.current = false;
 			return;
 		}
-		if(!error){
+		if (!error && firstTimeLogin === false) {
 			if (role === "patient") {
 				if (location.state.type === "signup") {
 					navigate("/login");
 				} else if (location.state.type === "login") {
-					if (firstTimeLogin === false) {
-						navigate("/patient/details");
-					} else {
-						navigate("/patient/dashboard");
-					}
+					navigate("/patient/details");
 				}
-			} else {	
-				if (firstTimeLogin === false) {
-					console.log("firstTimeLogin",firstTimeLogin);
-					console.log(role);
-					navigate(`/${role}/changepwd`);
-				} else {
-					navigate(`/${role}/dashboard`);
-				}
+			} else {
+				navigate(`/${role}/changepwd`);
 			}
+		} else if (!error && firstTimeLogin === true) {
+			navigate(`/${role}/dashboard`);
 		}
 	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital]);
-
-	// useEffect(() => {
-	// 	if (isAuthenticated) {
-	// 		navigate(`/${role}/dashboard`);
-	// 	}
-	// }, [isAuthenticated, navigate]);
 
 	return (
 		<div
