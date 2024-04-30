@@ -16,8 +16,6 @@ import {
 	DocPatients,
 	Room,
 	EndCall,
-	AboutUs,
-	ContactSection,
 	ChangePassword,
 	Departments,
 	ViewConsents,
@@ -30,7 +28,9 @@ import {
 	AddDepartment,
 	AddDoctor,
 	ForgotPassword,
-	SetNewPassword
+	SetNewPassword,
+	ContactUs,
+	OnGoingCalls,
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
@@ -57,27 +57,27 @@ const LandingNav = (props) => {
 
 const router = createBrowserRouter([
 	{
+		path: "/",
+		element: <Landing />,
+	},
+	{
 		element: <LandingNav store={store} />,
 		children: [
-			{
-				path: "/",
-				element: <Landing />,
-			},
 			{
 				path: "/faq",
 				element: <Faq />,
 			},
 			{
 				path: "/about-us",
-				element: <AboutUs />,
+				element: <Landing />,
 			},
 			{
 				path: "/opd-timings",
 				element: <OPDTimings />,
 			},
 			{
-				path: "/contact-s",
-				element: <Landing />,
+				path: "/contact-us",
+				element: <ContactUs />,
 			},
 
 			{
@@ -107,8 +107,7 @@ const router = createBrowserRouter([
 		path: "/doctor/changepwd",
 		element: (
 			<PrivateRoute>
-				{" "}
-				<ChangePassword />{" "}
+				<ChangePassword />
 			</PrivateRoute>
 		),
 	},
@@ -117,8 +116,7 @@ const router = createBrowserRouter([
 		path: "/hospital/changepwd",
 		element: (
 			<PrivateRoute>
-				{" "}
-				<ChangePassword />{" "}
+				<ChangePassword />
 			</PrivateRoute>
 		),
 	},
@@ -132,13 +130,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/forgot-password",
-		element: <ForgotPassword/>
-
+		element: <ForgotPassword />,
 	},
 	{
 		path: "/password-reset",
-		element: <SetNewPassword/>
-
+		element: <SetNewPassword />,
 	},
 	{
 		path: "/room/:roomId",
@@ -160,7 +156,9 @@ const router = createBrowserRouter([
 						"Feedback",
 						"Refer",
 						"View Consents",
+						"ongoingCalls",
 						"Logout",
+
 					],
 				}}
 				user={{ type: "doctor" }}
@@ -180,8 +178,7 @@ const router = createBrowserRouter([
 				path: "/doctor/feedback",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<Feedback />{" "}
+						<Feedback />
 					</PrivateRoute>
 				),
 			},
@@ -189,8 +186,7 @@ const router = createBrowserRouter([
 				path: "/doctor/allpatients",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<DocPatients />{" "}
+						<DocPatients />
 					</PrivateRoute>
 				),
 			},
@@ -198,8 +194,7 @@ const router = createBrowserRouter([
 				path: "/doctor/calendar",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<MyCalendar />{" "}
+						<MyCalendar />
 					</PrivateRoute>
 				),
 			},
@@ -207,8 +202,7 @@ const router = createBrowserRouter([
 				path: "/doctor/feedback",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<Feedback />{" "}
+						<Feedback />
 					</PrivateRoute>
 				),
 			},
@@ -216,8 +210,7 @@ const router = createBrowserRouter([
 				path: "/doctor/refer",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<Refer />{" "}
+						<Refer />
 					</PrivateRoute>
 				),
 			},
@@ -225,8 +218,7 @@ const router = createBrowserRouter([
 				path: "/doctor/departments",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<Departments />{" "}
+						<Departments />
 					</PrivateRoute>
 				),
 			},
@@ -234,8 +226,15 @@ const router = createBrowserRouter([
 				path: "/doctor/viewConsents",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<ViewConsents />{" "}
+						<ViewConsents />
+					</PrivateRoute>
+				),
+			},
+			{
+				path: "/doctor/ongoingcalls",
+				element: (
+					<PrivateRoute>
+						<OnGoingCalls />
 					</PrivateRoute>
 				),
 			},
@@ -263,8 +262,7 @@ const router = createBrowserRouter([
 				path: "patient/dashboard",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<PatientDashboard />{" "}
+						<PatientDashboard />
 					</PrivateRoute>
 				),
 			},
@@ -272,11 +270,9 @@ const router = createBrowserRouter([
 				path: "patient/consult",
 				element: (
 					<PrivateRoute>
-						{" "}
 						<SnackbarProvider>
-							{" "}
-							<PatientConsultation />{" "}
-						</SnackbarProvider>{" "}
+							<PatientConsultation />
+						</SnackbarProvider>
 					</PrivateRoute>
 				),
 			},
@@ -284,8 +280,7 @@ const router = createBrowserRouter([
 				path: "patient/reports",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<Reports />{" "}
+						<Reports />
 					</PrivateRoute>
 				),
 			},
@@ -293,8 +288,7 @@ const router = createBrowserRouter([
 				path: "patient/prescriptions",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<PatientPrescription />{" "}
+						<PatientPrescription />
 					</PrivateRoute>
 				),
 			},
@@ -310,8 +304,7 @@ const router = createBrowserRouter([
 				path: "patient/upcomingappointments",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<MyCalendar />{" "}
+						<MyCalendar />
 					</PrivateRoute>
 				),
 			},
@@ -332,8 +325,7 @@ const router = createBrowserRouter([
 				path: "hospital/dashboard",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<HospitalDashboard />{" "}
+						<HospitalDashboard />
 					</PrivateRoute>
 				),
 			},
@@ -341,8 +333,7 @@ const router = createBrowserRouter([
 				path: "hospital/adddepartment",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<AddDepartment />{" "}
+						<AddDepartment />
 					</PrivateRoute>
 				),
 			},
@@ -350,8 +341,7 @@ const router = createBrowserRouter([
 				path: "hospital/adddoctor",
 				element: (
 					<PrivateRoute>
-						{" "}
-						<AddDoctor />{" "}
+						<AddDoctor />
 					</PrivateRoute>
 				),
 			},

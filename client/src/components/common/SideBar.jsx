@@ -24,7 +24,7 @@ import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import smallLogo from "../../assets/logo.png";
 import largeLogo from "../../assets/logo_full.png";
 import { Link, useNavigate } from "react-router-dom";
-import "./Sidebar.css";
+import styles from "./Sidebar.module.css";
 import { useLocation } from "react-router-dom";
 import ShieldIcon from "@mui/icons-material/Shield";
 import { useDispatch, useSelector } from "react-redux";
@@ -88,7 +88,7 @@ function SideBar(props) {
 	console.log(location.state);
 	const navigate = useNavigate();
 	const role = useSelector((state) => state.login.user.role);
-	const state = useSelector(state => state.login);
+	const state = useSelector((state) => state.login);
 
 	const dispatch = useDispatch();
 
@@ -124,24 +124,25 @@ function SideBar(props) {
 	};
 
 	return (
-		<Box className="sidebar-parent" ref={sidebarRef}>
+		<Box className={styles.sidebar_parent} ref={sidebarRef}>
 			<CssBaseline />
 
 			<ThemeProvider theme={SidebarTheme}>
 				<Drawer variant="permanent" open={open}>
-					<DrawerHeader className="logo">
-						<IconButton onClick={showDashboard}>
+					<DrawerHeader className={styles.sidebar_logo}>
+						<IconButton className = {styles.sidebar_logos}  onClick={showDashboard}>
 							<img
 								src={logo}
 								alt="logo"
 								className={
-									logo === smallLogo ? "small_logo_img" : "large_logo_img"
+									`${logo === smallLogo ? "small_logo_img" : "large_logo_img"}
+									${styles.sidebar_logo_img}`
 								}
 							/>
 						</IconButton>
 					</DrawerHeader>
 
-					<DrawerHeader className="burger-btn">
+					<DrawerHeader className={styles.burger_btn}>
 						<IconButton
 							color="#fff"
 							aria-label="open drawer"
@@ -157,10 +158,16 @@ function SideBar(props) {
 					<Divider />
 					<List>
 						{sidebarContent.map((text, index) => (
-							<ListItem key={text} disablePadding className="sidebar-list-item">
+							<ListItem
+								key={text}
+								disablePadding
+								className={styles.sidebar_list_item}
+							>
 								<ListItemButton
-									onClick={(e) => { text === "Logout" ? handleLogout(e) : "" }}
-									className="sidebar-btn"
+									onClick={(e) => {
+										text === "Logout" ? handleLogout(e) : "";
+									}}
+									className={styles.sidebar_btn}
 									sx={{
 										justifyContent: open ? "initial" : "center",
 										marginBottom: "10px",
@@ -185,13 +192,13 @@ function SideBar(props) {
 											<MedicationSharpIcon style={{ color: "#fff" }} />
 										) : index == 3 ? (
 											<UpdateSharpIcon style={{ color: "#fff" }} />
-										) : index == 4 ?
-										userType === "doctor"
-											?
-											(<UndoSharpIcon style={{ color: "#fff" }} />)
-											:
-											<ShieldIcon style={{ color: "#fff" }} />
-										: index == 5 && userType==="doctor"?(
+										) : index == 4 ? (
+											userType === "doctor" ? (
+												<UndoSharpIcon style={{ color: "#fff" }} />
+											) : (
+												<ShieldIcon style={{ color: "#fff" }} />
+											)
+										) : index == 5 && userType === "doctor" ? (
 											<ShieldIcon style={{ color: "#fff" }} />
 										) : (
 											<LogoutSharpIcon style={{ color: "#fff" }} />

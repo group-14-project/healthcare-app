@@ -7,36 +7,36 @@ import {
 	loginActions,
 } from "../../Store/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { Notyf } from 'notyf';
-import 'notyf/notyf.min.css'; 
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
 const notyf = new Notyf({
 	position: {
-		x: 'right',
-		y: 'top',
-	  },
+		x: "right",
+		y: "top",
+	},
 });
 
 function isValidPassword(password) {
 	// Check length
 	if (password.length < 8) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one number
 	if (!/\d/.test(password)) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one special character
 	if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)) {
-	  return false;
+		return false;
 	}
-  
+
 	// Check for at least one uppercase letter
 	if (!/[A-Z]/.test(password)) {
-	  return false;
+		return false;
 	}
-  
+
 	return true;
 }
 
@@ -53,9 +53,9 @@ function Login() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const handleConfirmChange = (e) => {
 		setConfirmPassword(e.target.value);
-	}
+	};
 	const errorMsg = useSelector((state) => state.login.errorMsg);
-	
+
 	const handleSignInChange = (e) => {
 		const { name, value } = e.target;
 		dispatch(loginActions.updateDetails({ name, value }));
@@ -70,13 +70,13 @@ function Login() {
 	};
 	const handleSignIn = async (e) => {
 		e.preventDefault();
-		console.log(data);
+		// console.log(data);
 		if (data.role !== "") {
 			const loginSuccess = await dispatch(handleLogin(data));
 			if (loginSuccess) {
 				console.log(errorMsg);
 				navigate("/verify-otp", {
-					state: { type: "login" },
+					state: { type: "login", data: data },
 				});
 			}
 		}
@@ -89,11 +89,13 @@ function Login() {
 
 	const handlingSignUp = async (e) => {
 		e.preventDefault();
-		if(isValidPassword(password) === false){
-			notyf.error("Password should contain a specaial character, a number and an uppercase letter and should be atleast 8 characters long");
+		if (isValidPassword(password) === false) {
+			notyf.error(
+				"Password should contain a specaial character, a number and an uppercase letter and should be atleast 8 characters long"
+			);
 			return;
 		}
-		if(password !== confirmPassword){
+		if (password !== confirmPassword) {
 			notyf.error("Password and Confirm Password do not match");
 			return;
 		}
@@ -101,15 +103,14 @@ function Login() {
 		const signInSucess = await dispatch(handleSignUp(data));
 		if (signInSucess) {
 			navigate("/verify-otp", {
-				state: { type: "signup" },
+				state: { type: "signup", data: data },
 			});
 		}
 	};
 
 	const handleForgotPassword = () => {
 		navigate("/forgot-password");
-
-	}
+	};
 
 	const toggle = () => {
 		setContainerClass(containerClass === "sign-in" ? "sign-up" : "sign-in");
@@ -178,7 +179,11 @@ function Login() {
 							</div>
 							<div className="input-group">
 								<i className="bx bxs-lock-alt"></i>
-								<input onChange={handleConfirmChange} type="password" placeholder="Confirm password" />
+								<input
+									onChange={handleConfirmChange}
+									type="password"
+									placeholder="Confirm password"
+								/>
 							</div>
 							<button onClick={handlingSignUp}>Sign up</button>
 							<p>
@@ -247,7 +252,7 @@ function Login() {
 								/>
 							</div>
 							<button onClick={handleSignIn}>Sign in</button>
-							<p style = {{cursor:"pointer"}} onClick={handleForgotPassword}>
+							<p style={{ cursor: "pointer" }} onClick={handleForgotPassword}>
 								<b>Forgot password?</b>
 							</p>
 							<p>

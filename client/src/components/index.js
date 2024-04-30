@@ -21,8 +21,6 @@ import Faq from "./landing/Faq";
 import OPDTimings from "./landing/OPDTimings";
 import Room from "./Room/Room";
 import EndCall from "./Room/EndCall";
-import AboutUs from "./landing/AboutUs";
-import ContactSection from "./landing/ContactSection";
 import ChangePassword from "./common/ChangePassword";
 import Prescription from "./doctor/Prescription";
 import Departments from "./doctor/Departments";
@@ -39,6 +37,8 @@ import AddDoctor from "./hospital/AddDoctor";
 import Consents from "./Patient/Consents";
 import ForgotPassword from "./common/ForgotPassword";
 import SetNewPassword from "./common/SetNewPassword";
+import ContactUs from "./landing/ContactUs";
+import OnGoingCalls from "./doctor/OnGoingCalls";
 export {
 	MidNavbar,
 	SideBar,
@@ -63,8 +63,6 @@ export {
 	OPDTimings,
 	Room,
 	EndCall,
-	AboutUs,
-	ContactSection,
 	ChangePassword,
 	Prescription,
 	Departments,
@@ -80,5 +78,7 @@ export {
 	AddDoctor,
 	Consents,
 	ForgotPassword,
-	SetNewPassword
+	SetNewPassword,
+	ContactUs,
+	OnGoingCalls
 };

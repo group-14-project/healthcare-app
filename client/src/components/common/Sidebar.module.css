@@ -1,24 +1,29 @@
-.sidebar-parent {
+.sidebar_parent {
     display: 'flex';
 }
 
-.logo{
+.sidebar_logo{
     padding: 0!important;
     justify-content: center!important;
 }
+.sidebar_logos{
+    padding-top:30px !important;
+    height: 100% !important;
+    width: 100% !important;
+}
 
-.burger-btn {
+.burger_btn {
     padding-right: 0!important;
     justify-content: center!important;
 }
 
-.sidebar-btn {
+.sidebar_btn {
     padding-left: 2.5;
     padding-right: 2.5;
     min-height: 48;
 }
 
-.siderbar-list-item {
+.siderbar_list_item {
     display: 'block';
 }
 

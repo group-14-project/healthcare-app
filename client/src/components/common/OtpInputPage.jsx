@@ -3,7 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import otpImage from "../../assets/otp.jpeg";
 import { useDispatch, useSelector } from "react-redux";
-import { handleOTPverification } from "../../Store/loginSlice";
+import {
+	handleOTPverification,
+	handleLogin,
+	handleSignUp,
+} from "../../Store/loginSlice";
 
 const OtpInputPage = () => {
 	const navigate = useNavigate();
@@ -18,6 +22,7 @@ const OtpInputPage = () => {
 	const stateDoctor = useSelector((state) => state.doctor);
 	const stateHospital = useSelector((state) => state.hospital);
 	const [error, setError] = useState(false);
+	const data = location.state.data;
 	const isAuthenticated = useSelector(
 		(state) => state.login.user.isAuthenticated
 	);
@@ -46,6 +51,14 @@ const OtpInputPage = () => {
 
 		if (index > 0 && !otp[index - 1]) {
 			inputRefs.current[otp.indexOf("")].focus();
+		}
+	};
+
+	const handleResendOtp = async () => {
+		if (location.state.type == "login") {
+			const loginSuccess = await dispatch(handleLogin(data));
+		} else {
+			const signInSucess = await dispatch(handleSignUp(data));
 		}
 	};
 
@@ -105,11 +118,13 @@ const OtpInputPage = () => {
 				paddingTop: "110px",
 			}}
 		>
-			<img
-				src={otpImage}
-				alt="otp"
-				style={{ width: "200px", marginLeft: "80px", marginBottom: "2%" }}
-			/>
+			<div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+				<img
+					src={otpImage}
+					alt="otp"
+					style={{ width: "200px", marginLeft: "80px", marginBottom: "2%" }}
+				/>
+			</div>
 			<h2>Enter 6 Digit OTP</h2>
 			<div>
 				{otp.map((value, index) => {
@@ -145,9 +160,10 @@ const OtpInputPage = () => {
 				Verify OTP
 			</Button>
 			<p style={{ marginTop: "20px" }}>
-				<span onClick={() => navigate(location.state.signIn)}>
+				<span>
 					Didn't Received OTP{" "}
 					<span
+						onClick={handleResendOtp}
 						style={{
 							textDecoration: "underline",
 							color: "blue",
