@@ -81,13 +81,16 @@ function PatientConsultation(props) {
 			stompClient.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
 				dispatch(patientActions.updateCallingState(false));
 				// setCalling(false);
+				console.log("patient state: ", patientState);
 				const acceptBody = JSON.parse(accept.body);
 				const acceptedBy = JSON.parse(acceptBody.acceptedBy);
 				const initiatedBy = JSON.parse(acceptBody.initiatedBy);
+				console.log("accept body: ",acceptBody);
+				// const temp = acceptedBy;
+				initiatedBy.caller = acceptedBy.callee;
+				initiatedBy.name = acceptedBy.name;
 				acceptedBy.callee = localID;
-				initiatedBy.caller = patientState.remoteId;
-				acceptedBy.name = patientName
-				initiatedBy.name = patientState.doctorName;
+				acceptedBy.name = patientName;
 				console.log(acceptBody);
 				navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
 			});

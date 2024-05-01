@@ -13,9 +13,9 @@ const IncomingCall = (props) => {
      const dispatch = useDispatch();
      const navigate = useNavigate();
 
-     console.log(props);
-
      const handleAcceptCall = async () => {
+
+          console.log("doctor state: ",doctorState);
 
           const obj = dispatch(acceptCall(doctorState.firstName, doctorState.patientName, doctorState.remoteId, doctorState.doctorId, stompClient));
 

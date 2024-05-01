@@ -52,6 +52,8 @@ const Room = () => {
 
      const navigate = useNavigate();
 
+     console.log("remoteId: ",remoteID);
+     console.log("localId: ",localID);
 
 
 

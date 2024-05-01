@@ -71,13 +71,6 @@ function DoctorDashboard() {
 
 	const patientName = useSelector(state => state.doctor.patientName);
 
-	useEffect(() => {
-
-		localStorage.setItem("doctorId", state.doctorId);
-		localStorage.setItem("doctorName", state.firstName);
-		console.log(state);
-
-	}, []);
 
 	useEffect(() => {
 		if (stompClient) {

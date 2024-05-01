@@ -17,7 +17,7 @@ const EndCall = () => {
      // const dispatch = useDispatch();
      const state = useSelector(state => state);
      const navigate = useNavigate();
-
+     const dispatch = useDispatch();
      // let stompClient = useRef();
      const [remoteID, setRemoteId] = useState("");
      const [localID, setLocalID] = useState(state.doctor.doctorId);
