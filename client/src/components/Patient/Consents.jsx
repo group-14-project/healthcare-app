@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import formatDate from '../../Utility Data/dateChangeFunc';
 import { approveConsent, withdrawConsent, rejectConsentRequest } from '../../Store/patientSlice';
-import getstomClient from './MySocket';
+// import getstomClient from './MySocket';
 import CallLoader from './CallLoader';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';

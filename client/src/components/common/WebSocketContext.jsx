@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import stompClient from '../Patient/MySocket';
+// import stompClient from '../Patient/MySocket';
 const WebSocketContext = createContext();
 
 export const WebSocketProvider = ({ children }) => {

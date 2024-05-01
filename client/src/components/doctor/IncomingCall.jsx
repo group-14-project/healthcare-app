@@ -3,10 +3,12 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { acceptCall, doctorActions, rejectCall } from '../../Store/doctorSlice';
+import { useStompClient } from '../common/WebSocketContext';
 
 
 const IncomingCall = (props) => {
 
+     const stompClient = useStompClient();
      const doctorState = useSelector(state => state.doctor);
      const dispatch = useDispatch();
      const navigate = useNavigate();
@@ -15,7 +17,7 @@ const IncomingCall = (props) => {
 
      const handleAcceptCall = async () => {
 
-          const obj = dispatch(acceptCall(doctorState.firstName, doctorState.patientName, doctorState.remoteId, doctorState.doctorId));
+          const obj = dispatch(acceptCall(doctorState.firstName, doctorState.patientName, doctorState.remoteId, doctorState.doctorId, stompClient));
 
           dispatch(doctorActions.updateIncomingCall(false));
 
@@ -25,7 +27,7 @@ const IncomingCall = (props) => {
      const handleRejectCall = () => {
           dispatch(doctorActions.updateIncomingCall(false));
 
-          dispatch(rejectCall(doctorState.firstName, doctorState.doctorId, doctorState.patientName, doctorState.remoteId));
+          dispatch(rejectCall(doctorState.firstName, doctorState.doctorId, doctorState.patientName, doctorState.remoteId, stompClient));
      }
 
 

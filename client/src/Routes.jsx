@@ -32,6 +32,8 @@ import {
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { WebSocketProvider } from "./components/common/WebSocketContext.jsx";
+
 
 
 const Common = (props) => {
@@ -109,7 +111,7 @@ const router = createBrowserRouter([
 
 	{
 		path: "/hospital/changepwd",
-		element:<PrivateRoute> <ChangePassword /> </PrivateRoute>,
+		element: <PrivateRoute> <ChangePassword /> </PrivateRoute>,
 	},
 	{
 		path: "patient/details",
@@ -121,11 +123,11 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/room/:roomId",
-		element: <Room />,
+		element: <WebSocketProvider><Room /></WebSocketProvider>,
 	},
 	{
 		path: "/endCall",
-		element: <EndCall store={store} />,
+		element: <WebSocketProvider><EndCall store={store} /></WebSocketProvider>,
 	},
 
 	{
@@ -151,7 +153,9 @@ const router = createBrowserRouter([
 				path: "/doctor/dashboard",
 				element: (
 					<PrivateRoute>
-						<DoctorDashboard />
+						<WebSocketProvider>
+							<DoctorDashboard />
+						</WebSocketProvider>
 					</PrivateRoute>
 				),
 			},
@@ -209,7 +213,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "patient/consult",
-				element: <PrivateRoute> <SnackbarProvider> <PatientConsultation /> </SnackbarProvider>  </PrivateRoute>,
+				element: <PrivateRoute> <WebSocketProvider> <SnackbarProvider> <PatientConsultation /> </SnackbarProvider> </WebSocketProvider>  </PrivateRoute>,
 			},
 			{
 				path: "patient/reports",
@@ -225,7 +229,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "patient/upcomingappointments",
-				element:<PrivateRoute> <MyCalendar /> </PrivateRoute>,
+				element: <PrivateRoute> <MyCalendar /> </PrivateRoute>,
 			},
 		],
 	},
@@ -246,15 +250,15 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "hospital/dashboard",
-				element:<PrivateRoute> <HospitalDashboard /> </PrivateRoute>,
+				element: <PrivateRoute> <HospitalDashboard /> </PrivateRoute>,
 			},
 			{
 				path: "hospital/adddepartment",
-				element:<PrivateRoute> <AddDepartment /> </PrivateRoute>,
+				element: <PrivateRoute> <AddDepartment /> </PrivateRoute>,
 			},
 			{
 				path: "hospital/adddoctor",
-				element:<PrivateRoute> <AddDoctor /> </PrivateRoute>,
+				element: <PrivateRoute> <AddDoctor /> </PrivateRoute>,
 			},
 		],
 	},

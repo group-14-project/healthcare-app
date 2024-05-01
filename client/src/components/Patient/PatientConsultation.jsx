@@ -23,7 +23,9 @@ import { consultActions } from "../../Store/consultSlice.js";
 import { useSnackbar } from 'notistack';
 import CallLoader from "./CallLoader.jsx";
 import { makeCall, patientActions } from "../../Store/patientSlice.js";
-import getstomClient from "./MySocket.js";
+import { WebSocketProvider, useStompClient } from "../common/WebSocketContext.jsx";
+// import getstomClient from "./MySocket.js";
+
 
 
 
@@ -48,8 +50,10 @@ function PatientConsultation(props) {
 	// const mysoc = useRef();
 
 	const [localID, setLocalId] = useState(patientId);
-	const stompClient = useRef();
+	// const stompClient = useRef();
 	const { enqueueSnackbar } = useSnackbar();
+
+	const stompClient = useStompClient();
 
 	const dispatch = useDispatch();
 
@@ -59,19 +63,22 @@ function PatientConsultation(props) {
 
 		console.log(patientState.calling);
 
-		stompClient.current = getstomClient().client
-		console.log("this si stompClient: ", stompClient.current)
-		stompClient.current.connect({}, () => {
-			console.log("connection is establissssssssshed")
-			console.log(stompClient.current);
+		// stompClient.current = getstomClient().client
+		// console.log("this si stompClient: ", stompClient.current)
+		// stompClient.current.connect({}, () => {
+		// 	console.log("connection is establissssssssshed")
+		// 	console.log(stompClient.current);
+		if(stompClient){
 
-			stompClient.current.subscribe("/user/" + localID + "/topic/call", (data) => {
+		
+
+			stompClient.subscribe("/user/" + localID + "/topic/call", (data) => {
 				
 				console.log("Queue Size: ", data.body);
 
 			})
 
-			stompClient.current.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
+			stompClient.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
 				dispatch(patientActions.updateCallingState(false));
 				// setCalling(false);
 				const acceptBody = JSON.parse(accept.body);
@@ -85,7 +92,7 @@ function PatientConsultation(props) {
 				navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
 			});
 
-			stompClient.current.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
+			stompClient.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
 				dispatch(patientActions.updateCallingState(false));
 				// setCalling(false);
 				const acceptBody = JSON.parse(accept.body);
@@ -94,10 +101,11 @@ function PatientConsultation(props) {
 				const variant = "error"
 				enqueueSnackbar(rejectedBy.message, { variant });
 			});
+		}
 
-		})
+		// })
 
-	}, []);
+	}, [stompClient]);
 
 
 	const handleCall = (doctorId, doctorName) => {
@@ -111,7 +119,7 @@ function PatientConsultation(props) {
 
 		dispatch(patientActions.updateDoctorName(doctorName));
 
-		dispatch(makeCall(localID, patientName, doctorId, doctorName));
+		dispatch(makeCall(localID, patientName, doctorId, doctorName, stompClient));
 
 		// var conn = new SockJS("http://localhost:9090/socket");
 

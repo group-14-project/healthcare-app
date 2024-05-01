@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import getstomClient from "../components/Patient/MySocket";
+// import getstomClient from "../components/Patient/MySocket";
 
 
 
-const stompClient = getstomClient();
+// const stompClient = getstomClient();
 
 
 const initialState = {
@@ -294,8 +294,8 @@ export const rejectConsentRequest = (data) => {
 
 
 
-export const makeCall = (patientId, patientName, doctorId, doctorName) => {
-	stompClient.client.send("/app/call", {}, JSON.stringify({
+export const makeCall = (patientId, patientName, doctorId, doctorName, stompClient) => {
+	stompClient.send("/app/call", {}, JSON.stringify({
 		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
 		"callFrom": JSON.stringify({ "patientName": patientName, "localId": patientId.toString() }),
 		// "consultState": JSON.stringify(consult)

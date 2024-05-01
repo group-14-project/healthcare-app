@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import getstomClient from "../components/Patient/MySocket";
+// import getstomClient from "../components/Patient/MySocket";
 
-const stompClient = getstomClient();
+// const stompClient = getstomClient();
 
 
 const initialState = {
@@ -167,7 +167,7 @@ export const consentRegistration = (data) => {
 
 
 
-export const acceptCall = (doctorName, patientName, remoteId, localId) => {
+export const acceptCall = (doctorName, patientName, remoteId, localId, stompClient) => {
 
 	const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
 		/[018]/g,
@@ -189,7 +189,7 @@ export const acceptCall = (doctorName, patientName, remoteId, localId) => {
 	const acceptedBy = { name: doctorName, callee: localId };
 	const initiatedBy = { name: patientName, caller: remoteId };
 
-	stompClient.client.send(
+	stompClient.send(
 		"/app/acceptCall",
 		{},
 		JSON.stringify({
@@ -207,7 +207,7 @@ export const acceptCall = (doctorName, patientName, remoteId, localId) => {
 
 
 
-export const rejectCall = (doctorName, doctorId, patientName, patientId) => {
+export const rejectCall = (doctorName, doctorId, patientName, patientId, stompClient) => {
 	const rejectedBy = {
 		name: doctorName,
 		callee: doctorId,
@@ -215,7 +215,7 @@ export const rejectCall = (doctorName, doctorId, patientName, patientId) => {
 	};
 	const initiatedBy = { name: patientName, caller: patientId };
 
-	stompClient.client.send(
+	stompClient.send(
 		"/app/rejectCall",
 		{},
 		JSON.stringify({

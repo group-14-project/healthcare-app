@@ -47,13 +47,6 @@ const PatientDashboard = (props) => {
 	};
 
 	function renderEventContent(eventInfo) {
-		// return (
-		// 	<>
-		// 		<b>{eventInfo.timeText}</b>
-		// 		<i>{eventInfo.event.title}</i>
-		// 	</>
-		// )
-
 		console.log(eventInfo);
 	}
 
@@ -80,6 +73,7 @@ const PatientDashboard = (props) => {
 		};
 		fetchData();
 	}, []);
+	
 
 	return (
 		<Box

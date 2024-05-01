@@ -5,7 +5,7 @@ import axios from "axios";
 import { hospitalActions } from "./hospitalSlice";
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import getstomClient from "../components/Patient/MySocket";
+// import getstomClient from "../components/Patient/MySocket";
 
 const initialState = {
 	user: {
@@ -182,8 +182,8 @@ export const handleOTPverification = (otpdata) => {
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
-					const conn = new SockJS("http://localhost:9090/socket");
-					const stompClient = await new Stomp.over(conn);
+					// const conn = new SockJS("http://localhost:9090/socket");
+					// const stompClient = await new Stomp.over(conn);
 
 					// await makeSocketConnection(stompClient, response.data.doctorId, dispatch);
 

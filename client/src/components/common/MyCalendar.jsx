@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 // import loadingGif from '../images/loading.gif';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
-import getstomClient from '../Patient/MySocket';
+// import getstomClient from '../Patient/MySocket';
 import { useDispatch, useSelector } from 'react-redux';
 import IncomingCall from '../doctor/IncomingCall';
 import { acceptCall } from '../../Store/doctorSlice';
