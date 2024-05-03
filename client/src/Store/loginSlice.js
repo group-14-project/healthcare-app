@@ -11,6 +11,9 @@ const notyf = new Notyf({
 		y: "top",
 	},
 });
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+// import getstomClient from "../components/Patient/MySocket";
 
 const initialState = {
 	user: {
@@ -93,6 +96,37 @@ export const handleSignUp = (signUpData) => {
 	};
 };
 
+// const makeSocketConnection = async (stompClient, doctorId, dispatch) => {
+// 	await stompClient.connect({}, (frame) => {
+// 		stompClient.subscribe(
+// 			"/user/" + doctorId + "/topic/call",
+// 			(call) => {
+// 				console.log("call from: " + call.body);
+// 				// console.log("remote id: " + call.body);
+// 				// const userData = JSON.parse(call.body);
+// 				// console.log(userData);
+// 				// // console.log("consult state in doc dashboard: ", state.consult);
+// 				// const consultationData = JSON.parse(userData["consultState"]);
+// 				// const callFrom = JSON.parse(userData["callFrom"]);
+// 				// console.log(consultationData);
+// 				// console.log(callFrom.localId);
+
+
+// 				// dispatch(doctorActions.updateConsultState(consultationData));
+
+// 				dispatch(doctorActions.updateRemoteId(call.body));
+// 				// setConsultState(consultationData);
+
+// 				// setRemoteId(callFrom.localId);
+// 				// setPatientName(callFrom.patientName);
+// 				dispatch(doctorActions.updateIncomingCall(true));
+
+// 			}
+// 		);
+// 	});
+// }
+
+
 export const handleOTPverification = (otpdata) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
@@ -128,8 +162,19 @@ export const handleOTPverification = (otpdata) => {
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
+					// const conn = new SockJS("http://localhost:9090/socket");
+					// const stompClient = await new Stomp.over(conn);
+
+					// await makeSocketConnection(stompClient, response.data.doctorId, dispatch);
+
+					// response.data = {
+					// 	...response.data,
+					// 	stompRef: stompClient,
+					// };
+
 					dispatch(doctorActions.addDoctorDetails(response.data));
-				} else {
+
+				} else  {
 					dispatch(hospitalActions.addHospitalDetails(response.data));
 				}
 			}

@@ -8,9 +8,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchReviews } from "../../Store/doctorSlice";
 import { store } from "../../Store/store";
+import IncomingCall from "./IncomingCall";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -35,6 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 function Feedback() {
+	const doctorState = useSelector(state => state.doctor);
 	const reviews = useSelector((state) => state.doctor.reviews);
 	const dispatch = useDispatch();
 
@@ -43,7 +45,7 @@ function Feedback() {
 	}, []);
 
 	return (
-		<Box sx={{ display: "flex", marginLeft: "65px"}}>
+		<Box sx={{ display: "flex", marginLeft: "65px" }}>
 			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 700 }} aria-label="customized table">
 					<TableHead>
@@ -53,7 +55,7 @@ function Feedback() {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{reviews.map((review,index) => (
+						{reviews.map((review, index) => (
 							<StyledTableRow key={index}>
 								<StyledTableCell component="th" scope="row" align="center">
 									{review.patientFirstName} {review.patientLastName}
@@ -64,6 +66,11 @@ function Feedback() {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{doctorState.incomingCall ? (
+				<IncomingCall />
+			) : (
+				<></>
+			)}
 		</Box>
 	);
 }

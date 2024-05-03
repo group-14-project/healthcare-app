@@ -31,9 +31,12 @@ import {
 	SetNewPassword,
 	ContactUs,
 	OnGoingCalls,
+	SeniorDoctorCall,
 } from "./components/index";
 import { store } from "./Store/store.js";
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import { WebSocketProvider } from "./components/common/WebSocketContext.jsx";
+
 
 const Common = (props) => {
 	const sidebar = props.sidebar;
@@ -138,11 +141,15 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/room/:roomId",
-		element: <Room />,
+		element: <WebSocketProvider><Room /></WebSocketProvider>,
 	},
 	{
 		path: "/endCall",
-		element: <EndCall store={store} />,
+		element: <WebSocketProvider><EndCall store={store} /></WebSocketProvider>,
+	},
+	{
+		path: "/call",
+		element: <WebSocketProvider><SeniorDoctorCall /></WebSocketProvider>,
 	},
 
 	{
@@ -170,7 +177,9 @@ const router = createBrowserRouter([
 				path: "/doctor/dashboard",
 				element: (
 					<PrivateRoute>
-						<DoctorDashboard />
+						<WebSocketProvider>
+							<DoctorDashboard />
+						</WebSocketProvider>
 					</PrivateRoute>
 				),
 			},
@@ -234,7 +243,9 @@ const router = createBrowserRouter([
 				path: "/doctor/ongoingcalls",
 				element: (
 					<PrivateRoute>
-						<OnGoingCalls />
+						<WebSocketProvider>
+							<OnGoingCalls />
+						</WebSocketProvider>
 					</PrivateRoute>
 				),
 			},
@@ -268,13 +279,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "patient/consult",
-				element: (
-					<PrivateRoute>
-						<SnackbarProvider>
-							<PatientConsultation />
-						</SnackbarProvider>
-					</PrivateRoute>
-				),
+				element: <PrivateRoute> <WebSocketProvider> <SnackbarProvider> <PatientConsultation /> </SnackbarProvider> </WebSocketProvider>  </PrivateRoute>,
 			},
 			{
 				path: "patient/reports",

@@ -39,6 +39,7 @@ import ForgotPassword from "./common/ForgotPassword";
 import SetNewPassword from "./common/SetNewPassword";
 import ContactUs from "./landing/ContactUs";
 import OnGoingCalls from "./doctor/OnGoingCalls";
+import SeniorDoctorCall from "./doctor/SeniorDoctorCall";
 export {
 	MidNavbar,
 	SideBar,
@@ -80,5 +81,6 @@ export {
 	ForgotPassword,
 	SetNewPassword,
 	ContactUs,
-	OnGoingCalls
+	OnGoingCalls,
+	SeniorDoctorCall,
 };

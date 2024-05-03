@@ -29,6 +29,7 @@ import { useLocation } from "react-router-dom";
 import ShieldIcon from "@mui/icons-material/Shield";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../Store/loginSlice";
+import sessionStorage from "redux-persist/es/storage/session";
 
 const drawerWidth = 240;
 
@@ -117,7 +118,7 @@ function SideBar(props) {
 	const handleLogout = (e) => {
 		e.preventDefault();
 		localStorage.clear();
-		sessionStorage.clear();
+		window.sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
 
 		navigate("/");

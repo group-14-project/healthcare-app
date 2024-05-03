@@ -13,6 +13,7 @@ import ReportForm from './ReportForm';
 import { fetchReports, downloadReport } from '../../Store/patientSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import formatDate from '../../Utility Data/dateChangeFunc';
+import CallLoader from './CallLoader';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
      [`&.${tableCellClasses.head}`]: {
@@ -115,6 +116,13 @@ const Reports = (props) => {
                     show
                          ?
                          <ReportForm show={show} setShow={setShow} />
+                         :
+                         <></>
+               }
+               {
+                    patientState.calling
+                         ?
+                         <CallLoader />
                          :
                          <></>
                }

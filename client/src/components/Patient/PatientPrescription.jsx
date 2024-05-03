@@ -14,6 +14,7 @@ import { styled } from "@mui/material/styles";
 import Prescription from "../doctor/Prescription";
 // import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import CallLoader from "./CallLoader";
 
 
 
@@ -68,7 +69,7 @@ const PatientPrescription = () => {
      const [lgShow, setLgShow] = useState(false);
 
      const AppointmentDetails = useSelector(state => state.patient.pastAppointments);
-
+     const patientState = useSelector(state=>state.patient);
 
      return (
 
@@ -106,6 +107,13 @@ const PatientPrescription = () => {
                          </TableBody>
                     </Table>
                </TableContainer>
+               {
+                    patientState.calling
+                         ?
+                         <CallLoader />
+                         :
+                         <></>
+               }
           </Box>
      )
 

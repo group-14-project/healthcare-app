@@ -13,17 +13,24 @@ import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { useNavigate } from 'react-router-dom';
 import { useReactMediaRecorder } from "react-media-recorder";
 import "./Room.css";
+import { useSelector } from 'react-redux';
+import { useStompClient } from '../common/WebSocketContext';
+
+// import getstomClient from '../Patient/MySocket';
+
 
 const Room = () => {
 
-     let stompClient = useRef();
+     // let stompClient = useRef();
 
      const location = useLocation();
 
      let localVideoRef = useRef();
      let remoteVideoRef = useRef();
+     let SeniorDoctorVideoRef = useRef();
      let peerConnection = useRef();
-     let myref = useRef();
+     let peerConnection1 = useRef();
+     let myref = useRef(null);
      let mediaRecorder = useRef();
 
 
@@ -39,32 +46,38 @@ const Room = () => {
      const [recordingStart, setRecordingStart] = useState(false);
      const [recordingStop, setRecordingStop] = useState(true);
      const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ video: true });
+     const role = useSelector(state => state.login.user.role);
 
-
+     const stompClient = useStompClient();
 
      const navigate = useNavigate();
 
-     const role = localStorage.getItem("role");
+     console.log("remoteId: ",remoteID);
+     console.log("localId: ",localID);
+
+
 
 
      useEffect(() => {
 
+          const handlewebrtc = async () => {
 
-          var configuration = {
-               iceServers: [{
-                    urls: [
-                         "stun:stun.l.google.com:19302",
-                         "stun:global.stun.twilio.com:3478",
-                    ]
-               }]
-          };
+               var configuration = {
+                    iceServers: [{
+                         urls: [
+                              "stun:stun.l.google.com:19302",
+                              "stun:global.stun.twilio.com:3478",
+                         ]
+                    }]
+               };
 
-          peerConnection.current = new RTCPeerConnection(configuration);
-          var conn = new SockJS("http://localhost:9090/socket");
-          stompClient.current = new Stomp.over(conn);
+               peerConnection.current = new RTCPeerConnection(configuration);
+               peerConnection1.current = new RTCPeerConnection(configuration);
+               // var conn = new SockJS("http://localhost:9090/socket");
+               // stompClient.current = getstomClient().client;
 
 
-          stompClient.current.connect({}, async (frame) => {
+               // stompClient.current.connect({}, async (frame) => {
 
                await navigator.mediaDevices.getUserMedia({
                     video: true,
@@ -74,19 +87,45 @@ const Room = () => {
                     setLocalStream(stream);
                     stream.getTracks().forEach(async (track) => {
                          await peerConnection.current.addTrack(track, stream);
-                         track.enabled = false;
+                         // track.enabled = false;
                     });
                })
 
                await peerConnection.current.setLocalDescription(await peerConnection.current.createOffer());
                // console.log("setting description: ", description);
-               stompClient.current.send("/app/offer", {}, JSON.stringify({
+               stompClient.send("/app/offer", {}, JSON.stringify({
                     "toUser": remoteID.toString(),
                     "fromUser": localID.toString(),
                     "offer": JSON.stringify(peerConnection.current.localDescription)
                }))
 
-               stompClient.current.subscribe("/user/" + localID + "/topic/offer", async (offer) => {
+               stompClient.subscribe("/user/" + localID + "/topic/seniorJoin", async (message) => {
+
+                    const msg = JSON.parse(message.body);
+
+                    await peerConnection1.current.setLocalDescription(await peerConnection1.current.createOffer());
+                    // console.log("setting description: ", description);
+                    await stompClient.send("/app/offer", {}, JSON.stringify({
+                         "toUser": msg["fromUser"],
+                         "fromUser": msg["toUser"],
+                         "offer": JSON.stringify(peerConnection1.current.localDescription)
+                    }));
+
+                    await navigator.mediaDevices.getUserMedia({
+                         video: true,
+                         audio: true
+                    }).then(async (stream) => {
+                         localVideoRef.current.srcObject = stream;
+                         setLocalStream(stream);
+                         stream.getTracks().forEach(async (track) => {
+                              await peerConnection1.current.addTrack(track, stream);
+                              // track.enabled = false;
+                         });
+                    })
+
+               })
+
+               stompClient.subscribe("/user/" + localID + "/topic/offer", async (offer) => {
                     console.log("offer: ", JSON.parse(offer.body));
                     const offerData = JSON.parse(offer.body);
                     // if (peerConnection.current.signalingState !== "stable") {
@@ -96,7 +135,7 @@ const Room = () => {
 
                     await peerConnection.current.setLocalDescription(await peerConnection.current.createAnswer());
                     console.log("setting description: ", peerConnection.current.localDescription);
-                    stompClient.current.send("/app/answer", {}, JSON.stringify({
+                    await stompClient.send("/app/answer", {}, JSON.stringify({
                          "toUser": offerData.fromUser.toString(),
                          "fromUser": offerData.toUser.toString(),
                          "answer": JSON.stringify(peerConnection.current.localDescription)
@@ -104,7 +143,7 @@ const Room = () => {
 
                })
 
-               stompClient.current.subscribe("/user/" + localID + "/topic/candidate", async (answer) => {
+               stompClient.subscribe("/user/" + localID + "/topic/candidate", async (answer) => {
                     // console.log("candidate: ", JSON.parse(answer.body));
                     const candidateData = JSON.parse(answer.body);
 
@@ -120,7 +159,7 @@ const Room = () => {
                })
 
 
-               stompClient.current.subscribe("/user/" + localID + "/topic/answer", async (answer) => {
+               stompClient.subscribe("/user/" + localID + "/topic/answer", async (answer) => {
 
                     console.log("negotiation answer: ", answer.body);
 
@@ -131,7 +170,7 @@ const Room = () => {
 
                });
 
-               stompClient.current.subscribe("/user/" + localID + "/topic/disconnectCall", async (disconnect) => {
+               stompClient.subscribe("/user/" + localID + "/topic/disconnectCall", async (disconnect) => {
 
                     console.log("user disconnected: ", disconnect);
 
@@ -139,14 +178,62 @@ const Room = () => {
 
                     peerConnection.current.close();
 
+                    navigate('/endCall');
+
+               });
+
+               stompClient.subscribe("/user/" + localID + "/topic/seniorOffer", async (offer) => {
+
+                    console.log("offer: ", JSON.parse(offer.body));
+                    const offerData = JSON.parse(offer.body);
+                    // if (peerConnection.current.signalingState !== "stable") {
+                    await peerConnection1.current.setRemoteDescription(JSON.parse(offerData.offer));
+
+                    console.log("setting remote description: ", peerConnection1.current.remoteDescription);
+
+                    await peerConnection1.current.setLocalDescription(await peerConnection1.current.createAnswer());
+                    console.log("setting description: ", peerConnection1.current.localDescription);
+                    await stompClient.send("/app/seniorAnswer", {}, JSON.stringify({
+                         "toUser": offerData.fromUser.toString(),
+                         "fromUser": offerData.toUser.toString(),
+                         "answer": JSON.stringify(peerConnection1.current.localDescription)
+                    }));
+
                })
+
+               stompClient.subscribe("/user/" + localID + "/topic/seniorCandidate", async (answer) => {
+                    // console.log("candidate: ", JSON.parse(answer.body));
+                    const candidateData = JSON.parse(answer.body);
+
+                    console.log("candidate: ", candidateData);
+
+                    const candidate = JSON.parse(candidateData.candidate);
+                    console.log(candidate);
+                    console.log("remote description: ", peerConnection1.current.remoteDescription);
+                    console.log("local description: ", peerConnection1.current.localDescription);
+                    // if (candidate && peerConnection.current && peerConnection.current.remoteDescription)
+                    await peerConnection1.current.addIceCandidate(candidate);
+
+               })
+
+
+               stompClient.subscribe("/user/" + localID + "/topic/seniorAnswer", async (answer) => {
+
+                    console.log("negotiation answer: ", answer.body);
+
+                    const answerData = JSON.parse(answer.body);
+                    await peerConnection1.current.setRemoteDescription(JSON.parse(answerData.answer));
+                    console.log("negotiation remote description: ", peerConnection1.current.remoteDescription);
+
+
+               });
 
 
 
                peerConnection.current.onnegotiationneeded = async (event) => {
                     await peerConnection.current.setLocalDescription(await peerConnection.current.createOffer());
                     console.log("negotiation setting description: ", peerConnection.current.localDescription);
-                    stompClient.current.send("/app/offer", {}, JSON.stringify({
+                    await stompClient.send("/app/offer", {}, JSON.stringify({
                          "toUser": remoteID.toString(),
                          "fromUser": localID.toString(),
                          "offer": JSON.stringify(peerConnection.current.localDescription)
@@ -154,10 +241,10 @@ const Room = () => {
                }
 
 
-               peerConnection.current.onicecandidate = (event) => {
+               peerConnection.current.onicecandidate = async (event) => {
                     console.log(event);
                     if (event.candidate) {
-                         stompClient.current.send("/app/candidate", {}, JSON.stringify({
+                         await stompClient.send("/app/candidate", {}, JSON.stringify({
                               "toUser": remoteID.toString(),
                               "fromUser": localID.toString(),
                               "candidate": JSON.stringify(event.candidate)
@@ -171,9 +258,42 @@ const Room = () => {
                     setRemoteStream(event.streams);
                }
 
-          })
+               peerConnection1.current.onnegotiationneeded = async (event) => {
+                    await peerConnection1.current.setLocalDescription(await peerConnection1.current.createOffer());
+                    console.log("negotiation setting description: ", peerConnection1.current.localDescription);
+                    await stompClient.send("/app/seniorOffer", {}, JSON.stringify({
+                         "toUser": remoteID.toString(),
+                         "fromUser": localID.toString(),
+                         "offer": JSON.stringify(peerConnection1.current.localDescription)
+                    }))
+               }
 
-     }, [])
+
+               peerConnection1.current.onicecandidate = async (event) => {
+                    console.log(event);
+                    if (event.candidate) {
+                         await stompClient.send("/app/seniorCandidate", {}, JSON.stringify({
+                              "toUser": remoteID.toString(),
+                              "fromUser": localID.toString(),
+                              "candidate": JSON.stringify(event.candidate)
+                         }))
+                    }
+               }
+
+               peerConnection1.current.ontrack = (event) => {
+                    console.log("remote streams: ", event);
+                    SeniorDoctorVideoRef.current.srcObject = event.streams[0];
+                    // setRemoteStream(event.streams);
+               }
+          }
+
+          if (stompClient) {
+               handlewebrtc();
+          }
+
+
+
+     }, [stompClient])
 
 
 
@@ -228,9 +348,10 @@ const Room = () => {
 
           peerConnection.current.close();
 
-          stompClient.current.send("/app/disconnectCall", {}, JSON.stringify({
+          stompClient.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
-               "initiatedBy": remoteID.toString()
+               "initiatedBy": remoteID.toString(),
+               "role": role
           }))
 
           peerConnection.current = null;
@@ -238,7 +359,9 @@ const Room = () => {
 
           stompClient.current = null;
 
-          navigate('/endCall');
+          navigate("/endCall");
+          // if (role === "doctor") navigate("/doctor/dashboard");
+          // else navigate("/patient/dashboard");
 
      }
 
@@ -318,19 +441,9 @@ const Room = () => {
 
 
 
-
-
-
-
-
-     console.log(location.state);
-     console.log("status: ", status);
-
-
-
      return (
           <>
-               <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
+               <div style={{ display: "flex", flexWrap:'wrap', flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
                     <div style={{ margin: "10px" }}>
                          <video src={mediaBlobUrl} ref={localVideoRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
                          <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{localName}(You)</div>
@@ -338,6 +451,11 @@ const Room = () => {
                     <div ref={myref} style={{ margin: "10px" }} >
                          <video ref={remoteVideoRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
                          <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{remoteName}</div>
+                    </div>
+
+                    <div ref={myref} style={{ margin: "10px" }} >
+                         <video ref={SeniorDoctorVideoRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
+                         {/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>senior doctor</div> */}
                     </div>
 
                </div>
@@ -365,28 +483,6 @@ const Room = () => {
                               <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
                          }
                     </IconButton>
-
-                    {console.log(status)}
-                    {
-                         // role === "doctor"
-                         //      ?
-                         //      status === "idle" || status === "stopped"
-                         //           ?
-                         //           <IconButton onClick={handleStartRecording}>
-                         //                {
-                         //                     <RadioButtonCheckedIcon className='call_btn' sx={{ margin: "20px" }} />
-                         //                }
-                         //           </IconButton>
-                         //           :
-                         //           <IconButton onClick={handleStopRecording}>
-                         //                {
-                         //                     <StopCircleIcon className='call_btn' sx={{ margin: "20px" }} />
-                         //                }
-                         //           </IconButton>
-                         //      :
-                         //      <>
-                         //      </>
-                    }
 
                </div>
           </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Banner, Graph, SmallCalender, PrescriptionForm } from "../index";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import patient from "../../assets/patient.png";
 import appointments from "../../assets/appointments.png";
 import prescription from "../../assets/prescription.png";
@@ -10,123 +10,87 @@ import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useDispatch, useSelector } from "react-redux";
-import { doctorActions } from "../../Store/doctorSlice";
+import { acceptCall, doctorActions } from "../../Store/doctorSlice";
 import IncomingCall from "./IncomingCall";
 import CalendarModal from "../Patient/CalendarModal";
 import { makeConnection } from "../../Store/consultSlice";
 import { handleGetAllPatients } from "../../Store/doctorSlice";
+// import getstomClient from "../Patient/MySocket";
+// import stompClient from "../Patient/stomVariable"
+import { useStompClient } from "../common/WebSocketContext";
+// import stompClient from "../Patient/MySocket";
+
 
 function DoctorDashboard() {
-	const [incomingCall, setIncomingCall] = useState(false);
+
+	
+	// const [incomingCall, setIncomingCall] = useState(false);
+	// location.reload();
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
 	var category = "health";
-	let stompClient = useRef();
+	const stompClient = useStompClient();
+	// const stompClient = useRef();
+	// stompClient.current = useSelector(state => state.doctor.stompRef);
 	const [remoteID, setRemoteId] = useState("");
 	const [localID, setLocalID] = useState(state.doctorId);
 	const [roomID, setRoomID] = useState("");
-	const [patientName, setPatientName] = useState("");
+	// const [patientName, setPatientName] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [consultState, setConsultState] = useState({});
+	const isFirstRender = useRef(true)
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
+
+
+	let patientRef = useRef();
+	let doctorRef = useRef();
+	let ownRef = useRef();
 
 	const handleDateClick = () => {
 		setModalOpen((prev) => !prev);
 	};
 
-	useEffect(() => {
-		localStorage.setItem("doctorId", state.doctorId);
-		localStorage.setItem("doctorName", state.firstName);
-		dispatch(handleGetAllPatients())
-		console.log(state);
-	}, []);
+	// const stompClient = useRef();
 
-	const handleAcceptCall = async () => {
-		console.log("consult state: ", consultState);
-		const res = dispatch(makeConnection(consultState));
+	const patientName = useSelector(state => state.doctor.patientName);
 
-		console.log("make connection res: ", res);
-
-		const newUuid = ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
-			/[018]/g,
-			(c) =>
-				(
-					c ^
-					(crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-				).toString(16)
-		);
-
-		console.log(newUuid);
-
-		const doctorName = state.firstName;
-
-		setRoomID(newUuid);
-
-		const acceptedBy = { name: doctorName, callee: localID };
-		const initiatedBy = { name: patientName, caller: remoteID };
-
-		stompClient.current.send(
-			"/app/acceptCall",
-			{},
-			JSON.stringify({
-				roomID: newUuid,
-				acceptedBy: JSON.stringify(acceptedBy),
-				initiatedBy: JSON.stringify(initiatedBy),
-			})
-		);
-
-		navigate(`/room/${newUuid}`, { state: { acceptedBy, initiatedBy } });
-	};
-
-	const handleRejectCall = () => {
-		setIncomingCall(false);
-		const rejectedBy = {
-			name: state.firstName,
-			callee: localID,
-			message: "Doctor is Busy right now",
-		};
-		const initiatedBy = { name: patientName, caller: remoteID };
-
-		stompClient.current.send(
-			"/app/rejectCall",
-			{},
-			JSON.stringify({
-				rejectedBy: JSON.stringify(rejectedBy),
-				initiatedBy: JSON.stringify(initiatedBy),
-			})
-		);
-	};
 
 	useEffect(() => {
-		var conn = new SockJS("http://localhost:9090/socket");
-		stompClient.current = new Stomp.over(conn);
+		if (stompClient) {
 
-		stompClient.current.connect({}, (frame) => {
-			stompClient.current.subscribe(
-				"/user/" + localID + "/topic/call",
-				(call) => {
-					console.log("call from: " + call.body);
-					// console.log("remote id: " + call.body);
-					const userData = JSON.parse(call.body);
-					console.log(userData);
-					// console.log("consult state in doc dashboard: ", state.consult);
-					const consultationData = JSON.parse(userData["consultState"]);
-					const callFrom = JSON.parse(userData["callFrom"]);
-					console.log(consultationData);
-					console.log(callFrom.localId);
-					setConsultState(consultationData);
+			stompClient.subscribe("/user/" + localID + "/topic/call", (call) => {
+				// console.log('Received message:', message.body);
+				console.log("call from: " + call.body);
+				// console.log("remote id: " + call.body);
+				const userData = JSON.parse(call.body);
+				// console.log(userData);
+				// // console.log("consult state in doc dashboard: ", state.consult);
+				// const consultationData = JSON.parse(userData["consultState"]);
+				const callFrom = JSON.parse(userData["callFrom"]);
+				// console.log(consultationData);
+				// console.log(callFrom.localId);
+				// setConsultState(consultationData);
 
-					setRemoteId(callFrom.localId);
-					setPatientName(callFrom.patientName);
+				dispatch(doctorActions.updateRemoteId(callFrom.localId));
 
-					setIncomingCall(true);
-				}
-			);
-		});
-	}, []);
+				dispatch(doctorActions.updatePatientName(callFrom.patientName))
+
+				dispatch(doctorActions.updateIncomingCall(true));
+			});
+
+
+			// return () => {
+			// 	console.log("cleanup");
+			// 	subscription.unsubscribe();
+			// };
+		}
+	}, [stompClient]);
+
+
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -147,6 +111,9 @@ function DoctorDashboard() {
 		};
 		fetchData();
 	}, []);
+
+
+
 
 	return (
 		<>
@@ -264,14 +231,11 @@ function DoctorDashboard() {
 						</div>
 					</Box>
 				</Box>
+				{/* <Button variant="success" onClick={handleJoinCall}>Join Call</Button> */}
 			</Box>
 
-			{incomingCall ? (
-				<IncomingCall
-					acceptUtil={handleAcceptCall}
-					rejectUtil={handleRejectCall}
-					vars={patientName}
-				/>
+			{state.incomingCall ? (
+				<IncomingCall />
 			) : (
 				<></>
 			)}
