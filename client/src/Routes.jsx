@@ -127,7 +127,7 @@ const router = createBrowserRouter([
 		path: "patient/details",
 		element: (
 			<PrivateRoute>
-				<PatientDetails store={store} />
+				<PatientDetails  />
 			</PrivateRoute>
 		),
 	},
