@@ -210,6 +210,33 @@ export const consentRegistration = (data) => {
 	};
 };
 
+export const changeStatus = () => {
+	return async (dispatch, getState) => {
+		const fetchData = async () => {
+			const response = await axios.get(
+				"http://localhost:9090/doctor/changeStatus",
+				{
+					headers: {
+						Authorization: localStorage.getItem("Authorization"),
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return response;
+		};
+		try {
+				const response = await fetchData();
+				console.log("Status Changed", response.data);
+				notyf.success("Status Changed successfully");
+		} catch (error) {
+			console.error("Error Changing Status", error);
+			notyf.error("Error changing status");
+		}
+	};
+};
+
 export const handleGetPatientReports = (email) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {

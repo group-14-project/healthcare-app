@@ -71,3 +71,29 @@
     /* right: 3px; */
     font-weight: 700;
 }
+
+.profile_logout{
+    background-color: #F9F9F9;
+    border: 1px solid grey;
+    height: 5rem;
+    width: 12rem;
+    z-index: 2;
+    position: absolute;
+    top: 50px;
+    left: -10px;
+    color: black !important;
+    font-weight: 700;
+    box-sizing: border-box;
+    padding: 10px;
+    display: none;
+    cursor: pointer;
+}
+.line_hard{
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.hover:hover .profile_logout{
+    display: block !important;
+    cursor: pointer;
+}

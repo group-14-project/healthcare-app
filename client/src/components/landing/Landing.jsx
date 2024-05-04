@@ -101,7 +101,7 @@ function Landing(props) {
 							<Link to="/faq">FAQs</Link>
 						</li>
 						<li className="link">
-							<Link to="/contact-us">OPD Timings</Link>
+							<Link to="/opd-timings">OPD Timings</Link>
 						</li>
 						<li className="link">
 							<Link to="/login">Login</Link>

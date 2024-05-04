@@ -26,20 +26,21 @@ const notyf = new Notyf({
 	},
 });
 
-const PatientDetails = async (props) => {
+const PatientDetails = (props) => {
 	const navigate = useNavigate();
 	const formData = useSelector((state) => state.patient);
 	const dispatch = useDispatch();
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const res = await dispatch(handleUpdatePatientDetails());
-		if(res){
-			notyf.success("Details added successfully");
-			navigate("/patient/dashboard");
-		}
-		else{
-			notyf.error("Something went wrong");
-		}
+		
+			const res = await dispatch(handleUpdatePatientDetails());
+			if (res) {
+				notyf.success("Details added successfully");
+				navigate("/patient/dashboard");
+			} else {
+				notyf.error("Something went wrong");
+			}
+		 
 	};
 	const handleChange = (e) => {
 		const { name, value } = e.target;

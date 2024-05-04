@@ -98,14 +98,18 @@ const OtpInputPage = () => {
 		if (!error && firstTimeLogin === false) {
 			if (role === "patient") {
 				if (location.state.type === "signup") {
+					console.log("first")
 					navigate("/login");
 				} else if (location.state.type === "login") {
+					console.log("second")
 					navigate("/patient/details");
 				}
 			} else {
+				console.log("third")
 				navigate(`/${role}/changepwd`);
 			}
 		} else if (!error && firstTimeLogin === true) {
+			console.log("fourth")
 			navigate(`/${role}/dashboard`);
 		}
 	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital]);

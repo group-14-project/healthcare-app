@@ -159,7 +159,6 @@ const router = createBrowserRouter([
 					content: [
 						"All Patients",
 						"Calendar",
-						"Departments",
 						"Feedback",
 						"Refer",
 						"View Consents",
@@ -259,7 +258,7 @@ const router = createBrowserRouter([
 						"Consult",
 						"Reports",
 						"Prescriptions",
-						"UpcomingAppointments",
+						"Upcoming Appointments",
 						"Manage Consents",
 						"Logout",
 					],

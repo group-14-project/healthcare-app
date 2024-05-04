@@ -10,13 +10,30 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../Store/store";
 import styles from "./RightNavbar.module.css";
+import { useNavigate } from "react-router-dom";
+import { loginActions } from "../../Store/loginSlice";
+import { changeStatus } from "../../Store/doctorSlice";
 
 const RightNavbar = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const state = store.getState();
+	const [currState, setCurrentState] = useState("busy");
 	const role = useSelector((state) => state.login.user.role);
+	const handleLogout = (e) => {
+		e.preventDefault();
+		localStorage.clear();
+		window.sessionStorage.clear();
+		loginActions.updateDetails(dispatch(loginActions.resetState()));
+
+		navigate("/");
+	};
+	const handleSwitch = () => {
+		dispatch(changeStatus("active"));
+	};
 	return (
 		<Box className="right-navbar-parent">
 			<CssBaseline />
@@ -29,17 +46,49 @@ const RightNavbar = () => {
 						<IconButton>
 							<NotificationsNoneIcon className="rgt-navbar-notif-btn" />
 						</IconButton>
-						<input className={styles.input_switch} type="checkbox" id="demo" />
-						<label className={styles.label_switch} htmlFor="demo"></label>
-						<span className={styles.info_text}></span>
+						{role == "doctor" && (
+							<>
+								<input
+									onClick={handleSwitch}
+									className={styles.input_switch}
+									type="checkbox"
+									id="demo"
+								/>
+								<label className={styles.label_switch} htmlFor="demo"></label>
+								<span className={styles.info_text}></span>
+							</>
+						)}
 					</Toolbar>
 					<Toolbar>
 						<Box>
 							<Typography noWrap component="p" className="rgt-navbar-name">
-								{state[role].firstName + " " + state[role].lastName}
+								{role !== "hospital" &&
+									state[role].firstName + " " + state[role].lastName}
 							</Typography>
-							<Link href="#" underline="none" className="rgt-navbar-view-label">
+							<Link
+								underline="none"
+								className={`"rgt-navbar-view-label" ${styles.hover}`}
+							>
 								{"View Profile"}
+								<Box className={styles.profile_logout}>
+									<Link
+										onClick={() => {
+											navigate(`/${role}/details`);
+										}}
+										underline="none"
+										className="rgt-navbar-view-label"
+									>
+										{"View Profile"}
+									</Link>
+									<hr className={styles.line_hard} />
+									<Link
+										underline="none"
+										className="rgt-navbar-view-label"
+										onClick={handleLogout}
+									>
+										{"Logout"}
+									</Link>
+								</Box>
 							</Link>
 						</Box>
 						<IconButton>

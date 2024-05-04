@@ -31,6 +31,7 @@ const initialState = {
 	remoteId: "",
 	doctorName: "",
 };
+import { Notyf } from "notyf";
 import 'notyf/notyf.min.css'; 
 const notyf = new Notyf({
 	position: {
@@ -64,8 +65,10 @@ export const handleUpdatePatientDetails = () => {
 		try {
 			const response = await fetchData();
 			console.log("details added", response.data);
+			return true
 		} catch (error) {
 			console.error("Error adding details", error);
+			return false;
 		}
 	};
 };
@@ -94,9 +97,11 @@ export const fetchReports = () => {
 			const response = await fetchData();
 			dispatch(patientActions.updateReports(response.data));
 			console.log("reports fetched: ", response.data);
+			return true
 		}
 		catch (err) {
 			console.error("error fetching reports: ", err);
+			return false;
 		}
 
 	}

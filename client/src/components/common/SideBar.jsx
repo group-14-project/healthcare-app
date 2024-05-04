@@ -90,6 +90,7 @@ function SideBar(props) {
 	const navigate = useNavigate();
 	const role = useSelector((state) => state.login.user.role);
 	const state = useSelector((state) => state.login);
+	const senior = useSelector((state) => state.doctor.senior);
 
 	const dispatch = useDispatch();
 

@@ -74,17 +74,9 @@ const OPDTimings = () => {
 		},
 	]);
 	return (
-		<Box
-			flex={1}
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-		>
+		<Box flex={1} display="flex" justifyContent="center" alignItems="center">
 			<Container maxWidth="xl">
 				<div className={style.name_logo}>
-					<div className={style.image_div}>
-						<img src={logo} alt="AarogyaShala Logo" />
-					</div>
 					<div className={style.text}>
 						<h2>Welcome to Arogyashala's OPD Timings schedule</h2>
 					</div>

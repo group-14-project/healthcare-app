@@ -46,6 +46,7 @@ function Login() {
 	const data = useSelector((state) => state.login.user);
 	const [containerClass, setContainerClass] = useState("sign-in");
 	const role = useSelector((state) => state.login.user.role);
+	const firstTimeLogin = useSelector((state) => state[role].firstTimeLogin)
 	const isAuthenticated = useSelector(
 		(state) => state.login.user.isAuthenticated
 	);
@@ -129,7 +130,16 @@ function Login() {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			navigate(`/${role}/dashboard`);
+			if(!firstTimeLogin){
+				if(role == 'patient'){
+					navigate('/patient/details')
+				}else{
+					navigate(`/${role}/changepwd`)
+				}
+			}
+			else{
+				navigate(`/${role}/dashboard`);
+			}
 		}
 	}, [isAuthenticated, navigate]);
 

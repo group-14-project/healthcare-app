@@ -15,7 +15,7 @@ export const Accordion = ({ section }) => {
 				borderRadius: 4,
 				p: 2,
 				mb: 2,
-				backgroundColor: "#ffebcd",
+				backgroundColor: "#4FBAA1",
 			}}
 		>
 			<div className="accordion-container" sx={{ width: "500px" }}>

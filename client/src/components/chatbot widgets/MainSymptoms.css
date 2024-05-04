@@ -10,5 +10,19 @@
     padding: 8px;
     /* border-color: blue; */
     background: transparent;
-    text-align: center;
+    /* text-align: center !important; */
+    /* height: 8rem;
+    width: 20rem; */
+    text-align: left !important;
+}
+
+.option-button span{
+  display: inline-block !important;
+}
+
+.option-button img{
+  display: inline-block !important;
+  height: auto !important;
+  width: auto !important;
+
 }

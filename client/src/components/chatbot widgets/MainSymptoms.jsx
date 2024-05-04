@@ -62,7 +62,7 @@ const MainSymptoms = (props) => {
 
 	const buttonsMarkup = options.map((option) => (
 		<button key={option.id} onClick={option.handler} className="option-button">
-			{option.text}
+			<span>{option.text}</span>
 			<img src={option.image} />
 		</button>
 	));
