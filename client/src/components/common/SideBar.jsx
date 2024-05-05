@@ -78,7 +78,7 @@ const Drawer = styled(MuiDrawer, {
 
 function SideBar(props) {
 	const sidebarRef = React.useRef(null);
-	console.log("in sidebar: ", props);
+
 	const sidebarContent = props.content.sidebarContent.sidebar.content;
 	const userType = props.type.user.user.type;
 	const theme = useTheme();
@@ -86,7 +86,7 @@ function SideBar(props) {
 	const [logo, setLogo] = React.useState(smallLogo);
 	const location = useLocation();
 	const patientData = location.state;
-	console.log(location.state);
+
 	const navigate = useNavigate();
 	const role = useSelector((state) => state.login.user.role);
 	const state = useSelector((state) => state.login);
@@ -132,14 +132,17 @@ function SideBar(props) {
 			<ThemeProvider theme={SidebarTheme}>
 				<Drawer variant="permanent" open={open}>
 					<DrawerHeader className={styles.sidebar_logo}>
-						<IconButton className = {styles.sidebar_logos}  onClick={showDashboard}>
+						<IconButton
+							className={styles.sidebar_logos}
+							onClick={showDashboard}
+						>
 							<img
 								src={logo}
 								alt="logo"
-								className={
-									`${logo === smallLogo ? "small_logo_img" : "large_logo_img"}
-									${styles.sidebar_logo_img}`
+								className={`${
+									logo === smallLogo ? "small_logo_img" : "large_logo_img"
 								}
+									${styles.sidebar_logo_img}`}
 							/>
 						</IconButton>
 					</DrawerHeader>

@@ -65,7 +65,7 @@ const RightNavbar = () => {
 								{role !== "hospital" &&
 									state[role].firstName + " " + state[role].lastName}
 							</Typography>
-							<Link
+							<Box
 								underline="none"
 								className={`"rgt-navbar-view-label" ${styles.hover}`}
 							>
@@ -89,7 +89,7 @@ const RightNavbar = () => {
 										{"Logout"}
 									</Link>
 								</Box>
-							</Link>
+							</Box>
 						</Box>
 						<IconButton>
 							<AccountCircleIcon className="profile-icon" />

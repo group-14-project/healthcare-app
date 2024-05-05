@@ -192,6 +192,7 @@ function PatientConsultation(props) {
 			socket.onmessage = (event) => {
 				const message = JSON.parse(event.data);
 				setMessages(message);
+				console.log(message, "message")
 			};
 			socket.onclose = () => {
 				console.log("WebSocket connection closed");

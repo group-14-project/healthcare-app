@@ -15,10 +15,7 @@ import IncomingCall from "./IncomingCall";
 import CalendarModal from "../Patient/CalendarModal";
 import { makeConnection } from "../../Store/consultSlice";
 import { handleGetAllPatients } from "../../Store/doctorSlice";
-// import getstomClient from "../Patient/MySocket";
-// import stompClient from "../Patient/stomVariable"
 import { useStompClient } from "../common/WebSocketContext";
-// import stompClient from "../Patient/MySocket";
 
 
 function DoctorDashboard() {
@@ -30,6 +27,7 @@ function DoctorDashboard() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
+	console.log(state)
 	var category = "health";
 	const stompClient = useStompClient();
 	// const stompClient = useRef();
@@ -89,6 +87,10 @@ function DoctorDashboard() {
 			// };
 		}
 	}, [stompClient]);
+
+	useEffect(() => {
+		dispatch(handleGetAllPatients())
+	}, []);
 
 
 
@@ -152,9 +154,6 @@ function DoctorDashboard() {
 							</Box>
 							<Box sx = {{cursor: "pointer"}} className={styles.btn_div} onClick={handleShow}>
 								Template &nbsp;
-								{/* <span className={styles.template_icon}>
-									<i className="fa-solid fa-circle-arrow-right"></i>
-								</span> */}
 								<PrescriptionForm show={show} onHide={() => setShow(false)} />
 							</Box>
 						</Box>

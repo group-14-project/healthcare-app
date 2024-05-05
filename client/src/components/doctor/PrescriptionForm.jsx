@@ -12,13 +12,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleAddPrescription } from "../../Store/doctorSlice";
 
 function PrescriptionForm(props) {
+	console.log(props)
 	const doctorState = useSelector((state) => state.doctor);
 	const [patientName, setPatientName] = useState("");
 	const [patientEmail, setPatientEmail] = useState("");
 	const [medicineName, setMedicineName] = useState("");
 	const [medicine, setMedicine] = useState([]);
-	const [dosageCount, setDosageCount] = useState("");
-	const [dosage, setDosage] = useState([]);
 	const [addComment, setaddComment] = useState("");
 	const dispatch = useDispatch();
 
@@ -49,21 +48,10 @@ function PrescriptionForm(props) {
 		setMedicineName("");
 	};
 
-	const handleDosageChange = (event) => {
-		setDosageCount(event.target.value);
-	};
-
-	const handleDosageArray = () => {
-		const dosageArray = [...dosage];
-		dosageArray.push(dosageCount);
-		setDosage(dosageArray);
-		setDosageCount("");
-	};
-
 	const handleSubmit = () => {
 		let string = "";
 		for (let i = 0; i < medicine.length; i++) {
-			string += medicine[i] + "-" + dosage[i] + "\n";
+			string += medicine[i] + "\n";
 		}
 		string += "--"+addComment;
 		console.log(string);
@@ -73,7 +61,7 @@ function PrescriptionForm(props) {
 	return (
 		<>
 			<Modal {...props} size="lg">
-				<Modal.Header closeButton>
+				<Modal.Header closeButton onClick={props.onHide}>
 					<Modal.Title>Prescription</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -107,6 +95,7 @@ function PrescriptionForm(props) {
 										return selected;
 									}}
 									inputProps={{ "aria-label": "Without label" }}
+									required
 								>
 									<MenuItem disabled value="">
 										<em>Patient Name</em>
@@ -127,8 +116,7 @@ function PrescriptionForm(props) {
 							<table className={styles.prescription_table}>
 								<thead>
 									<tr>
-										<th>Medicine Name</th>
-										<th>Dosage</th>
+										<th>Medicine and Dosage</th>
 									</tr>
 								</thead>
 								<tbody className={styles.formfields}>
@@ -140,14 +128,6 @@ function PrescriptionForm(props) {
 													onBlur={handleMedicineArray}
 													type="text"
 													name="medicine"
-												/>
-											</td>
-											<td>
-												<input
-													onChange={handleDosageChange}
-													onBlur={handleDosageArray}
-													type="text"
-													name="dosage"
 												/>
 											</td>
 										</tr>
