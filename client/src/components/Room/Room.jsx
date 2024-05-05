@@ -38,9 +38,14 @@ const Room = () => {
      let remoteName = location.state.initiatedBy.name
      let localID = location.state.acceptedBy.callee;
      let localName = location.state.acceptedBy.name;
+     // let seniorName = "";
      const [audio, setAudio] = useState(false);
      const [video, setVideo] = useState(false);
-     const [localStream, setLocalStream] = useState(null);
+     const [seniorJoin, setSeniorJoin] = useState(false);
+     const [seniorName, setSeniorName] = useState("");
+     const [seniorID, setSeniorId] = useState("");
+     const [localStreamR, setLocalStreamR] = useState(null);
+     const [localStreamS, setLocalStreamS] = useState(null);
      const [remoteStream, setRemoteStream] = useState(null);
      const [recording, setRecording] = useState([]);
      const [recordingStart, setRecordingStart] = useState(false);
@@ -52,8 +57,8 @@ const Room = () => {
 
      const navigate = useNavigate();
 
-     console.log("remoteId: ",remoteID);
-     console.log("localId: ",localID);
+     console.log("remoteId: ", remoteID);
+     console.log("localId: ", localID);
 
 
 
@@ -84,25 +89,26 @@ const Room = () => {
                     audio: true
                }).then((stream) => {
                     localVideoRef.current.srcObject = stream;
-                    setLocalStream(stream);
+                    setLocalStreamR(stream);
                     stream.getTracks().forEach(async (track) => {
                          await peerConnection.current.addTrack(track, stream);
-                         // track.enabled = false;
+                         track.enabled = false;
                     });
                })
 
                await peerConnection.current.setLocalDescription(await peerConnection.current.createOffer());
                // console.log("setting description: ", description);
-               stompClient.send("/app/offer", {}, JSON.stringify({
+               await stompClient.send("/app/offer", {}, JSON.stringify({
                     "toUser": remoteID.toString(),
                     "fromUser": localID.toString(),
                     "offer": JSON.stringify(peerConnection.current.localDescription)
                }))
 
                stompClient.subscribe("/user/" + localID + "/topic/seniorJoin", async (message) => {
-
+                    setSeniorJoin(true);
                     const msg = JSON.parse(message.body);
-
+                    setSeniorName(msg.seniorName);
+                    setSeniorId(msg.fromUser);
                     await peerConnection1.current.setLocalDescription(await peerConnection1.current.createOffer());
                     // console.log("setting description: ", description);
                     await stompClient.send("/app/offer", {}, JSON.stringify({
@@ -116,10 +122,10 @@ const Room = () => {
                          audio: true
                     }).then(async (stream) => {
                          localVideoRef.current.srcObject = stream;
-                         setLocalStream(stream);
+                         setLocalStreamS(stream);
                          stream.getTracks().forEach(async (track) => {
                               await peerConnection1.current.addTrack(track, stream);
-                              // track.enabled = false;
+                              track.enabled = false;
                          });
                     })
 
@@ -156,7 +162,7 @@ const Room = () => {
                     // if (candidate && peerConnection.current && peerConnection.current.remoteDescription)
                     await peerConnection.current.addIceCandidate(candidate);
 
-               })
+               });
 
 
                stompClient.subscribe("/user/" + localID + "/topic/answer", async (answer) => {
@@ -228,6 +234,21 @@ const Room = () => {
 
                });
 
+               stompClient.subscribe("/user/" + localID + "/topic/leave", async (answer) => {
+
+                    setSeniorJoin(false);
+
+                    peerConnection1.current.ontrack = null;
+                    peerConnection1.current.onremovetrack = null;
+                    peerConnection1.current.onicecandidate = null;
+                    peerConnection1.current.oniceconnectionstatechange = null;
+                    peerConnection1.current.onsignalingstatechange = null;
+
+                    peerConnection1.current.close();
+
+                    peerConnection1.current = null;
+
+               });
 
 
                peerConnection.current.onnegotiationneeded = async (event) => {
@@ -299,15 +320,26 @@ const Room = () => {
 
 
      const handleVoiceToggle = async (e) => {
-          console.log(localStream);
-          const audioTrack = await localStream.getTracks().find(track => track.kind === 'audio');
-          console.log(audioTrack);
-          if (audioTrack.enabled) {
-               audioTrack.enabled = false;
+          // console.log(localStream);
+          const audioTrackR = await localStreamR.getTracks().find(track => track.kind === 'audio');
+          console.log(audioTrackR);
+          if (audioTrackR.enabled) {
+               audioTrackR.enabled = false;
                setAudio(false);
           }
           else {
-               audioTrack.enabled = true;
+               audioTrackR.enabled = true;
+               setAudio(true);
+          }
+
+          const audioTrackS = await localStreamS.getTracks().find(track => track.kind === 'audio');
+          console.log(audioTrackS);
+          if (audioTrackS.enabled) {
+               audioTrackS.enabled = false;
+               setAudio(false);
+          }
+          else {
+               audioTrackS.enabled = true;
                setAudio(true);
           }
      }
@@ -315,15 +347,26 @@ const Room = () => {
 
 
      const handleVideoToggle = async (e) => {
-          console.log(localStream);
-          const videoTrack = await localStream.getTracks().find(track => track.kind === 'video');
-          console.log(videoTrack);
-          if (videoTrack.enabled) {
-               videoTrack.enabled = false;
+          // console.log(localStream);
+          const videoTrackR = await localStreamR.getTracks().find(track => track.kind === 'video');
+          console.log(videoTrackR);
+          if (videoTrackR.enabled) {
+               videoTrackR.enabled = false;
                setVideo(false);
           }
           else {
-               videoTrack.enabled = true;
+               videoTrackR.enabled = true;
+               setVideo(true);
+          }
+
+          const videoTrackS = await localStreamS.getTracks().find(track => track.kind === 'video');
+          console.log(videoTrackS);
+          if (videoTrackS.enabled) {
+               videoTrackS.enabled = false;
+               setVideo(false);
+          }
+          else {
+               videoTrackS.enabled = true;
                setVideo(true);
           }
      }
@@ -331,9 +374,13 @@ const Room = () => {
 
      const handleEndCall = async (e) => {
 
-          localStream.getTracks().forEach(track => {
+          localStreamR.getTracks().forEach(track => {
                track.stop();
-          })
+          });
+
+          // localStreamS.getTracks().forEach(track => {
+          //      track.stop();
+          // });
 
 
 
@@ -343,18 +390,33 @@ const Room = () => {
           peerConnection.current.oniceconnectionstatechange = null;
           peerConnection.current.onsignalingstatechange = null;
 
-          console.log(remoteVideoRef.current);
-
-
           peerConnection.current.close();
+
+          peerConnection1.current.ontrack = null;
+          peerConnection1.current.onremovetrack = null;
+          peerConnection1.current.onicecandidate = null;
+          peerConnection1.current.oniceconnectionstatechange = null;
+          peerConnection1.current.onsignalingstatechange = null;
+
+          // console.log(remoteVideoRef.current);
+
+
+          peerConnection1.current.close();
 
           stompClient.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
                "initiatedBy": remoteID.toString(),
                "role": role
-          }))
+          }));
+
+          stompClient.send("/app/leave", {}, JSON.stringify({
+               "fromUser": localID.toString(),
+               "toUser": seniorID.toString(),
+          }));
 
           peerConnection.current = null;
+
+          peerConnection1.current = null;
 
 
           stompClient.current = null;
@@ -365,127 +427,94 @@ const Room = () => {
 
      }
 
-     /*
-     
-          NEED TO COMPLETE THE RECORDING TASK
- 
-     function download() {
-          console.log(recording);
-          const blob = new Blob(recording, {
-               type: "video/mp4",
-          });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          document.body.appendChild(a);
-          a.style = "display: none";
-          a.href = url;
-          a.download = "test.mp4";
-          a.click();
-          window.URL.revokeObjectURL(url);
-     }
- 
-     const handleStartRecording = async () => {
-          startRecording();
-          // const canvas = document.querySelector("body");
-          // const stream = localStream.captureStream(25);
-          // setRecordingStart(prev => prev = true);
-          // setRecordingStop(prev => prev = false);
- 
-          // const options = { mimeType: "video/webm;codecs=vp9,opus" };
-          // mediaRecorder.current = new MediaRecorder(localStream, options);
-          // mediaRecorder.current.ondataavailable = (event) => {
-          //      console.log(event);
- 
-          //      if (event.data.size > 0) {
-          //           setRecording(event.data);
-          //           // console.log(recording);
-          //           download();
-          //      }
-          // }
-          // mediaRecorder.current.start();
- 
- 
-          // mediaRecorder.current
-     }
- 
-     const handleDownload = () => {
-          console.log(mediaBlobUrl);
-          if (mediaBlobUrl) {
-               const url = window.URL.createObjectURL(new Blob(mediaBlobUrl, {type: 'video/mp4'}));
-               const a = document.createElement('a');
-               a.style.display = 'none';
-               a.href = url;
-               a.download = 'recorded_video.mp4'; // You can set the desired file name here
-               document.body.appendChild(a);
-               a.click();
-               window.URL.revokeObjectURL(url);
-               document.body.removeChild(a);
-          }
-     };
- 
- 
-     const handleStopRecording = async () => {
-          stopRecording();
-          handleDownload();
-          // setRecordedVideoBlob(mediaBlobUrl);
- 
-          // const canvas = document.querySelector("body");
-          // const stream = localStream.captureStream(25);
- 
-          // setRecordingStart(prev => prev = false);
-          // setRecordingStop(prev => prev = true);
- 
-          // mediaRecorder.current.stop();
-     }
-     */
+     const [isVisible, setIsVisible] = useState(false);
 
+     const handleMouseEnter = () => {
+          setIsVisible(true);
+     }
+
+     const handleMouseLeave = () => {
+          setIsVisible(false);
+     }
+
+     // const handleMouseMove = () => {
+     //      setIsVisible(true);
+     // };
+
+
+     // setTimeout(() => {
+     //      setIsVisible(false);
+     // }, 3000);
 
 
      return (
-          <>
-               <div style={{ display: "flex", flexWrap:'wrap', flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
-                    <div style={{ margin: "10px" }}>
-                         <video src={mediaBlobUrl} ref={localVideoRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
-                         <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{localName}(You)</div>
-                    </div>
-                    <div ref={myref} style={{ margin: "10px" }} >
-                         <video ref={remoteVideoRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
-                         <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{remoteName}</div>
+          <div className='room'>
+               <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", alignItems: "center" }}>
+                    <div ref={myref} style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+                         <video ref={remoteVideoRef} autoPlay style={{ border: "2px solid #202124", borderRadius: "30px", width: "100%", height: "100%" }} />
+                         <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", width: '100%', color: "#fff" }}>{remoteName}</div>
                     </div>
 
-                    <div ref={myref} style={{ margin: "10px" }} >
-                         <video ref={SeniorDoctorVideoRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
-                         {/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>senior doctor</div> */}
-                    </div>
+                    {
+                         seniorJoin
+                              ?
+                              <div ref={myref} style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "left", alignItems: "center" }} >
+                                   <video ref={SeniorDoctorVideoRef} autoPlay style={{ border: "2px solid #202124", borderRadius: "30px", width: "100%", height: "100%" }} />
+                                   <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", color: "#fff" }}>Senior Dr. {seniorName}</div>
+                              </div>
+                              :
+                              <></>
+                    }
 
-               </div>
-               <div style={{ display: "flex", justifyContent: "center" }}>
-                    <IconButton onClick={handleVoiceToggle}>
-                         {
-                              audio
-                                   ?
-                                   <MicIcon className='call_btn' sx={{ margin: "20px" }} />
-                                   :
-                                   <MicOffIcon className='call_btn' sx={{ margin: "20px" }} />
-                         }
-                    </IconButton>
-                    <IconButton onClick={handleVideoToggle}>
-                         {
-                              video
-                                   ?
-                                   <VideocamIcon className='call_btn' sx={{ margin: "20px" }} />
-                                   :
-                                   <VideocamOffIcon className='call_btn' sx={{ margin: "20px" }} />
-                         }
-                    </IconButton>
-                    <IconButton onClick={handleEndCall}>
-                         {
-                              <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
-                         }
-                    </IconButton>
+                    <div style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "left", alignItems: "center" }}>
+                         <video src={mediaBlobUrl} ref={localVideoRef} autoPlay muted style={{ border: "2px solid #202124", borderRadius: "30px", width: "100%", height: "100%" }} />
+                         <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", color: "#fff" }}>{localName}(You)</div>
+                    </div>
 
                </div>
-          </>
+               <div style={{ width: "100%", height: "100px" }} onMouseLeave={handleMouseLeave} onMouseEnter={handleMouseEnter}>
+                    {
+                         (
+                              <div style={{ display: "flex", justifyContent: "center", position: 'fixed', bottom: '0', left: '49%', opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s ease-in-out', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.2)', color: '#fff', borderRadius: '20px', width: "50%" }}>
+                                   <IconButton onClick={handleVoiceToggle}>
+                                        {
+                                             audio
+                                                  ?
+                                                  <div style={{ borderRadius: "50%", border: "1px solid grey" }}>
+                                                       <MicIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                  </div>
+                                                  :
+                                                  <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                       <MicOffIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                  </div>
+                                        }
+                                   </IconButton>
+                                   <IconButton onClick={handleVideoToggle}>
+                                        {
+                                             video
+                                                  ?
+                                                  <div style={{ borderRadius: "50%", border: "1px solid grey" }}>
+                                                       <VideocamIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                  </div>
+                                                  :
+                                                  <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                       <VideocamOffIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                  </div>
+                                        }
+                                   </IconButton>
+                                   <IconButton onClick={handleEndCall}>
+                                        {
+                                             <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                  <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
+                                             </div>
+                                        }
+                                   </IconButton>
+
+                              </div>
+                         )
+                    }
+               </div>
+          </div>
      )
 }
 

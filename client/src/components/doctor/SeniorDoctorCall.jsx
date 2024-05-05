@@ -9,10 +9,12 @@ import CallEndIcon from '@mui/icons-material/CallEnd';
 import { Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useStompClient } from "../common/WebSocketContext";
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 let peerConnections = {};
 const SeniorDoctorCall = () => {
+
+     const navigate = useNavigate();
 
      var configuration = {
           iceServers: [{
@@ -28,6 +30,7 @@ const SeniorDoctorCall = () => {
      // const pendingConsents = useSelector((state) => state.seniorDoctor.pending);
      const state = useSelector((state) => state.doctor);
      const localID = state.doctorId;
+     const localName = state.firstName;
      const patientRef = useRef();
      const doctorRef = useRef();
      const ownRef = useRef();
@@ -116,6 +119,36 @@ const SeniorDoctorCall = () => {
                     console.log("negotiation remote description: ", peerConnections[answerData.fromUser].remoteDescription);
 
                });
+
+               stompClient.subscribe("/user/" + localID + "/topic/leave", async (answer) => {
+
+                    // localStreamD.getTracks().forEach(track => {
+                    //      track.stop();
+                    // });
+                    // localStreamP.getTracks().forEach(track => {
+                    //      track.stop();
+                    // });
+
+                    peerConnections[location.state.patientId].ontrack = null;
+                    peerConnections[location.state.patientId].onremovetrack = null;
+                    peerConnections[location.state.patientId].onicecandidate = null;
+                    peerConnections[location.state.patientId].oniceconnectionstatechange = null;
+                    peerConnections[location.state.patientId].onsignalingstatechange = null;
+
+                    peerConnections[location.state.doctorId]
+
+                    peerConnections[location.state.doctorId].ontrack = null;
+                    peerConnections[location.state.doctorId].onremovetrack = null;
+                    peerConnections[location.state.doctorId].onicecandidate = null;
+                    peerConnections[location.state.doctorId].oniceconnectionstatechange = null;
+                    peerConnections[location.state.doctorId].onsignalingstatechange = null;
+
+                    peerConnections[location.state.patientId].close();
+                    peerConnections[location.state.doctorId].close();
+
+                    navigate("/doctor/dashboard");
+
+               });
                // }
 
 
@@ -146,7 +179,7 @@ const SeniorDoctorCall = () => {
                     setLocalStreamD(stream);
                     stream.getTracks().forEach(async (track) => {
                          await pc.addTrack(track, stream);
-                         // track.enabled = true;
+                         track.enabled = false;
                     });
                });
 
@@ -206,7 +239,7 @@ const SeniorDoctorCall = () => {
                     setLocalStreamP(stream);
                     stream.getTracks().forEach(async (track) => {
                          await pc.addTrack(track, stream);
-                         // track.enabled = true;
+                         track.enabled = false;
                     });
                })
 
@@ -261,11 +294,13 @@ const SeniorDoctorCall = () => {
                await stompClient.send("/app/seniorJoin", {}, JSON.stringify({
                     "toUser": patientId.toString(),
                     "fromUser": localID.toString(),
+                    "seniorName": localName,
                }));
 
                await stompClient.send("/app/seniorJoin", {}, JSON.stringify({
                     "toUser": doctorId.toString(),
                     "fromUser": localID.toString(),
+                    "seniorName": localName,
                }));
 
 
@@ -278,10 +313,19 @@ const SeniorDoctorCall = () => {
 
           handleJoinCall();
 
-     },[stompClient]);
+     }, [stompClient]);
 
 
 
+     const [isVisible, setIsVisible] = useState(false);
+
+     const handleMouseEnter = () => {
+          setIsVisible(true);
+     }
+
+     const handleMouseLeave = () => {
+          setIsVisible(false);
+     }
 
 
      const handleVoiceToggle = async (e) => {
@@ -298,7 +342,7 @@ const SeniorDoctorCall = () => {
                setAudio(true);
           }
           if (audioTrackD.enabled) {
-               audioTrackP.enabled = false;
+               audioTrackD.enabled = false;
                setAudio(false);
           }
           else {
@@ -311,6 +355,7 @@ const SeniorDoctorCall = () => {
 
      const handleVideoToggle = async (e) => {
           // console.log(localStream);
+          // e.target.style.backgroundColor = "red";
           const videoTrackP = await localStreamP.getTracks().find(track => track.kind === 'video');
           const videoTrackD = await localStreamD.getTracks().find(track => track.kind === 'video');
           // console.log(videoTrack);
@@ -332,54 +377,113 @@ const SeniorDoctorCall = () => {
           }
      }
 
+     const handleEndCall = () => {
+          localStreamD.getTracks().forEach(track => {
+               track.stop();
+          });
+          localStreamP.getTracks().forEach(track => {
+               track.stop();
+          });
+
+          peerConnections[location.state.patientId].ontrack = null;
+          peerConnections[location.state.patientId].onremovetrack = null;
+          peerConnections[location.state.patientId].onicecandidate = null;
+          peerConnections[location.state.patientId].oniceconnectionstatechange = null;
+          peerConnections[location.state.patientId].onsignalingstatechange = null;
+
+          peerConnections[location.state.doctorId]
+
+          peerConnections[location.state.doctorId].ontrack = null;
+          peerConnections[location.state.doctorId].onremovetrack = null;
+          peerConnections[location.state.doctorId].onicecandidate = null;
+          peerConnections[location.state.doctorId].oniceconnectionstatechange = null;
+          peerConnections[location.state.doctorId].onsignalingstatechange = null;
+
+          peerConnections[location.state.patientId].close();
+          peerConnections[location.state.doctorId].close();
+
+          stompClient.send("/app/leave", {}, JSON.stringify({
+               "fromUser": localID.toString(),
+               "toUser": location.state.patientId.toString()
+          }));
+
+          stompClient.send("/app/leave", {}, JSON.stringify({
+               "fromUser": localID.toString(),
+               "toUser": location.state.doctorId.toString()
+          }));
+
+          peerConnections[location.state.patientId] = null;
+          peerConnections[location.state.doctorId] = null;
+
+          navigate("/doctor/dashboard");
+
+     }
+
 
      return (
           <>
 
-               <Box>
-                    <div style={{ display: "flex", flexWrap: "wrap", flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
-                         <div style={{ margin: "10px" }}>
-                              <video ref={patientRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
-                              {/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{localName}(You)</div> */}
-                         </div>
-                         <div style={{ margin: "10px" }} >
-                              <video ref={doctorRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
-                              {/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{remoteName}</div> */}
+               <div className='room'>
+                    <div style={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', justifyContent: "center", alignItems: "center" }}>
+                         <div style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+                              <video ref={patientRef} autoPlay style={{ borderRadius: "30px", width: "100%", height: "100%" }} />
+                              <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", width: '100%', color: "#fff" }}>{location.state.patientName}</div>
                          </div>
 
-                         <div style={{ margin: "10px" }} >
-                              <video ref={ownRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "50%", height: "100%" }} />
-                              {/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>senior doctor</div> */}
+                         <div style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "left", alignItems: "center" }} >
+                              <video ref={doctorRef} autoPlay style={{ borderRadius: "30px", width: "100%", height: "100%" }} />
+                              <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", color: "#fff" }}>{location.state.doctorName}</div>
                          </div>
 
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                         <IconButton onClick={handleVoiceToggle}>
-                              {
-                                   audio
-                                        ?
-                                        <MicIcon className='call_btn' sx={{ margin: "20px" }} />
-                                        :
-                                        <MicOffIcon className='call_btn' sx={{ margin: "20px" }} />
-                              }
-                         </IconButton>
-                         <IconButton onClick={handleVideoToggle}>
-                              {
-                                   video
-                                        ?
-                                        <VideocamIcon className='call_btn' sx={{ margin: "20px" }} />
-                                        :
-                                        <VideocamOffIcon className='call_btn' sx={{ margin: "20px" }} />
-                              }
-                         </IconButton>
-                         <IconButton>
-                              {
-                                   <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
-                              }
-                         </IconButton>
+                         <div style={{ margin: "10px", display: "flex", flexWrap: "wrap", flexDirection: "column", justifyContent: "left", alignItems: "center" }}>
+                              <video ref={ownRef} autoPlay muted style={{ borderRadius: "30px", width: "100%", height: "100%" }} />
+                              <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center", color: "#fff" }}>{localName}(You)</div>
+                         </div>
 
                     </div>
-               </Box>
+                    <div style={{ width: "100%", height: "100px" }} onMouseLeave={handleMouseLeave} onMouseEnter={handleMouseEnter}>
+                         {
+                              (
+                                   <div style={{ display: "flex", justifyContent: "center", position: 'fixed', bottom: '0', left: '49%', opacity: isVisible ? 1 : 0, transition: 'opacity 0.5s ease-in-out', transform: 'translate(-50%, -50%)', background: 'rgba(0,0,0,0.2)', color: '#fff', borderRadius: '20px', width: "50%" }}>
+                                        <IconButton onClick={handleVoiceToggle}>
+                                             {
+                                                  audio
+                                                       ?
+                                                       <div style={{ borderRadius: "50%", border: "1px solid grey" }}>
+                                                            <MicIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                       </div>
+                                                       :
+                                                       <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                            <MicOffIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                       </div>
+                                             }
+                                        </IconButton>
+                                        <IconButton onClick={handleVideoToggle}>
+                                             {
+                                                  video
+                                                       ?
+                                                       <div style={{ borderRadius: "50%", border: "1px solid grey" }}>
+                                                            <VideocamIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                       </div>
+                                                       :
+                                                       <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                            <VideocamOffIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                       </div>
+                                             }
+                                        </IconButton>
+                                        <IconButton onClick={handleEndCall}>
+                                             {
+                                                  <div style={{ backgroundColor: "red", borderRadius: "50%" }}>
+                                                       <CallEndIcon className='call_btn' sx={{ margin: "20px" }} />
+                                                  </div>
+                                             }
+                                        </IconButton>
+
+                                   </div>
+                              )
+                         }
+                    </div>
+               </div>
           </>
      )
 }

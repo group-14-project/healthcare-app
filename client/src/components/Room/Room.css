@@ -1,4 +1,19 @@
+/* body{
+     background: rgb(32,33,36);
+} */
+
+
+
+.room{
+     background: rgb(32,33,36);
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     /* overflow: hidden; */
+}
 .call_btn{
-     font-size: 3rem!important;
-     color: #3c9a8d;
+     font-size: 1.5rem!important;
+     color: #fff;
 }

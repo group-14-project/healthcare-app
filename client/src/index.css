@@ -3,6 +3,7 @@ body,html{
     padding: 0;
     font-family: monospace;
     overflow: scroll;
+    overflow-x: hidden;
     margin-top:0 !important ;
 }
 html::-webkit-scrollbar {
