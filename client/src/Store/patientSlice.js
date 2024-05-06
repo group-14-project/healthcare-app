@@ -49,7 +49,7 @@ export const handleUpdatePatientDetails = () => {
 		const fetchData = async () => {
 			const state = getState();
 			const response = await axios.put(
-				"http://localhost:9090/patient/updateDetail",
+				"https://localhost:9090/patient/updateDetail",
 				state.patient,
 				{
 					headers: {
@@ -78,7 +78,7 @@ export const fetchReports = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/patient/viewReports",
+				"https://localhost:9090/patient/viewReports",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -112,7 +112,7 @@ export const uploadReport = (data) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.post(
-				"http://localhost:9090/patient/uploadReport",
+				"https://localhost:9090/patient/uploadReport",
 				data,
 				{
 					headers: {
@@ -142,7 +142,7 @@ export const downloadReport = (reportId, reportName) => {
 	return async (dispatch, getState) => {
 		const helper = async () => {
 			const response = await axios.get(
-				`http://localhost:9090/patient/downloadFile/${reportId}`,
+				`https://localhost:9090/patient/downloadFile/${reportId}`,
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -177,7 +177,7 @@ export const fetchPatientConsents = () => {
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/patient/viewConsents",
+				"https://localhost:9090/patient/viewConsents",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -215,7 +215,7 @@ export const approveConsent = (data) => {
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const response = await axios.put(
-				"http://localhost:9090/patient/giveConsent",
+				"https://localhost:9090/patient/giveConsent",
 				data,
 				{
 					headers: {
@@ -245,7 +245,7 @@ export const withdrawConsent = (data) => {
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const response = await axios.put(
-				"http://localhost:9090/patient/withdrawConsent",
+				"https://localhost:9090/patient/withdrawConsent",
 				data,
 				{
 					headers: {
@@ -276,7 +276,7 @@ export const rejectConsentRequest = (data) => {
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const response = await axios.put(
-				"http://localhost:9090/patient/rejectConsent",
+				"https://localhost:9090/patient/rejectConsent",
 				data,
 				{
 					headers: {

@@ -175,7 +175,7 @@ function PatientConsultation(props) {
 	}
 
 	const createWebSocket = () => {
-		const newSocket = new WebSocket("ws://localhost:9090/doctor-status");
+		const newSocket = new WebSocket("wss://localhost:9090/doctor-status");
 		// console.log(newSocket);
 		newSocket.onopen = () => {
 			console.log("WebSocket connection established");

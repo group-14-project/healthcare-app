@@ -49,7 +49,7 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/doctor/viewHospitalsAndDoctors",
+				"https://localhost:9090/doctor/viewHospitalsAndDoctors",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -83,7 +83,7 @@ export const fetchReviews = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/doctor/viewReviews",
+				"https://localhost:9090/doctor/viewReviews",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -113,7 +113,7 @@ export const handleGetAllPatients = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/doctor/patientsLastAppointment",
+				"https://localhost:9090/doctor/patientsLastAppointment",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -143,7 +143,7 @@ export const handleRecommendedPatients = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/doctor/getRecommendedPatients",
+				"https://localhost:9090/doctor/getRecommendedPatients",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -173,7 +173,7 @@ export const consentRegistration = (data) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.post(
-				"http://localhost:9090/doctor/registerConsent",
+				"https://localhost:9090/doctor/registerConsent",
 				data,
 				{
 					headers: {
@@ -214,7 +214,7 @@ export const changeStatus = () => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/doctor/changeStatus",
+				"https://localhost:9090/doctor/changeStatus",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -245,7 +245,7 @@ export const handleGetPatientReports = (email) => {
 			};
 			console.log(data);
 			const response = await axios.post(
-				`http://localhost:9090/doctor/viewReports`,
+				`https://localhost:9090/doctor/viewReports`,
 				data,
 				{
 					headers: {
@@ -275,7 +275,7 @@ export const handleGetRecPatientReports = (id) => {
 		const fetchData = async () => {
 			// console.log(data);
 			const response = await axios.get(
-				`http://localhost:9090/doctor/viewRecommendedReports/${id}`,
+				`https://localhost:9090/doctor/viewRecommendedReports/${id}`,
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -302,7 +302,7 @@ export const handleGetRecPatientReport = (id, reportName) => {
 		const fetchData = async () => {
 			console.log(id);
 			const response = await axios.get(
-				`http://localhost:9090/doctor/downloadRecommendedFile/${id}`,
+				`https://localhost:9090/doctor/downloadRecommendedFile/${id}`,
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -398,7 +398,7 @@ export const handleGetPatientReport = (id, reportName) => {
 		const fetchData = async () => {
 			console.log(id);
 			const response = await axios.get(
-				`http://localhost:9090/doctor/downloadFile/${id}`,
+				`https://localhost:9090/doctor/downloadFile/${id}`,
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -494,7 +494,7 @@ export const handleAddPrescription = (email,presc) => {
 			};
 			console.log(data)
 			const response = await axios.post(
-				`http://localhost:9090/doctor/addPrescription`,
+				`https://localhost:9090/doctor/addPrescription`,
 				data,
 				{
 					headers: {

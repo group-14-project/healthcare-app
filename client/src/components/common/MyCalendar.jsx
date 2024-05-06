@@ -56,7 +56,7 @@ const MyCalendar = () => {
   const fetchData = async (id) => {
 
     return new Promise((resolve, reject) => {
-      axios.get(`http://localhost:9191/get_course_by_student_id?student_id=${id}`)
+      axios.get(`https://localhost:9191/get_course_by_student_id?student_id=${id}`)
         .then((res) => { resolve(res.data) })
         .catch((error) => { reject(error) })
     })

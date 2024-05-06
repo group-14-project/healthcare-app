@@ -24,7 +24,6 @@ function PrescriptionForm(props) {
 	const patientList = useSelector((state) => state.doctor.AllpatientsList);
 
 	const handleChange = (event) => {
-		console.log(event.target.value.email);
 		setPatientName(
 			event.target.value.firstName + " " + event.target.value.lastName
 		);
@@ -37,7 +36,6 @@ function PrescriptionForm(props) {
 	};
 
 	const handleMedicineChange = (event) => {
-		console.log(event.target.value);
 		setMedicineName(event.target.value);
 	};
 
@@ -54,7 +52,6 @@ function PrescriptionForm(props) {
 			string += medicine[i] + "\n";
 		}
 		string += "--"+addComment;
-		console.log(string);
 		dispatch(handleAddPrescription(patientEmail, string));
 	};
 

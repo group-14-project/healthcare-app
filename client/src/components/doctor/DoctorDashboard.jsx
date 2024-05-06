@@ -27,7 +27,6 @@ function DoctorDashboard() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
-	console.log(state)
 	var category = "health";
 	const stompClient = useStompClient();
 	// const stompClient = useRef();

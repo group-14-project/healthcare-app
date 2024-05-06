@@ -46,7 +46,7 @@ const AddDoctor = (props) => {
         console.log(data)
 		try {
 			const response = await axios.post(
-				"http://localhost:9090/hospital/addDoctor",
+				"https://localhost:9090/hospital/addDoctor",
 				data,
 				{
 					headers: {

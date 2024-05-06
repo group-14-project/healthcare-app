@@ -73,10 +73,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function PrescriptionModal(props) {
 	const [medArray, setMedArray] = useState([]);
 	const [addComment, setAddComment] = useState("");
-	console.log("props", props.appointment.prescription);
-	// console.log("props",props.appointment.prescription)
 	const doctorState = useSelector((state) => state.doctor);
-	// console.log(doctorState);
 	useEffect(() => {
 		if (props.appointment.prescription !== null) {
 			const { beforeDelimiter, afterDelimiter } = separateString(
@@ -146,7 +143,6 @@ function PrescriptionModal(props) {
 
 function AppointmentsModal(props) {
 	const AppointmentDetails = props.patientdetails;
-	console.log("appointDetials", AppointmentDetails);
 	const [selectedAppointmentIndex, setSelectedAppointmentIndex] = useState(null);
 	const [lgShow, setLgShow] = useState(false);
 	const handleClick = (index) =>{

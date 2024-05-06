@@ -56,7 +56,7 @@ function ChangePassword() {
 				return;
 			}
 			const response = await axios.put(
-				`http://localhost:9090/${role}/updatePassword`,
+				`https://localhost:9090/${role}/updatePassword`,
 				data,
 				{
 					headers: {

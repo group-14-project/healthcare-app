@@ -26,7 +26,7 @@ export const fetchConsents = () => {
 	return async (dispatch) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"http://localhost:9090/senior_doctor/viewConsents",
+				"https://localhost:9090/senior_doctor/viewConsents",
 				{
 					headers: {
 						Authorization: localStorage.getItem("Authorization"),
@@ -53,7 +53,7 @@ export const approveConsent = (consentId) => {
 		const fetchData = async () => {
 			console.log(consentId);
 			const response = await axios.post(
-				`http://localhost:9090/senior_doctor/approveConsent/${consentId}`,
+				`https://localhost:9090/senior_doctor/approveConsent/${consentId}`,
 				null,
 				{
 					headers: {
@@ -86,7 +86,7 @@ export const rejectConsent = (consentId) => {
 		const fetchData = async () => {
 			console.log(consentId);
 			const response = await axios.post(
-				`http://localhost:9090/senior_doctor/rejectConsent/${consentId}`,
+				`https://localhost:9090/senior_doctor/rejectConsent/${consentId}`,
 				null,
 				{
 					headers: {

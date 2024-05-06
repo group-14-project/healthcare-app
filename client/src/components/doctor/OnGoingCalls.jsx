@@ -80,7 +80,7 @@ function OnGoingCalls() {
 
 		const getCallDetails = async (id) => {
 			const response = await axios.get(
-				`http://localhost:9090/getCallDetails`, {
+				`https://localhost:9090/getCallDetails`, {
 				headers: {
 					Authorization: localStorage.getItem("Authorization"),
 					"Access-Control-Allow-Origin": "*",

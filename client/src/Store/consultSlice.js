@@ -17,7 +17,7 @@ export const makeConnection = (data) => {
                console.log("consult state: ",state.consult);
                const response = await axios.post
                     (
-                         "http://localhost:9090/doctor/makeConnection",
+                         "https://localhost:9090/doctor/makeConnection",
                          data,
                          {
                               headers: {

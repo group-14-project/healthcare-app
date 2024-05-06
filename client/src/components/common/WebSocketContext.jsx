@@ -9,7 +9,7 @@ export const WebSocketProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:9090/socket');
+    const socket = new SockJS('https://localhost:9090/socket');
     const stomp = Stomp.over(socket);
 
     stomp.connect({}, () => {

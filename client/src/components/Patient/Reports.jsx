@@ -45,7 +45,7 @@ const Reports = (props) => {
 
 
      useEffect(() => {
-          const response = dispatch(fetchReports());
+          dispatch(fetchReports());
      }, [])
 
 

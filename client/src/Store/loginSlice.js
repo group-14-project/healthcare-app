@@ -37,7 +37,7 @@ export const handleLogin = (loginData) => {
 				},
 			};
 			const response = await axios.post(
-				`http://localhost:9090/${loginData.role}/loginotp`,
+				`https://localhost:9090/${loginData.role}/loginotp`,
 				userData,
 				{
 					headers: {
@@ -74,7 +74,7 @@ export const handleSignUp = (signUpData) => {
 			};
 			console.log(userData);
 			const response = await axios.post(
-				`http://localhost:9090/patient/signupotp`,
+				`https://localhost:9090/patient/signupotp`,
 				userData,
 				{
 					headers: {
@@ -138,7 +138,7 @@ export const handleOTPverification = (otpdata) => {
 				},
 			};
 			const response = await axios.post(
-				`http://localhost:9090/${state.login.user.role}/${otpdata.type}`,
+				`https://localhost:9090/${state.login.user.role}/${otpdata.type}`,
 				userData,
 				{
 					headers: {
@@ -162,7 +162,7 @@ export const handleOTPverification = (otpdata) => {
 				if (state.login.user.role === "patient") {
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
-					// const conn = new SockJS("http://localhost:9090/socket");
+					// const conn = new SockJS("https://localhost:9090/socket");
 					// const stompClient = await new Stomp.over(conn);
 
 					// await makeSocketConnection(stompClient, response.data.doctorId, dispatch);
@@ -195,7 +195,7 @@ export const forgotPassword = (payload) => {
 				role: payload.role,
 			};
 			const response = await axios.post(
-				`http://localhost:9090/forgotPassword`,
+				`https://localhost:9090/forgotPassword`,
 				data,
 				{
 					headers: {
@@ -224,7 +224,7 @@ export const setNewPassword = (payload) => {
 		const fetchData = async () => {
 			console.log(payload)
 			const response = await axios.post(
-				`http://localhost:9090/changePassword`,
+				`https://localhost:9090/changePassword`,
 				payload,
 				{
 					headers: {
