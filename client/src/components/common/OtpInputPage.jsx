@@ -117,7 +117,7 @@ const OtpInputPage = () => {
 		} else if (!error && firstTimeLogin === true) {
 			navigate(`/${role}/dashboard`);
 		}
-	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital]);
+	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital,firstTimeLogin]);
 
 	return (
 		<div

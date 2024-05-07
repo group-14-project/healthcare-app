@@ -1,6 +1,4 @@
-.outer_div{
-    /* height: 140vh; */
-}
+
 .main_box{
     justify-content: space-between;
     display : flex;
@@ -90,7 +88,7 @@
 
 .side_divs{
     width: 95%;
-    height: 30%;
+    height: 40%;
     border-radius: 25px;
     display: flex;
     box-sizing: border-box;

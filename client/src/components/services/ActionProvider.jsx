@@ -28,7 +28,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "mainSymptom",
-				value: "Heart",
+				value: "Cardiology",
 			})
 		);
 
@@ -66,7 +66,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "mainSymptom",
-				value: "Skin",
+				value: "Dermatology",
 			})
 		);
 		setState((prev) => ({
@@ -84,12 +84,11 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 	const handleGastroenterology = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
-		});
-		console.log("fever");
+		})
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "mainSymptom",
-				value: "Stomach",
+				value: "Gastroenterology",
 			})
 		);
 		setState((prev) => ({
@@ -111,7 +110,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "mainSymptom",
-				value: "Brain",
+				value: "Neurology",
 			})
 		);
 		setState((prev) => ({
@@ -133,7 +132,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "mainSymptom",
-				value: "Bones",
+				value: "Orthopedics",
 			})
 		);
 		setState((prev) => ({

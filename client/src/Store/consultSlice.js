@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { doctorActions } from "./doctorSlice";
-
+import {GetCookie} from './loginSlice';
 const initialState = {
      email: "",
      mainSymptom: "",
@@ -21,7 +21,7 @@ export const makeConnection = (data) => {
                          data,
                          {
                               headers: {
-                                   Authorization: localStorage.getItem("Authorization"),
+                                   Authorization: GetCookie(),
                                    "Access-Control-Allow-Origin": "*",
                                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
                                    "Content-Type": "application/json",

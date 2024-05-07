@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import {GetCookie} from './loginSlice';
 // import getstomClient from "../components/Patient/MySocket";
 
 
@@ -54,7 +55,7 @@ export const handleUpdatePatientDetails = () => {
 				state.patient,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -82,7 +83,7 @@ export const fetchReports = () => {
 				"https://localhost:9090/patient/viewReports",
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -117,7 +118,7 @@ export const uploadReport = (data) => {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "multipart/form-data"
@@ -146,7 +147,7 @@ export const downloadReport = (reportId, reportName) => {
 				`https://localhost:9090/patient/downloadFile/${reportId}`,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 					},
@@ -181,7 +182,7 @@ export const fetchPatientConsents = () => {
 				"https://localhost:9090/patient/viewConsents",
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -220,7 +221,7 @@ export const approveConsent = (data) => {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json"
@@ -250,7 +251,7 @@ export const withdrawConsent = (data) => {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json"
@@ -281,7 +282,7 @@ export const rejectConsentRequest = (data) => {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json"

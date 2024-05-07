@@ -75,7 +75,6 @@ function Login() {
 		if (data.role !== "") {
 			const loginSuccess = await dispatch(handleLogin(data));
 			if (loginSuccess) {
-				console.log(errorMsg);
 				navigate("/verify-otp", {
 					state: { type: "login", data: data },
 				});

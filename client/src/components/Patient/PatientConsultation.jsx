@@ -194,9 +194,10 @@ function PatientConsultation(props) {
 	useEffect(() => {
 		if (socket) {
 			socket.onmessage = (event) => {
+				console.log(mainSymptom, "mainSymptom");
 				const message = JSON.parse(event.data);
-				// const newMessage = message.filter((msg) => msg.specialization === mainSymptom)
-				setMessages(message);
+				const newMessage = message.filter((msg) => msg.specialization === mainSymptom)
+				setMessages(newMessage);
 				console.log(message, "message");
 			};
 			socket.onclose = () => {
@@ -220,7 +221,7 @@ function PatientConsultation(props) {
 							<TableRow>
 								<TableCell>Name</TableCell>
 								<TableCell align="right">Hospital</TableCell>
-								<TableCell align="right">Email</TableCell>
+								<TableCell align="right">Specialization</TableCell>
 								<TableCell align="right">Status</TableCell>
 								<TableCell align="right">Consult Doctor</TableCell>
 							</TableRow>
@@ -235,7 +236,7 @@ function PatientConsultation(props) {
 										{message.firstName}
 									</TableCell>
 									<TableCell align="right">{message.hospitalName}</TableCell>
-									<TableCell align="right">{message.email}</TableCell>
+									<TableCell align="right">{message.specialization}</TableCell>
 									<TableCell align="right">
 										{message.status === "active" ? (
 											<>
@@ -272,7 +273,7 @@ function PatientConsultation(props) {
 										)}
 									</TableCell>
 									<TableCell align="right">
-										{message.status === "active" ? <Link
+										{message.status === "active" || message.status === "onCall" ? <Link
 											onClick={() => {
 												handleCall(message.doctorId, message.firstName);
 											}}

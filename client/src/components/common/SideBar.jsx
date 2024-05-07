@@ -15,10 +15,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import SidebarTheme from "./SidebarTheme";
 import { ThemeProvider } from "@emotion/react";
-import PersonIcon from '@mui/icons-material/Person';
-import ReviewsIcon from '@mui/icons-material/Reviews';
-import ScreenShareIcon from '@mui/icons-material/ScreenShare';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import PersonIcon from "@mui/icons-material/Person";
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import DuoSharpIcon from "@mui/icons-material/DuoSharp";
 import SummarizeSharpIcon from "@mui/icons-material/SummarizeSharp";
 import MedicationSharpIcon from "@mui/icons-material/MedicationSharp";
@@ -32,8 +32,9 @@ import styles from "./Sidebar.module.css";
 import { useLocation } from "react-router-dom";
 import ShieldIcon from "@mui/icons-material/Shield";
 import { useDispatch, useSelector } from "react-redux";
-import { loginActions } from "../../Store/loginSlice";
+import { loginActions,logout } from "../../Store/loginSlice";
 import sessionStorage from "redux-persist/es/storage/session";
+import AddIcon from "@mui/icons-material/Add";
 
 const drawerWidth = 240;
 
@@ -122,10 +123,10 @@ function SideBar(props) {
 
 	const handleLogout = (e) => {
 		e.preventDefault();
+		dispatch(logout(userType,localStorage.getItem("Authorization")));
 		localStorage.clear();
 		window.sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
-
 		navigate("/");
 	};
 
@@ -166,116 +167,161 @@ function SideBar(props) {
 					</DrawerHeader>
 					<Divider />
 					<List>
-						{(userType === "doctor")&& 
-						sidebarContent.map((text, index) => (
-							<ListItem
-								key={text}
-								disablePadding
-								className={styles.sidebar_list_item}
-							>
-								<ListItemButton
-									onClick={(e) => {
-										text === "Logout" ? handleLogout(e) : "";
-									}}
-									className={styles.sidebar_btn}
-									sx={{
-										justifyContent: open ? "initial" : "center",
-										marginBottom: "10px",
-									}}
-									component={Link}
-									to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
-									patient={patientData}
+						{userType === "doctor" &&
+							sidebarContent.map((text, index) => (
+								<ListItem
+									key={text}
+									disablePadding
+									className={styles.sidebar_list_item}
 								>
-									<ListItemIcon
-										sx={{
-											minWidth: 0,
-											mr: open ? 3 : "auto",
-											justifyContent: "center",
-											color: "#fff",
+									<ListItemButton
+										onClick={(e) => {
+											text === "Logout" ? handleLogout(e) : "";
 										}}
+										className={styles.sidebar_btn}
+										sx={{
+											justifyContent: open ? "initial" : "center",
+											marginBottom: "10px",
+										}}
+										component={Link}
+										to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
+										patient={patientData}
 									>
-										{index == 0 ? (
-											<PersonIcon style={{ color: "#fff" }} />
-										) : index == 1 ? (
-											<SummarizeSharpIcon style={{ color: "#fff" }} />
-										) : index == 2 ? (
-											<ReviewsIcon style={{ color: "#fff" }} />
-										) : index == 3 ? (
-											<ScreenShareIcon style={{ color: "#fff" }} />
-										) : index == 4 ? (
-											userType === "doctor" ? (
-												<UndoSharpIcon style={{ color: "#fff" }} />
-											) : (
+										<ListItemIcon
+											sx={{
+												minWidth: 0,
+												mr: open ? 3 : "auto",
+												justifyContent: "center",
+												color: "#fff",
+											}}
+										>
+											{index == 0 ? (
+												<PersonIcon style={{ color: "#fff" }} />
+											) : index == 1 ? (
+												<SummarizeSharpIcon style={{ color: "#fff" }} />
+											) : index == 2 ? (
+												<ReviewsIcon style={{ color: "#fff" }} />
+											) : index == 3 ? (
+												<ScreenShareIcon style={{ color: "#fff" }} />
+											) : index == 4 ? (
+												userType === "doctor" ? (
+													<UndoSharpIcon style={{ color: "#fff" }} />
+												) : (
+													<ShieldIcon style={{ color: "#fff" }} />
+												)
+											) : index == 5 && userType === "doctor" ? (
 												<ShieldIcon style={{ color: "#fff" }} />
-											)
-										) : index == 5 && userType === "doctor" ? (
-											<ShieldIcon style={{ color: "#fff" }} />
-										) : (
-											<LogoutSharpIcon style={{ color: "#fff" }} />
-										)}
-									</ListItemIcon>
-									<ListItemText
-										primary={text}
-										sx={{ ...(!open && { display: "none" }), color: "#fff" }}
-									/>
-								</ListItemButton>
-							</ListItem>
-						))}
-						{(userType === "patient")&& 
-						sidebarContent.map((text, index) => (
-							<ListItem
-								key={text}
-								disablePadding
-								className={styles.sidebar_list_item}
-							>
-								<ListItemButton
-									onClick={(e) => {
-										text === "Logout" ? handleLogout(e) : "";
-									}}
-									className={styles.sidebar_btn}
-									sx={{
-										justifyContent: open ? "initial" : "center",
-										marginBottom: "10px",
-									}}
-									component={Link}
-									to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
-									patient={patientData}
+											) : (
+												<LogoutSharpIcon style={{ color: "#fff" }} />
+											)}
+										</ListItemIcon>
+										<ListItemText
+											primary={text}
+											sx={{ ...(!open && { display: "none" }), color: "#fff" }}
+										/>
+									</ListItemButton>
+								</ListItem>
+							))}
+						{userType === "patient" &&
+							sidebarContent.map((text, index) => (
+								<ListItem
+									key={text}
+									disablePadding
+									className={styles.sidebar_list_item}
 								>
-									<ListItemIcon
-										sx={{
-											minWidth: 0,
-											mr: open ? 3 : "auto",
-											justifyContent: "center",
-											color: "#fff",
+									<ListItemButton
+										onClick={(e) => {
+											text === "Logout" ? handleLogout(e) : "";
 										}}
+										className={styles.sidebar_btn}
+										sx={{
+											justifyContent: open ? "initial" : "center",
+											marginBottom: "10px",
+										}}
+										component={Link}
+										to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
+										patient={patientData}
 									>
-										{index == 0 ? (
-											<DuoSharpIcon style={{ color: "#fff" }} />
-										) : index == 1 ? (
-											<SummarizeSharpIcon style={{ color: "#fff" }} />
-										) : index == 2 ? (
-											<MedicationSharpIcon style={{ color: "#fff" }} />
-										) : index == 3 ? (
-											<ScreenShareIcon style={{ color: "#fff" }} />
-										) : index == 4 ? (
-											userType === "doctor" ? (
-												<UndoSharpIcon style={{ color: "#fff" }} />
-											) : (
+										<ListItemIcon
+											sx={{
+												minWidth: 0,
+												mr: open ? 3 : "auto",
+												justifyContent: "center",
+												color: "#fff",
+											}}
+										>
+											{index == 0 ? (
+												<DuoSharpIcon style={{ color: "#fff" }} />
+											) : index == 1 ? (
+												<SummarizeSharpIcon style={{ color: "#fff" }} />
+											) : index == 2 ? (
+												<MedicationSharpIcon style={{ color: "#fff" }} />
+											) : index == 3 ? (
+												<ScreenShareIcon style={{ color: "#fff" }} />
+											) : index == 4 ? (
+												userType === "doctor" ? (
+													<UndoSharpIcon style={{ color: "#fff" }} />
+												) : (
+													<ShieldIcon style={{ color: "#fff" }} />
+												)
+											) : index == 5 && userType === "doctor" ? (
 												<ShieldIcon style={{ color: "#fff" }} />
-											)
-										) : index == 5 && userType === "doctor" ? (
-											<ShieldIcon style={{ color: "#fff" }} />
-										) : (
-											<LogoutSharpIcon style={{ color: "#fff" }} />
-										)}
-									</ListItemIcon>
-									<ListItemText
-										primary={text}
-										sx={{ ...(!open && { display: "none" }), color: "#fff" }}
-									/>
-								</ListItemButton>
-							</ListItem>
-						))}
+											) : (
+												<LogoutSharpIcon style={{ color: "#fff" }} />
+											)}
+										</ListItemIcon>
+										<ListItemText
+											primary={text}
+											sx={{ ...(!open && { display: "none" }), color: "#fff" }}
+										/>
+									</ListItemButton>
+								</ListItem>
+							))}
+						{userType === "hospital" &&
+							sidebarContent.map((text, index) => (
+								<ListItem
+									key={text}
+									disablePadding
+									className={styles.sidebar_list_item}
+								>
+									<ListItemButton
+										onClick={(e) => {
+											text === "Logout" ? handleLogout(e) : "";
+										}}
+										className={styles.sidebar_btn}
+										sx={{
+											justifyContent: open ? "initial" : "center",
+											marginBottom: "10px",
+										}}
+										component={Link}
+										to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
+										patient={patientData}
+									>
+										<ListItemIcon
+											sx={{
+												minWidth: 0,
+												mr: open ? 3 : "auto",
+												justifyContent: "center",
+												color: "#fff",
+											}}
+										>
+											{index == 0 ? (
+												<AddIcon style={{ color: "#fff" }} />
+											) : index == 1 ? (
+												<MedicationSharpIcon style={{ color: "#fff" }} />
+											) : index == 3 ? (
+												<PlaylistAddCheckIcon style={{ color: "#fff" }} />
+											) : (
+												<LogoutSharpIcon style={{ color: "#fff" }} />
+											)}
+										</ListItemIcon>
+										<ListItemText
+											primary={text}
+											sx={{ ...(!open && { display: "none" }), color: "#fff" }}
+										/>
+									</ListItemButton>
+								</ListItem>
+							))}
 					</List>
 				</Drawer>
 			</ThemeProvider>

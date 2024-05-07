@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { patientActions } from "./patientSlice";
 import { doctorActions } from "./doctorSlice";
 import axios from "axios";
@@ -11,9 +11,11 @@ const notyf = new Notyf({
 		y: "top",
 	},
 });
-import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
-// import getstomClient from "../components/Patient/MySocket";
+import Cookies from 'js-cookie';
+
+export const GetCookie = () => {
+    return Cookies.get("token");
+  };
 
 const initialState = {
 	user: {
@@ -154,10 +156,13 @@ export const handleOTPverification = (otpdata) => {
 		try {
 			const response = await fetchData();
 			if (otpdata.type === "login") {
-				localStorage.setItem(
-					"Authorization",
-					response.headers.get("authorization")
-				);
+				// localStorage.setItem(
+				// 	"Authorization",
+				// 	response.headers.get("authorization")
+				// );
+
+				Cookies.set('token', response.headers.get("authorization"));
+
 				dispatch(loginActions.updateAuthenticated(true));
 				const state = getState();
 				if (state.login.user.role === "patient") {
@@ -215,6 +220,35 @@ export const forgotPassword = (payload) => {
 			
 		} catch (error) {
 			notyf.error(error.response.data.errorMessage);
+			return false;
+		}
+	};
+};
+
+export const logout = (userType,token) => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			console.log(userType)
+			const response = await axios.get(
+				`https://localhost:9090/${userType}/logout`,
+				{
+					headers: {
+						Authorization: token,
+						"Access-Control-Allow-Origin": "*",
+						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			console.log(response);
+		};
+		try {
+			await fetchData();
+			notyf.success("Logout Successful");
+			return true;
+			
+		} catch (error) {
+			// notyf.error(error.response.data.errorMessage);
 			return false;
 		}
 	};

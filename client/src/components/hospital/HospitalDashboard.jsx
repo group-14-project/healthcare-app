@@ -33,6 +33,37 @@ function HospitalDashboard() {
 		fetchData();
 	}, []);
 
+	const reviews = [
+		{
+			patientFirstName: "Karan",
+			patientLastName: "Sharma",
+			doctorFirstName: "Abhishek",
+			doctorLastName: "Sharma",
+			review: "Convenient and effective - received excellent care from the comfort of my home.",
+		},
+		{
+			patientFirstName:"Akash",
+			patientLastName: "Gupta",
+			doctorFirstName: "Deep",
+			doctorLastName: "Bansal",
+			review: "Great experience - quick and easy consultation with knowledgeable professionals.",
+		},
+		{
+			patientFirstName: "Ram",
+			patientLastName: "Gupta",
+			doctorFirstName: "Nabarun",
+			doctorLastName: "Mukherjee",
+			review: "Highly recommend - efficient and personalized care tailored to my needs.",
+		},
+		{
+			patientFirstName: "Gaurav",
+			patientLastName: "Sharma",
+			doctorFirstName: "Aditya",
+			doctorLastName: "Sharma",
+			review: "Safe and secure - trusted platform for confidential medical consultations.",
+		},
+	];
+
 	return (
 		<>
 			<Box
@@ -51,7 +82,6 @@ function HospitalDashboard() {
 							<img src={doctorImage} alt="doctor_image" />
 						</Box>
 					</Box>
-					
 
 					<Box className={styles.graph}>
 						<Graph data={state.eachDayCounts} />
@@ -63,15 +93,16 @@ function HospitalDashboard() {
 					>
 						<h4 className={styles.appointments_title}>Doctor Reviews</h4>
 						<ul className={styles.appointments_list}>
-							{state.reviews.map((review, index) => (
+							{reviews.map((review, index) => (
 								<li key={index} className={styles.appointment_item}>
 									<div className={styles.patient_name}>
-										{review.patientFirstName}&nbsp;
+										Patient Name - {review.patientFirstName}&nbsp;
 										{review.patientLastName}
-										{review.doctorFirstName}&nbsp;
+										<br/>
+										Doctor Name - {review.doctorFirstName}&nbsp;
 										{review.doctorLastName}
 									</div>
-									<div className={styles.appointment_date}>{review.review}</div>
+									<div className={styles.appointment_date}>"{review.review}"</div>
 								</li>
 							))}
 						</ul>
