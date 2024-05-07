@@ -15,6 +15,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css'; 
+import { GetCookie } from "../../Store/loginSlice";
 const notyf = new Notyf({
 	position: {
 		x: 'right',
