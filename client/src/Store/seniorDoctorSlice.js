@@ -31,7 +31,7 @@ export const fetchConsents = () => {
 				"https://localhost:9090/senior_doctor/viewConsents",
 				{
 					headers: {
-						Authorization: localStorage.getItem("token"),
+						Authorization: sessionStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const approveConsent = (consentId) => {
 				null,
 				{
 					headers: {
-						Authorization: localStorage.getItem("token"),
+						Authorization: sessionStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -92,7 +92,7 @@ export const rejectConsent = (consentId) => {
 				null,
 				{
 					headers: {
-						Authorization: localStorage.getItem("token"),
+						Authorization: sessionStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",

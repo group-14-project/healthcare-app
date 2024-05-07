@@ -20,6 +20,14 @@ import { useStompClient } from "../common/WebSocketContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { GetCookie } from "../../Store/loginSlice";
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+const notyf = new Notyf({
+	position: {
+		x: "right",
+		y: "top",
+	},
+});
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -102,8 +110,8 @@ function OnGoingCalls() {
 				setCalls(response.data);
 				return response.data;
 			} catch (error) {
-				console.error("Error getting reports", error);
-				notyf.error("Error fetching patient reports");
+				console.error("Error getting calls", error);
+				// notyf.error("Error fetching calls");
 			}
 		}
 

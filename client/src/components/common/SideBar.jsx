@@ -124,7 +124,7 @@ function SideBar(props) {
 	const handleLogout = (e) => {
 		e.preventDefault();
 		dispatch(logout(userType,GetCookie()));
-		localStorage.clear();
+		sessionStorage.clear();
 		window.sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
 		navigate("/");

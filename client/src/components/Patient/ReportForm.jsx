@@ -21,7 +21,7 @@ const ReportForm = (props) => {
 
      const handleChange = (e) =>{
           setDoctorName(e.target.value.firstName + " " + e.target.value.lastName);
-          setDoctorEmail(e.target.value.email);
+          setDoctorEmail(e.target.value.doctorEmail);
      }
 
      const handleReportNameChange = (e) => {

@@ -20,7 +20,7 @@ export const makeConnection = async (data) => {
                          data,
                          {
                               headers: {
-                                   Authorization: localStorage.getItem("token"),
+                                   Authorization: sessionStorage.getItem("token"),
                                    "Access-Control-Allow-Origin": "*",
                                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
                                    "Content-Type": "application/json",

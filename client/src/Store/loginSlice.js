@@ -156,8 +156,8 @@ export const handleOTPverification = (otpdata) => {
 		try {
 			const response = await fetchData();
 			if (otpdata.type === "login") {
-				localStorage.setItem(
-					"Authorization",
+				sessionStorage.setItem(
+					"token",
 					response.headers.get("authorization")
 				);
 
