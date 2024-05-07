@@ -127,7 +127,7 @@ const router = createBrowserRouter([
 		path: "patient/details",
 		element: (
 			<PrivateRoute>
-				<PatientDetails  />
+				<PatientDetails />
 			</PrivateRoute>
 		),
 	},
@@ -141,11 +141,23 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/room/:roomId",
-		element: <WebSocketProvider><Room /></WebSocketProvider>,
+		element: (
+			<PrivateRoute>
+				<WebSocketProvider>
+					<Room />
+				</WebSocketProvider>,
+			</PrivateRoute>
+		)
 	},
 	{
 		path: "/endCall",
-		element: <WebSocketProvider><EndCall store={store} /></WebSocketProvider>,
+		element: (
+			<PrivateRoute>
+				<WebSocketProvider>
+					<EndCall store={store} />
+				</WebSocketProvider>
+			</PrivateRoute>
+		)
 	},
 	{
 		path: "/call",

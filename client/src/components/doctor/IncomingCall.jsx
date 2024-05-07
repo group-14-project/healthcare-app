@@ -37,6 +37,7 @@ const IncomingCall = (props) => {
           dispatch(doctorActions.updateIncomingCall(false));
 
           navigate(`/room/${obj.roomId}`, { state: obj.data });
+          
      };
 
      const handleRejectCall = () => {

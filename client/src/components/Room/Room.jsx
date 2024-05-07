@@ -8,6 +8,7 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
+import MedicationIcon from '@mui/icons-material/Medication';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +16,8 @@ import { useReactMediaRecorder } from "react-media-recorder";
 import "./Room.css";
 import { useSelector } from 'react-redux';
 import { useStompClient } from '../common/WebSocketContext';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import PrescriptionForm from '../doctor/PrescriptionForm';
 
 // import getstomClient from '../Patient/MySocket';
 
@@ -56,6 +59,9 @@ const Room = () => {
      const stompClient = useStompClient();
 
      const navigate = useNavigate();
+
+     const [show, setShow] = useState(false);
+     const handleShow = () => setShow(true);
 
      console.log("remoteId: ", remoteID);
      console.log("localId: ", localID);
@@ -180,7 +186,7 @@ const Room = () => {
 
                     console.log("user disconnected: ", disconnect);
 
-                    myref.current.style.display = "none";
+                    // myref.current.style.display = "none";
 
                     peerConnection.current.close();
 
@@ -392,11 +398,13 @@ const Room = () => {
 
           peerConnection.current.close();
 
-          peerConnection1.current.ontrack = null;
-          peerConnection1.current.onremovetrack = null;
-          peerConnection1.current.onicecandidate = null;
-          peerConnection1.current.oniceconnectionstatechange = null;
-          peerConnection1.current.onsignalingstatechange = null;
+          if(peerConnection1.current !== null){
+               peerConnection1.current.ontrack = null;
+               peerConnection1.current.onremovetrack = null;
+               peerConnection1.current.onicecandidate = null;
+               peerConnection1.current.oniceconnectionstatechange = null;
+               peerConnection1.current.onsignalingstatechange = null;
+          }
 
           // console.log(remoteVideoRef.current);
 
@@ -419,7 +427,7 @@ const Room = () => {
           peerConnection1.current = null;
 
 
-          stompClient.current = null;
+          // stompClient.current = null;
 
           navigate("/endCall");
           // if (role === "doctor") navigate("/doctor/dashboard");
@@ -509,6 +517,31 @@ const Room = () => {
                                              </div>
                                         }
                                    </IconButton>
+
+                                   {
+                                        role === "doctor"
+                                             ?
+                                             <>
+                                                  <IconButton onClick={handleShow}>
+                                                       {
+                                                            <div style={{ backgroundColor: "white", borderRadius: "50%" }}>
+                                                                 <MedicationIcon sx={{ margin: "20px" }} />
+                                                                 <PrescriptionForm show={show} onHide={() => setShow(false)} />
+                                                            </div>
+                                                       }
+                                                  </IconButton>
+                                                  <IconButton>
+                                                       {
+                                                            <div style={{ backgroundColor: "white", borderRadius: "50%" }}>
+                                                                 <SummarizeIcon sx={{ margin: "20px" }} />
+                                                            </div>
+                                                       }
+                                                  </IconButton>
+                                             </>
+                                             :
+                                             <></>
+
+                                   }
 
                               </div>
                          )

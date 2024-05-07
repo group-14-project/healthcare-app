@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Notyf } from "notyf";
+import "notyf/notyf.min.css";
+import { GetCookie } from "./loginSlice";
 
 const initialState = {
 	pending: [],
 	approved: [],
 };
-import { Notyf } from "notyf";
-import "notyf/notyf.min.css";
+
 const notyf = new Notyf({
 	position: {
 		x: "right",
