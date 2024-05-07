@@ -156,12 +156,12 @@ export const handleOTPverification = (otpdata) => {
 		try {
 			const response = await fetchData();
 			if (otpdata.type === "login") {
-				// localStorage.setItem(
-				// 	"Authorization",
-				// 	response.headers.get("authorization")
-				// );
+				localStorage.setItem(
+					"Authorization",
+					response.headers.get("authorization")
+				);
 
-				Cookies.set('token', response.headers.get("authorization"));
+				// Cookies.set('token', response.headers.get("authorization"));
 
 				dispatch(loginActions.updateAuthenticated(true));
 				const state = getState();

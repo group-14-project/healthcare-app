@@ -53,7 +53,7 @@ export const handlehospitalAndSpecializationAndDoctor = () => {
 				"https://localhost:9090/doctor/viewHospitalsAndDoctors",
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const fetchReviews = () => {
 				"https://localhost:9090/doctor/viewReviews",
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -117,7 +117,7 @@ export const handleGetAllPatients = () => {
 				"https://localhost:9090/doctor/patientsLastAppointment",
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -147,7 +147,7 @@ export const handleRecommendedPatients = () => {
 				"https://localhost:9090/doctor/getRecommendedPatients",
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -178,7 +178,7 @@ export const consentRegistration = (data) => {
 				data,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -218,7 +218,7 @@ export const changeStatus = (status) => {
 				`https://localhost:9090/doctor/changeStatus/${status}`,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -250,7 +250,7 @@ export const handleGetPatientReports = (email) => {
 				data,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -279,7 +279,7 @@ export const handleGetRecPatientReports = (id) => {
 				`https://localhost:9090/doctor/viewRecommendedReports/${id}`,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -306,7 +306,7 @@ export const handleGetRecPatientReport = (id, reportName) => {
 				`https://localhost:9090/doctor/downloadRecommendedFile/${id}`,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 					},
@@ -402,7 +402,7 @@ export const handleGetPatientReport = (id, reportName) => {
 				`https://localhost:9090/doctor/downloadFile/${id}`,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 					},
@@ -499,7 +499,7 @@ export const handleAddPrescription = (email,presc) => {
 				data,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",

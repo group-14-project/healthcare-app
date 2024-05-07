@@ -61,7 +61,7 @@ function ChangePassword() {
 				data,
 				{
 					headers: {
-						Authorization: GetCookie(),
+						Authorization: localStorage.getItem("token"),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",

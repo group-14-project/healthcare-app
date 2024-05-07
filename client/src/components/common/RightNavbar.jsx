@@ -39,6 +39,7 @@ const RightNavbar = () => {
 		else{
 			setCurrentState("busy");
 			dispatch(changeStatus(2))
+
 		}
 	};
 	return (
