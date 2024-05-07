@@ -307,11 +307,12 @@ export const rejectConsentRequest = (data) => {
 
 
 
-export const makeCall = (patientId, patientName, doctorId, doctorName, stompClient) => {
+export const makeCall = (patientId, patientName, doctorId, doctorName, stompClient, consult) => {
+	console.log(consult);
 	stompClient.send("/app/call", {}, JSON.stringify({
 		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
 		"callFrom": JSON.stringify({ "patientName": patientName, "localId": patientId.toString() }),
-		// "consultState": JSON.stringify(consult)
+		"consultState": JSON.stringify(consult)
 	}));
 
 	
@@ -320,7 +321,7 @@ export const makeCall = (patientId, patientName, doctorId, doctorName, stompClie
 		type: "call",
 		"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
 		"callFrom": JSON.stringify({ "patientName": patientName, "localId": patientId.toString() }),
-		// "consultState": JSON.stringify(consult)
+		"consultState": JSON.stringify(consult)
 	}
 
 }

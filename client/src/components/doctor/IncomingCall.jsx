@@ -4,18 +4,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { acceptCall, doctorActions, rejectCall } from '../../Store/doctorSlice';
 import { useStompClient } from '../common/WebSocketContext';
+import { consultActions, makeConnection } from '../../Store/consultSlice';
 
 
 const IncomingCall = (props) => {
 
      const stompClient = useStompClient();
      const doctorState = useSelector(state => state.doctor);
+     const consultState = useSelector(state=>state.consult);
      const dispatch = useDispatch();
      const navigate = useNavigate();
 
+     
+
      const handleAcceptCall = async () => {
 
+          let data = props.consult.consultState;
+
+          
+          data = {...data, appointmentDateAndTime: new Date()};
+          
+          
+          console.log(data);
+
+          dispatch(await makeConnection(data));
+          
           console.log("doctor state: ",doctorState);
+
 
           const obj = dispatch(acceptCall(doctorState.firstName, doctorState.patientName, doctorState.remoteId, doctorState.doctorId, stompClient));
 

@@ -173,6 +173,11 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 	const handleConvertToString = (options) => {
 		console.log(options);
 
+		console.log({
+			name: "secondarySymptom",
+			value: options.join(","),
+		})
+
 		dispatch(
 			consultActions.updateConsultDetails({
 				name: "secondarySymptom",

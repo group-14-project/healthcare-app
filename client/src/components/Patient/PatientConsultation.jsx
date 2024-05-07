@@ -114,20 +114,12 @@ function PatientConsultation(props) {
 	const handleCall = (doctorId, doctorName) => {
 		dispatch(patientActions.updateCallingState(true));
 		// setCalling(true);
-
-		dispatch(
-			consultActions.updateConsultDetails({
-				name: "appointmentTimeDate",
-				value: new Date().toISOString(),
-			})
-		);
-
 		// setRemoteID(doctorId.toString());
 		dispatch(patientActions.updateRemoteId(doctorId));
 
 		dispatch(patientActions.updateDoctorName(doctorName));
 
-		dispatch(makeCall(localID, patientName, doctorId, doctorName, stompClient));
+		dispatch(makeCall(localID, patientName, doctorId, doctorName, stompClient, consult));
 
 		// var conn = new SockJS("http://localhost:9090/socket");
 

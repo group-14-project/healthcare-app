@@ -6,14 +6,13 @@ const initialState = {
      email: "",
      mainSymptom: "",
      secondarySymptom: "",
-     appointmentTimeDate: new Date().toString()
+     appointmentDate: ""
 }
 
-export const makeConnection = (data) => {
+export const makeConnection = async (data) => {
      return async (dispatch, getState) => {
           const fetchData = async () => {
                const state = getState();
-               // dispatch(consultActions.updateConsultDetails("appointmentTimeDate", ))
                console.log("consult state: ",state.consult);
                const response = await axios.post
                     (
@@ -29,10 +28,11 @@ export const makeConnection = (data) => {
                          }
 
                     ).then((res)=>{
-                         console.log(res);
-                         const data = JSON.parse(res.config.data);
+                         console.log("res: ",res);
+                         // const resData = JSON.parse(res.data);
+                         
 
-                         dispatch(doctorActions.updatePastAppointments(data));
+                         dispatch(doctorActions.updatePastAppointments(res.data));
 
                          return res;
                     })
@@ -72,9 +72,6 @@ const consultSlice = createSlice({
           },
           updateSecondarySymptom: (state, action) => {
                state.secondarySymptom = action.payload.join(',');
-          },
-          updateDateTime: (state, action) => {
-               state.appointmentTimeDate = action.payload;
           },
           updateConsultDetails: (state, { payload }) => {
 			return {

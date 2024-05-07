@@ -59,11 +59,11 @@ function DoctorDashboard() {
 				const userData = JSON.parse(call.body);
 				// console.log(userData);
 				// // console.log("consult state in doc dashboard: ", state.consult);
-				// const consultationData = JSON.parse(userData["consultState"]);
+				const consultationData = JSON.parse(userData["consultState"]);
 				const callFrom = JSON.parse(userData["callFrom"]);
-				// console.log(consultationData);
+				console.log(consultationData);
 				// console.log(callFrom.localId);
-				// setConsultState(consultationData);
+				setConsultState(consultationData);
 
 				dispatch(doctorActions.updateRemoteId(callFrom.localId));
 
@@ -223,7 +223,7 @@ function DoctorDashboard() {
 				{/* <Button variant="success" onClick={handleJoinCall}>Join Call</Button> */}
 			</Box>
 
-			{state.incomingCall ? <IncomingCall /> : <></>}
+			{state.incomingCall ? <IncomingCall consult={{consultState}}/> : <></>}
 			{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
 		</>
 	);
