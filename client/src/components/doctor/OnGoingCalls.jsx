@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useStompClient } from "../common/WebSocketContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { GetCookie } from "../../Store/loginSlice";
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -73,6 +74,7 @@ function OnGoingCalls() {
 	const [calls, setCalls] = useState([]);
 	const [audio, setAudio] = useState(false);
 	const [video, setVideo] = useState(false);
+	
 
 	const navigate = useNavigate();
 
@@ -82,7 +84,7 @@ function OnGoingCalls() {
 			const response = await axios.get(
 				`https://localhost:9090/getCallDetails`, {
 				headers: {
-					Authorization: localStorage.getItem("Authorization"),
+					Authorization: GetCookie(),
 					"Access-Control-Allow-Origin": "*",
 					"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 					"Content-Type": "application/json",

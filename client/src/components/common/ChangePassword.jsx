@@ -5,6 +5,7 @@ import axios from "axios";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css'; 
 import { useNavigate } from "react-router-dom";
+import { GetCookie } from "../../Store/loginSlice";
 const notyf = new Notyf({
 	position: {
 		x: 'right',
@@ -60,7 +61,7 @@ function ChangePassword() {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",

@@ -15,6 +15,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css'; 
+import { GetCookie } from "../../Store/loginSlice";
 const notyf = new Notyf({
 	position: {
 		x: 'right',
@@ -50,7 +51,7 @@ const AddDoctor = (props) => {
 				data,
 				{
 					headers: {
-						Authorization: localStorage.getItem("Authorization"),
+						Authorization: GetCookie(),
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
 						"Content-Type": "application/json",
@@ -61,7 +62,7 @@ const AddDoctor = (props) => {
 			notyf.success("Doctor Added Successfully");
 		} catch (error) {
 			console.log(error);
-			notyf.error(response.data.errorMessage);
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 
