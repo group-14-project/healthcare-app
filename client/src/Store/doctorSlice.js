@@ -352,8 +352,8 @@ export const acceptCall = (doctorName, patientName, remoteId, localId, stompClie
 
 	console.log("stomp client in doctor slice: ", stompClient);
 
-	const acceptedBy = { name: doctorName, callee: localId };
-	const initiatedBy = { name: patientName, caller: remoteId };
+	const acceptedBy = { name: doctorName, callee: localId.toString() };
+	const initiatedBy = { name: patientName, caller: remoteId.toString() };
 
 	stompClient.send(
 		"/app/acceptCall",

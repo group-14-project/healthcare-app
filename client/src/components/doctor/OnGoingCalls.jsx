@@ -447,22 +447,6 @@ function OnGoingCalls() {
 				)}
 
 				<Box>
-					<div style={{ display: "flex", flexWrap: "wrap", flexDirection: "row", justifyContent: "center", alignItems: "center", margin: "20px" }}>
-						<div style={{ margin: "10px" }}>
-							<video ref={patientRef} autoPlay muted style={{ border: "2px solid grey", borderRadius: "30px" }} />
-							{/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{localName}(You)</div> */}
-						</div>
-						<div style={{ margin: "10px" }} >
-							<video ref={doctorRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
-							{/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>{remoteName}</div> */}
-						</div>
-
-						<div style={{ margin: "10px" }} >
-							<video ref={ownRef} autoPlay style={{ border: "2px solid grey", borderRadius: "30px", width: "100%", height: "100%" }} />
-							{/* <div style={{ fontSize: "1.2rem", display: "flex", justifyContent: "center" }}>senior doctor</div> */}
-						</div>
-
-					</div>
 					<div style={{ display: "flex", justifyContent: "center" }}>
 						<IconButton onClick={handleVoiceToggle}>
 							{

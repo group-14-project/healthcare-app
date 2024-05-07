@@ -428,8 +428,8 @@ const Room = () => {
 
 
           // stompClient.current = null;
-
-          navigate(`${role}/dashboard`);
+          console.log("hi")
+          navigate(`${role}/dashboard`, {replace:true});
           // if (role === "doctor") navigate("/doctor/dashboard");
           // else navigate("/patient/dashboard");
 
