@@ -4,10 +4,8 @@ import { consultActions } from "../../Store/consultSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
-
-	const patientState = useSelector(state=>state.patient);
+	const patientState = useSelector((state) => state.patient);
 	const dispatch = useDispatch();
-
 
 	const handleHello = () => {
 		const botMessage = createChatBotMessage(
@@ -23,11 +21,16 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 		}));
 	};
 
-	const handleheadache = () => {
+	const handleCardiology = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Headache"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Heart",
+			})
+		);
 
 		setState((prev) => ({
 			...prev,
@@ -35,195 +38,149 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 			options: [
 				{
 					id: 1,
-					text: "stuffy nose",
+					text: "Chest pain or discomfort",
 				},
 				{
 					id: 2,
-					text: "chest pain",
+					text: "Shortness of breath",
 				},
 				{
 					id: 3,
-					text: "seizure",
+					text: "Irregular heartbeat (arrhythmia)",
+				},
+				{
+					id: 4,
+					text: "High blood pressure",
+				},
+				{
+					id: 5,
+					text: "Fatigue",
 				},
 			],
 		}));
 	};
-	const handlebackache = () => {
+	const handleDermatology = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Backache"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Skin",
+			})
+		);
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
 			options: [
-				{
-					id: 1,
-					text: "Joint Pain",
-				},
-				{
-					id: 2,
-					text: "Lower Back",
-				},
-				{
-					id: 3,
-					text: "Fracture",
-				},
+				{ id: 1, text: "Skin rash" },
+				{ id: 2, text: "Acne" },
+				{ id: 3, text: "Eczema" },
+				{ id: 4, text: "Psoriasis" },
+				{ id: 5, text: "Skin cancer" },
 			],
 		}));
 	};
-	const handlefever = () => {
+	const handleGastroenterology = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
 		console.log("fever");
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Fever"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Stomach",
+			})
+		);
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
 			options: [
-				{
-					id: 1,
-					text: "stuffy nose",
-				},
-				{
-					id: 2,
-					text: "ear pain",
-				},
-				{
-					id: 3,
-					text: "redness in ear",
-				},
+				{ id: 1, text: "Abdominal pain or discomfort" },
+				{ id: 2, text: "Indigestion" },
+				{ id: 3, text: "Heartburn" },
+				{ id: 4, text: "Diarrhea or constipation" },
+				{ id: 5, text: "Blood in stool" },
 			],
 		}));
 	};
-	const handlecough = () => {
+	const handleNeurology = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Cough"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Brain",
+			})
+		);
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
 			options: [
-				{
-					id: 1,
-					text: "recent surgery",
-				},
-				{
-					id: 2,
-					text: "chest pain",
-				},
-				{
-					id: 3,
-					text: "lung disease",
-				},
+				{ id: 1, text: "Headaches" },
+				{ id: 2, text: "Seizures" },
+				{ id: 3, text: "Numbness or tingling" },
+				{ id: 4, text: "Dizziness or vertigo" },
+				{ id: 5, text: "Memory loss or confusion" },
 			],
 		}));
 	};
-	const handleheartpain = () => {
+	const handleOrthopedics = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Heart Pain"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Bones",
+			})
+		);
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
 			options: [
-				{
-					id: 1,
-					text: "High BP",
-				},
-				{
-					id: 2,
-					text: "Recent surgery",
-				},
-				{
-					id: 3,
-					text: "Diabetes",
-				},
+				{ id: 1, text: "Joint pain or stiffness" },
+				{ id: 2, text: "Muscle weakness" },
+				{ id: 3, text: "Limited range of motion" },
+				{ id: 4, text: "Swelling or tenderness" },
+				{ id: 5, text: "Difficulty walking or moving" },
 			],
 		}));
 	};
-	const handlerunnynose = () => {
+	const handlePhysician = () => {
 		const botMessage = createChatBotMessage("Please select more symptoms", {
 			widget: "secsymptoms",
 		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Runny Nose"}));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "mainSymptom",
+				value: "Physician",
+			})
+		);
 		setState((prev) => ({
 			...prev,
 			messages: [...prev.messages, botMessage],
 			options: [
-				{
-					id: 1,
-					text: "cough",
-				},
-				{
-					id: 2,
-					text: "cold",
-				},
-				{
-					id: 3,
-					text: "sinus",
-				},
-			],
-		}));
-	};
-	const handlesorethroat = () => {
-		const botMessage = createChatBotMessage("Please select more symptoms", {
-			widget: "secsymptoms",
-		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Sore Throat"}));
-		setState((prev) => ({
-			...prev,
-			messages: [...prev.messages, botMessage],
-			options: [
-				{
-					id: 1,
-					text: "chills",
-				},
-				{
-					id: 2,
-					text: "Dry cough",
-				},
-				{
-					id: 3,
-					text: "Cough with fever",
-				},
-			],
-		}));
-	};
-	const handlevomiting = () => {
-		const botMessage = createChatBotMessage("Please select more symptoms", {
-			widget: "secsymptoms",
-		});
-		dispatch(consultActions.updateConsultDetails({name:"mainSymptom",value:"Vomitting"}));
-		setState((prev) => ({
-			...prev,
-			messages: [...prev.messages, botMessage],
-			options: [
-				{
-					id: 1,
-					text: "Smoking",
-				},
-				{
-					id: 2,
-					text: "Heart Patient",
-				},
-				{
-					id: 3,
-					text: "Overweight",
-				},
+				{ id: 1, text: "Fatigue" },
+				{ id: 2, text: "Burnout" },
+				{ id: 3, text: "Stress" },
+				{ id: 4, text: "Sleep disturbances" },
+				{ id: 5, text: "Anxiety" },
 			],
 		}));
 	};
 
 	const handleConvertToString = (options) => {
-		
-		console.log(options)
+		console.log(options);
 
-		dispatch(consultActions.updateConsultDetails({name:"secondarySymptom",value:options.join(',')}));
-	}
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "secondarySymptom",
+				value: options.join(","),
+			})
+		);
+	};
 
 	return (
 		<div>
@@ -231,15 +188,13 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 				return React.cloneElement(child, {
 					actions: {
 						handleHello,
-						handlebackache,
-						handlecough,
-						handlefever,
-						handleheadache,
-						handleheartpain,
-						handlerunnynose,
-						handlesorethroat,
-						handlevomiting,
-						handleConvertToString
+						handleCardiology,
+						handlePhysician,
+						handleOrthopedics,
+						handleNeurology,
+						handleGastroenterology,
+						handleDermatology,
+						handleConvertToString,
 					},
 				});
 			})}

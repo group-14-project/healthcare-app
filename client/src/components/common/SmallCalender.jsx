@@ -56,7 +56,7 @@ export default function DateCalendarServerRequest() {
 
 	React.useEffect(() => {
 		fetchHighlightedDays();
-		console.log(highlightedDays);
+		// console.log(highlightedDays);
 	}, []);
 
 	const handleMonthChange = (date) => {

@@ -15,6 +15,10 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import SidebarTheme from "./SidebarTheme";
 import { ThemeProvider } from "@emotion/react";
+import PersonIcon from '@mui/icons-material/Person';
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import ScreenShareIcon from '@mui/icons-material/ScreenShare';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import DuoSharpIcon from "@mui/icons-material/DuoSharp";
 import SummarizeSharpIcon from "@mui/icons-material/SummarizeSharp";
 import MedicationSharpIcon from "@mui/icons-material/MedicationSharp";
@@ -162,7 +166,63 @@ function SideBar(props) {
 					</DrawerHeader>
 					<Divider />
 					<List>
-						{sidebarContent.map((text, index) => (
+						{(userType === "doctor")&& 
+						sidebarContent.map((text, index) => (
+							<ListItem
+								key={text}
+								disablePadding
+								className={styles.sidebar_list_item}
+							>
+								<ListItemButton
+									onClick={(e) => {
+										text === "Logout" ? handleLogout(e) : "";
+									}}
+									className={styles.sidebar_btn}
+									sx={{
+										justifyContent: open ? "initial" : "center",
+										marginBottom: "10px",
+									}}
+									component={Link}
+									to={`${userType}/${text.replace(/\s+/g, "").toLowerCase()}`}
+									patient={patientData}
+								>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : "auto",
+											justifyContent: "center",
+											color: "#fff",
+										}}
+									>
+										{index == 0 ? (
+											<PersonIcon style={{ color: "#fff" }} />
+										) : index == 1 ? (
+											<SummarizeSharpIcon style={{ color: "#fff" }} />
+										) : index == 2 ? (
+											<ReviewsIcon style={{ color: "#fff" }} />
+										) : index == 3 ? (
+											<ScreenShareIcon style={{ color: "#fff" }} />
+										) : index == 4 ? (
+											userType === "doctor" ? (
+												<UndoSharpIcon style={{ color: "#fff" }} />
+											) : (
+												<ShieldIcon style={{ color: "#fff" }} />
+											)
+										) : index == 5 && userType === "doctor" ? (
+											<ShieldIcon style={{ color: "#fff" }} />
+										) : (
+											<LogoutSharpIcon style={{ color: "#fff" }} />
+										)}
+									</ListItemIcon>
+									<ListItemText
+										primary={text}
+										sx={{ ...(!open && { display: "none" }), color: "#fff" }}
+									/>
+								</ListItemButton>
+							</ListItem>
+						))}
+						{(userType === "patient")&& 
+						sidebarContent.map((text, index) => (
 							<ListItem
 								key={text}
 								disablePadding
@@ -196,7 +256,7 @@ function SideBar(props) {
 										) : index == 2 ? (
 											<MedicationSharpIcon style={{ color: "#fff" }} />
 										) : index == 3 ? (
-											<UpdateSharpIcon style={{ color: "#fff" }} />
+											<ScreenShareIcon style={{ color: "#fff" }} />
 										) : index == 4 ? (
 											userType === "doctor" ? (
 												<UndoSharpIcon style={{ color: "#fff" }} />

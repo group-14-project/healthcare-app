@@ -8,6 +8,14 @@ import {
 	handleLogin,
 	handleSignUp,
 } from "../../Store/loginSlice";
+import "notyf/notyf.min.css";
+import { Notyf } from "notyf";
+const notyf = new Notyf({
+	position: {
+		x: "right",
+		y: "top",
+	},
+});
 
 const OtpInputPage = () => {
 	const navigate = useNavigate();
@@ -98,18 +106,15 @@ const OtpInputPage = () => {
 		if (!error && firstTimeLogin === false) {
 			if (role === "patient") {
 				if (location.state.type === "signup") {
-					console.log("first")
+					notyf.success("Signup Successful");
 					navigate("/login");
 				} else if (location.state.type === "login") {
-					console.log("second")
 					navigate("/patient/details");
 				}
 			} else {
-				console.log("third")
 				navigate(`/${role}/changepwd`);
 			}
 		} else if (!error && firstTimeLogin === true) {
-			console.log("fourth")
 			navigate(`/${role}/dashboard`);
 		}
 	}, [location.state.type, navigate, statePatient, stateDoctor, stateHospital]);

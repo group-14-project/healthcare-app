@@ -8,32 +8,32 @@ import { Box } from "@mui/material";
 import "./PatientConsultation.css";
 import { Link } from "react-router-dom";
 import SockJS from "sockjs-client";
-import Stomp from 'stompjs';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Stomp from "stompjs";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../Store/store.js";
 import { consultActions } from "../../Store/consultSlice.js";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import CallLoader from "./CallLoader.jsx";
 import { makeCall, patientActions } from "../../Store/patientSlice.js";
-import { WebSocketProvider, useStompClient } from "../common/WebSocketContext.jsx";
+import {
+	WebSocketProvider,
+	useStompClient,
+} from "../common/WebSocketContext.jsx";
 // import getstomClient from "./MySocket.js";
 
-
-
-
 function PatientConsultation(props) {
-
 	const navigate = useNavigate();
-	const consult = useSelector(state => state.consult);
-	const patientState = useSelector(state => state.patient);
+	const consult = useSelector((state) => state.consult);
+	const patientState = useSelector((state) => state.patient);
+	const mainSymptom = useSelector((state) => state.consult.mainSymptom);
 
 	const state = store.getState();
 
@@ -58,7 +58,6 @@ function PatientConsultation(props) {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-
 		dispatch(consultActions.updateEmail(state.patient.email));
 
 		console.log(patientState.calling);
@@ -68,54 +67,60 @@ function PatientConsultation(props) {
 		// stompClient.current.connect({}, () => {
 		// 	console.log("connection is establissssssssshed")
 		// 	console.log(stompClient.current);
-		if(stompClient){
-
-		
-
+		if (stompClient) {
 			stompClient.subscribe("/user/" + localID + "/topic/call", (data) => {
-				
 				console.log("Queue Size: ", data.body);
-
-			})
-
-			stompClient.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
-				dispatch(patientActions.updateCallingState(false));
-				// setCalling(false);
-				console.log("patient state: ", patientState);
-				const acceptBody = JSON.parse(accept.body);
-				const acceptedBy = JSON.parse(acceptBody.acceptedBy);
-				const initiatedBy = JSON.parse(acceptBody.initiatedBy);
-				console.log("accept body: ",acceptBody);
-				// const temp = acceptedBy;
-				initiatedBy.caller = acceptedBy.callee;
-				initiatedBy.name = acceptedBy.name;
-				acceptedBy.callee = localID;
-				acceptedBy.name = patientName;
-				console.log(acceptBody);
-				navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
 			});
 
-			stompClient.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
-				dispatch(patientActions.updateCallingState(false));
-				// setCalling(false);
-				const acceptBody = JSON.parse(accept.body);
-				const rejectedBy = JSON.parse(acceptBody.rejectedBy);
-				console.log(rejectedBy.message);
-				const variant = "error"
-				enqueueSnackbar(rejectedBy.message, { variant });
-			});
+			stompClient.subscribe(
+				"/user/" + localID + "/topic/acceptCall",
+				(accept) => {
+					dispatch(patientActions.updateCallingState(false));
+					// setCalling(false);
+					console.log("patient state: ", patientState);
+					const acceptBody = JSON.parse(accept.body);
+					const acceptedBy = JSON.parse(acceptBody.acceptedBy);
+					const initiatedBy = JSON.parse(acceptBody.initiatedBy);
+					console.log("accept body: ", acceptBody);
+					// const temp = acceptedBy;
+					initiatedBy.caller = acceptedBy.callee;
+					initiatedBy.name = acceptedBy.name;
+					acceptedBy.callee = localID;
+					acceptedBy.name = patientName;
+					console.log(acceptBody);
+					navigate(`/room/${acceptBody.roomID}`, {
+						state: { acceptedBy, initiatedBy },
+					});
+				}
+			);
+
+			stompClient.subscribe(
+				"/user/" + localID + "/topic/rejectCall",
+				(accept) => {
+					dispatch(patientActions.updateCallingState(false));
+					// setCalling(false);
+					const acceptBody = JSON.parse(accept.body);
+					const rejectedBy = JSON.parse(acceptBody.rejectedBy);
+					console.log(rejectedBy.message);
+					const variant = "error";
+					enqueueSnackbar(rejectedBy.message, { variant });
+				}
+			);
 		}
 
 		// })
-
 	}, [stompClient]);
-
 
 	const handleCall = (doctorId, doctorName) => {
 		dispatch(patientActions.updateCallingState(true));
 		// setCalling(true);
 
-		dispatch(consultActions.updateConsultDetails({ name: "appointmentTimeDate", value: new Date().toISOString() }));
+		dispatch(
+			consultActions.updateConsultDetails({
+				name: "appointmentTimeDate",
+				value: new Date().toISOString(),
+			})
+		);
 
 		// setRemoteID(doctorId.toString());
 		dispatch(patientActions.updateRemoteId(doctorId));
@@ -132,47 +137,46 @@ function PatientConsultation(props) {
 
 		// stompClient.current.connect({}, () => {
 
+		// stompClient.current.subscribe("/user/" + localID + "/topic/call", (data) => {
 
-			// stompClient.current.subscribe("/user/" + localID + "/topic/call", (data) => {
+		// 	console.log("Queue Size: ", data.body);
 
-			// 	console.log("Queue Size: ", data.body);
-
-			// })
-
-			// stompClient.current.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
-			// 	// console.log(accept);
-			// 	// dispatch(patientActions.updateCallingState(false));
-			// 	setCalling(false);
-			// 	const acceptBody = JSON.parse(accept.body);
-			// 	const acceptedBy = JSON.parse(acceptBody.acceptedBy);
-			// 	const initiatedBy = JSON.parse(acceptBody.initiatedBy);
-			// 	acceptedBy.callee = localID;
-			// 	initiatedBy.caller = doctorId;
-			// 	acceptedBy.name = patientName
-			// 	initiatedBy.name = doctorName;
-			// 	console.log(acceptBody);
-			// 	navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
-			// });
-
-			// stompClient.current.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
-			// 	// dispatch(patientActions.updateCallingState(false));
-			// 	setCalling(false);
-			// 	const acceptBody = JSON.parse(accept.body);
-			// 	const rejectedBy = JSON.parse(acceptBody.rejectedBy);
-			// 	console.log(rejectedBy.message);
-			// 	const variant = "error"
-			// 	enqueueSnackbar(rejectedBy.message, { variant });
-			// })
-
-			// console.log("consult: ", consult);
-
-			// stompClient.current.send("/app/call", {}, JSON.stringify({
-			// 	"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
-			// 	"callFrom": JSON.stringify({ "patientName": patientName, "localId": localID.toString() }),
-			// 	// "consultState": JSON.stringify(consult)
-			// }));
 		// })
-	}
+
+		// stompClient.current.subscribe("/user/" + localID + "/topic/acceptCall", (accept) => {
+		// 	// console.log(accept);
+		// 	// dispatch(patientActions.updateCallingState(false));
+		// 	setCalling(false);
+		// 	const acceptBody = JSON.parse(accept.body);
+		// 	const acceptedBy = JSON.parse(acceptBody.acceptedBy);
+		// 	const initiatedBy = JSON.parse(acceptBody.initiatedBy);
+		// 	acceptedBy.callee = localID;
+		// 	initiatedBy.caller = doctorId;
+		// 	acceptedBy.name = patientName
+		// 	initiatedBy.name = doctorName;
+		// 	console.log(acceptBody);
+		// 	navigate(`/room/${acceptBody.roomID}`, { state: { acceptedBy, initiatedBy } });
+		// });
+
+		// stompClient.current.subscribe("/user/" + localID + "/topic/rejectCall", (accept) => {
+		// 	// dispatch(patientActions.updateCallingState(false));
+		// 	setCalling(false);
+		// 	const acceptBody = JSON.parse(accept.body);
+		// 	const rejectedBy = JSON.parse(acceptBody.rejectedBy);
+		// 	console.log(rejectedBy.message);
+		// 	const variant = "error"
+		// 	enqueueSnackbar(rejectedBy.message, { variant });
+		// })
+
+		// console.log("consult: ", consult);
+
+		// stompClient.current.send("/app/call", {}, JSON.stringify({
+		// 	"callTo": JSON.stringify({ "doctorName": doctorName, "remoteId": doctorId.toString() }),
+		// 	"callFrom": JSON.stringify({ "patientName": patientName, "localId": localID.toString() }),
+		// 	// "consultState": JSON.stringify(consult)
+		// }));
+		// })
+	};
 
 	const createWebSocket = () => {
 		const newSocket = new WebSocket("wss://localhost:9090/doctor-status");
@@ -191,8 +195,9 @@ function PatientConsultation(props) {
 		if (socket) {
 			socket.onmessage = (event) => {
 				const message = JSON.parse(event.data);
+				// const newMessage = message.filter((msg) => msg.specialization === mainSymptom)
 				setMessages(message);
-				console.log(message, "message")
+				console.log(message, "message");
 			};
 			socket.onclose = () => {
 				console.log("WebSocket connection closed");
@@ -200,9 +205,7 @@ function PatientConsultation(props) {
 		}
 	}, [messages, socket, setMessages]);
 
-
 	return (
-
 		<Box className="patient-consultation">
 			<Chatbot
 				socketFunc={createWebSocket}
@@ -226,28 +229,64 @@ function PatientConsultation(props) {
 							{messages.map((message, index) => (
 								<TableRow
 									key={index}
-									sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+									sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
 								>
 									<TableCell component="th" scopename="row">
 										{message.firstName}
 									</TableCell>
 									<TableCell align="right">{message.hospitalName}</TableCell>
 									<TableCell align="right">{message.email}</TableCell>
-									<TableCell align="right">{message.status}</TableCell>
-									<TableCell align="right"><Link onClick={() => { handleCall(message.doctorId, message.firstName) }}>Call</Link></TableCell>
+									<TableCell align="right">
+										{message.status === "active" ? (
+											<>
+											<div className="ring-container">
+												<div className="ringring1"></div>
+												<div className="circle1"></div>
+											</div>
+											active
+											</>
+										) : message.status === "busy" ? (
+											<>
+											<div className="ring-container">
+												<div className="ringring2"></div>
+												<div className="circle2"></div>
+											</div>
+											Busy
+											</>
+										) : message.status === "offline" ? (
+											<>
+											<div className="ring-container">
+												<div className="ringring3"></div>
+												<div className="circle3"></div>
+											</div>
+											offline
+											</>
+										) : (
+											<>
+											<div className="ring-container">
+												<div className="ringring4"></div>
+												<div className="circle4"></div>
+											</div>
+											On Call
+											</>
+										)}
+									</TableCell>
+									<TableCell align="right">
+										{message.status === "active" ? <Link
+											onClick={() => {
+												handleCall(message.doctorId, message.firstName);
+											}}
+										>
+											Call
+										</Link> : "Can't call" }
+									</TableCell>
 								</TableRow>
 							))}
 						</TableBody>
 					</Table>
 				</TableContainer>
 			</Box>
-			{
-				patientState.calling
-					?
-					<CallLoader />
-					:
-					<></>
-			}
+			{patientState.calling ? <CallLoader /> : <></>}
 		</Box>
 	);
 }

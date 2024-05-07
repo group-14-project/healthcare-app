@@ -81,7 +81,6 @@ const PatientPrescription = () => {
                                    <StyledTableCell align="center">Appoitment Date</StyledTableCell>
                                    <StyledTableCell align="center">Symptom</StyledTableCell>
                                    <StyledTableCell align="center">Prescription</StyledTableCell>
-                                   <StyledTableCell align="center">Recording Link</StyledTableCell>
                               </TableRow>
                          </TableHead>
                          <TableBody>
@@ -101,7 +100,6 @@ const PatientPrescription = () => {
                                                   appointment={appointment}
                                              />
                                         </StyledTableCell>
-                                        <StyledTableCell align="center">Link</StyledTableCell>
                                    </StyledTableRow>
                               ))}
                          </TableBody>

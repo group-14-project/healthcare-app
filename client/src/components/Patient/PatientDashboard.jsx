@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import CallLoader from "./CallLoader";
 
-
 const events = [
 	{ id: 1, title: "Appointment-1", start: "2024-04-23 14:30", allDay: false },
 	{ id: 2, title: "Appointment-2", start: "2024-04-22 12:30", allDay: false },
@@ -38,7 +37,7 @@ const PatientDashboard = (props) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	var category = "health";
 
-	const patientState = useSelector(state=>state.patient);
+	const patientState = useSelector((state) => state.patient);
 
 	const dispatch = useDispatch();
 
@@ -51,7 +50,6 @@ const PatientDashboard = (props) => {
 	}
 
 	useEffect(() => {
-		console.log("hello");
 
 		const fetchData = async () => {
 			try {
@@ -63,9 +61,9 @@ const PatientDashboard = (props) => {
 						},
 					}
 				);
-				console.log("Quote Fetched:", response.data[0]);
+
 				const quoteData = response.data[0];
-				console.log(quoteData);
+
 				dispatch(patientActions.updateQuote(quoteData));
 			} catch (error) {
 				console.error("Error fetching quote", error);
@@ -73,7 +71,6 @@ const PatientDashboard = (props) => {
 		};
 		fetchData();
 	}, []);
-	
 
 	return (
 		<Box
@@ -332,13 +329,7 @@ const PatientDashboard = (props) => {
 				</Box>
 				{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
 			</Box>
-			{
-                    patientState.calling
-                         ?
-                         <CallLoader />
-                         :
-                         <></>
-               }
+			{patientState.calling ? <CallLoader /> : <></>}
 		</Box>
 	);
 };

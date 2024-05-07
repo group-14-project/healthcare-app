@@ -205,7 +205,7 @@ export const consentRegistration = (data) => {
 			}
 		} catch (error) {
 			console.error("Error sharing consent", error);
-			notyf.error("This patient is already registered with this doctor");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
@@ -232,7 +232,7 @@ export const changeStatus = () => {
 				notyf.success("Status Changed successfully");
 		} catch (error) {
 			console.error("Error Changing Status", error);
-			notyf.error("Error changing status");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
@@ -264,7 +264,7 @@ export const handleGetPatientReports = (email) => {
 			return response.data;
 		} catch (error) {
 			console.error("Error getting reports", error);
-			notyf.error("Error fetching patient reports");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
@@ -293,7 +293,7 @@ export const handleGetRecPatientReports = (id) => {
 			return response.data;
 		} catch (error) {
 			console.error("Error getting reports", error);
-			notyf.error("Error fetching patient reports");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
@@ -327,7 +327,7 @@ export const handleGetRecPatientReport = (id, reportName) => {
 			link.click();
 		} catch (error) {
 			console.error("Error getting reports", error);
-			notyf.error("You can't download this report");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };
@@ -423,7 +423,7 @@ export const handleGetPatientReport = (id, reportName) => {
 			link.click();
 		} catch (error) {
 			console.error("Error getting reports", error);
-			notyf.error("Error fetching patient reports");
+			notyf.error(error.response.data.errorMessage);
 		}
 	};
 };

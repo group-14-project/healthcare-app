@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import { Graph } from "../index";
 import { Box } from "@mui/material";
 import styles from "./HospitalDashboard.module.css";
 import axios from "axios";
-import { useDispatch, useSelector, useStore } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import doctorImage from "../../assets/doctor.png";
 import styles2 from "./Banner.module.css";
 import { hospitalActions } from "../../Store/hospitalSlice";
@@ -51,72 +51,7 @@ function HospitalDashboard() {
 							<img src={doctorImage} alt="doctor_image" />
 						</Box>
 					</Box>
-					{/* <Box className={styles.quick_actions}>
-						<Box className={`${styles.action_btn} ${styles.action_btn_1}`}>
-							<Box className={styles.patient_icon}>
-								<img src={patient} alt="patient" />
-							</Box>
-							<Box
-								sx={{
-									fontWeight: 600,
-									marginBottom: "6px",
-								}}
-							>
-								Total Patients
-							</Box>
-							<Box className={styles.btn_div}>{state.doctor.totalPatients}</Box>
-						</Box>
-						<Box className={`${styles.action_btn} ${styles.action_btn_2}`}>
-							<Box className={styles.patient_icon}>
-								<img src={prescription} alt="prescription" />
-							</Box>
-							<Box
-								sx={{
-									fontWeight: 600,
-									marginBottom: "6px",
-								}}
-							>
-								Prescription
-							</Box>
-							<Box className={styles.btn_div}>
-								Template &nbsp;
-								<span className={styles.template_icon}>
-									<i className="fa-solid fa-circle-arrow-right"></i>
-								</span>
-							</Box>
-						</Box>
-
-						<Box className={`${styles.action_btn} ${styles.action_btn_3}`}>
-							<Box className={styles.patient_icon}>
-								<img src={appointments} alt="appointments" />
-							</Box>
-							<Box
-								sx={{
-									fontWeight: 600,
-									marginBottom: "6px",
-								}}
-							>
-								Appointments
-							</Box>
-							<Box className={styles.quick_btn_font}>
-								{state.doctor.totalAppointments}
-							</Box>
-						</Box>
-						<Box className={`${styles.action_btn} ${styles.action_btn_4}`}>
-							<Box className={styles.patient_icon}>
-								<img src={next_app} alt="next_app" />
-							</Box>
-							<Box
-								sx={{
-									fontWeight: 600,
-									marginBottom: "6px",
-								}}
-							>
-								Clock
-							</Box>
-							<Box className={styles.btn_div}>Join Now</Box>
-						</Box>
-					</Box> */}
+					
 
 					<Box className={styles.graph}>
 						<Graph data={state.eachDayCounts} />

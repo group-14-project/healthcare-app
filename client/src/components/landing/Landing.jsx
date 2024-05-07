@@ -21,7 +21,6 @@ const notyf = new Notyf({
 	},
 });
 
-
 function isValidPassword(password) {
 	// Check length
 	if (password.length < 8) {
@@ -182,7 +181,7 @@ function Landing(props) {
 			<section className="section__container service__container">
 				<div className="service__header">
 					<div className="service__header__content">
-						<h2 className="section__header">Our Special service</h2>
+						<h2 className="section__header">Our Departments</h2>
 						<p>
 							Beyond simply providing medical care, our commitment lies in
 							delivering unparalleled service tailored to your unique needs.
@@ -196,56 +195,69 @@ function Landing(props) {
 				>
 					<div className="service__card">
 						<span>
-							<i className="ri-microscope-line" />
+							<i className="fa-solid fa-heart-pulse fa-fw" />
 						</span>
-						<h4>Laboratory Test</h4>
+						<h4>Cardiology</h4>
 						<p>
-							Accurate Diagnostics, Swift Results: Experience top-notch
-							Laboratory Testing at our facility.
+							Our cardiology department offers expert consultation, Guiding
+							hearts towards health with care and dedication.
 						</p>
 						<a href="#">Learn More</a>
 					</div>
 					<div className="service__card">
 						<span>
-							<i className="ri-capsule-fill" />
+							<i className="fa-solid fa-hand-dots"></i>
 						</span>
-						<h4>Laboratory Test</h4>
+						<h4>Dermatology</h4>
 						<p>
-							Accurate Diagnostics, Swift Results: Experience top-notch
-							Laboratory Testing at our facility.
+							In our dermatology department, we provide tailored consultations,
+							Addressing skin concerns with expertise and personalized
+							solutions.
 						</p>
 						<a href="#">Learn More</a>
 					</div>
 					<div className="service__card">
 						<span>
-							<i className="ri-nurse-line" />
+							<i className="fa-solid fa-tablets"></i>
 						</span>
-						<h4>Laboratory Test</h4>
+						<h4>Gastroenterology</h4>
 						<p>
-							Accurate Diagnostics, Swift Results: Experience top-notch
-							Laboratory Testing at our facility.
+							In gastroenterology, we offer comprehensive consultations,
+							Navigating digestive health with precision and compassion.
 						</p>
 						<a href="#">Learn More</a>
 					</div>
 					<div className="service__card">
 						<span>
-							<i className="ri-mental-health-line" />
+							<i className="fa-solid fa-brain"></i>
 						</span>
-						<h4>Health Check</h4>
+						<h4>Neurology</h4>
 						<p>
-							Our thorough assessments and expert evaluations help you stay
-							proactive about your health.
+							In neurology, we provide specialized consultations, Navigating the
+							complexities of the brain with expertise and care.
 						</p>
 						<a href="#">Learn More</a>
 					</div>
 					<div className="service__card">
 						<span>
-							<i className="ri-hospital-line" />
+							<i className="fa-solid fa-bone"></i>
 						</span>
-						<h4>General Dentistry</h4>
+						<h4>Orthopedics</h4>
 						<p>
-							Experience comprehensive oral care with Dentistry. Trust us to
-							keep your smile healthy and bright.
+							In orthopedics, we offer expert consultations, Guiding patients
+							toward mobility and wellness with precision.
+						</p>
+						<a href="#">Learn More</a>
+					</div>
+					<div className="service__card">
+						<span>
+						<i className="fa-solid fa-user-nurse"></i>
+						</span>
+						<h4>Physician</h4>
+						<p>
+							In our physician department, we provide comprehensive
+							consultations, Addressing medical concerns with expertise and
+							compassion.
 						</p>
 						<a href="#">Learn More</a>
 					</div>
@@ -256,23 +268,27 @@ function Landing(props) {
 				<div className="about__content">
 					<h2 className="section__header">About Us</h2>
 					<p style={{ fontSize: "18px" }}>
-						Welcome to AarogyaShala, your one-stop destination for reliable and
-						comprehensive health care website. We are committed to promoting
-						wellness and providing valuable resources to empower you on your
-						health journey.
+						Welcome to Arogyashala, your trusted online healthcare
+						teleconsultation service dedicated to your well-being. At
+						Arogyashala, we believe that access to quality healthcare should be
+						convenient and accessible to everyone, regardless of geographical
+						location or time constraints.
 					</p>
 					<p style={{ fontSize: "18px" }}>
-						Arogyashala Healthcare offers holistic, patient-centered care with a
-						focus on preventive medicine and traditional healing practices. Its
-						reputation for quality service, cultural sensitivity, and community
-						engagement make it a compelling choice for those seeking
-						comprehensive and personalized healthcare solutions
+						Our platform connects you with experienced healthcare professionals
+						from various specialties, ensuring that you receive personalized and
+						timely medical advice from the comfort of your home. Whether you're
+						seeking medical guidance, a second opinion, or ongoing support for
+						chronic conditions, our team of dedicated doctors and specialists
+						are here to assist you every step of the way.
 					</p>
 					<p style={{ fontSize: "18px" }}>
-						Discover practical health tips and lifestyle advice to optimize your
-						physical and mental well-being. We believe that small changes can
-						lead to significant improvements in your quality of life, and we're
-						here to guide you on your path to a healthier and happier you.
+						From primary care consultations to specialized medical advice,
+						Arogyashala is committed to providing you with the highest standard
+						of care, promoting holistic well-being and empowering you to take
+						control of your health. Join us in our mission to make healthcare
+						accessible to all, because at Arogyashala, your health is our
+						priority.
 					</p>
 				</div>
 				<div className="about__image">
@@ -292,33 +308,37 @@ function Landing(props) {
 					</p>
 					<div className="why__grid">
 						<span>
-							<i className="ri-hand-heart-line" />
+							<i className="fa-solid fa-phone"></i>
 						</span>
 						<div>
-							<h4>Intensive Care</h4>
+							<h4>Convenience</h4>
 							<p>
-								Our Intensive Care Unit is equipped with advanced technology and
-								staffed by team of professionals
+								With our online teleconsultation service, you can access
+								healthcare from anywhere, at any time, without the hassle of
+								commuting or waiting rooms.
 							</p>
 						</div>
 						<span>
-							<i className="ri-truck-line" />
+							<i className="fa-solid fa-stethoscope"></i>
 						</span>
 						<div>
-							<h4>Free Ambulance Car</h4>
+							<h4>Expertise</h4>
 							<p>
-								A compassionate initiative to prioritize your health and
-								well-being without any financial burden.
+								Our platform connects you with a diverse team of experienced
+								healthcare professionals, ensuring that you receive specialized
+								care tailored to your needs.
 							</p>
 						</div>
 						<span>
-							<i className="ri-hospital-line" />
+							<i className="fa-solid fa-shield-halved"></i>
 						</span>
 						<div>
-							<h4>Medical and Surgical</h4>
+							<h4>Confidentiality</h4>
 							<p>
-								Our Medical and Surgical services offer advanced healthcare
-								solutions to address medical needs.
+								Our secure teleconsultation platform ensures that your personal
+								health information remains confidential and protected at all
+								times, providing you with peace of mind during your
+								consultations.
 							</p>
 						</div>
 					</div>
@@ -406,6 +426,7 @@ function Landing(props) {
 						<h4>Dr. Michael Lee</h4>
 						<p>Dermatologist</p>
 					</div>
+					
 				</div>
 			</section>
 			<footer className="footer">

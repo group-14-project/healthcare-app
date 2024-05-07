@@ -88,6 +88,7 @@ export const handleSignUp = (signUpData) => {
 		};
 		try {
 			await fetchData();
+			notyf.success("OTP sent to email");
 			return true;
 		} catch (error) {
 			notyf.error(error.response.data.errorMessage);
@@ -160,6 +161,7 @@ export const handleOTPverification = (otpdata) => {
 				dispatch(loginActions.updateAuthenticated(true));
 				const state = getState();
 				if (state.login.user.role === "patient") {
+					console.log("response",response.data)
 					dispatch(patientActions.addPatientDetails(response.data));
 				} else if (state.login.user.role === "doctor") {
 					// const conn = new SockJS("https://localhost:9090/socket");

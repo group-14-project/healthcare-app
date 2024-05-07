@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleAddPrescription } from "../../Store/doctorSlice";
 
 function PrescriptionForm(props) {
-	console.log(props)
 	const doctorState = useSelector((state) => state.doctor);
 	const [patientName, setPatientName] = useState("");
 	const [patientEmail, setPatientEmail] = useState("");

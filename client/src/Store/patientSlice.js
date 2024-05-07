@@ -30,6 +30,7 @@ const initialState = {
 	calling: false,
 	remoteId: "",
 	doctorName: "",
+	doctorList:[]
 };
 import { Notyf } from "notyf";
 import 'notyf/notyf.min.css'; 
@@ -133,7 +134,7 @@ export const uploadReport = (data) => {
 
 		} catch (error) {
 			console.log("Error uploading report", error);
-			notyf.error("Error Uploading Report");
+			notyf.error(error.response.data.errorMessage);
 		}
 	}
 }
@@ -168,7 +169,7 @@ export const downloadReport = (reportId, reportName) => {
 			link.click();
 		} catch (error) {
 			console.log("Error downloading report", error);
-			notyf.error("Error Downloading Report");
+			notyf.error(error.response.data.errorMessage);
 		}
 	}
 }
@@ -236,7 +237,7 @@ export const approveConsent = (data) => {
 			notyf.success("Consent Provided Successfully");
 		} catch (error) {
 			console.log("Error providing consent", error);
-			notyf.error(response.data.errorMessage);
+			notyf.error(error.response.data.errorMessage);
 		}
 	}
 }
@@ -267,7 +268,7 @@ export const withdrawConsent = (data) => {
 
 		} catch (error) {
 			console.log("Error withdrawing consent", error);
-			notyf.error("Error Withdrawing Consent");
+			notyf.error(error.response.data.errorMessage);
 		}
 	}
 }
@@ -298,7 +299,7 @@ export const rejectConsentRequest = (data) => {
 
 		} catch (error) {
 			console.log("Error rejecting consent", error);
-			notyf.error("Error Rejecting Consent");
+			notyf.error(error.response.data.errorMessage);
 		}
 	}
 }
@@ -344,9 +345,9 @@ const patientSlice = createSlice({
 			state.futureAppointments = payload.futureAppointments;
 			state.patientId = payload.patientId;
 			state.firstTimeLogin = payload.firstTimeLogin;
+			state.doctorList = payload.doctorList;
 		},
 		updatePatientDetails: (state, { payload }) => {
-			console.log(payload);
 			return {
 				...state,
 				[payload.name]: payload.value,

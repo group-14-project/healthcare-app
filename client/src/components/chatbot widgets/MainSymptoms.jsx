@@ -1,69 +1,118 @@
 import React from "react";
 import "./MainSymptoms.css";
-import cough from "../../assets/symptoms/cough.png";
-import backache from "../../assets/symptoms/backache.png";
-import fever from "../../assets/symptoms/fever.png";
-import headache from "../../assets/symptoms/headache.png";
-import heartPain from "../../assets/symptoms/heart-pain.png";
-import runnyNose from "../../assets/symptoms/runny-nose.png";
-import soreThroat from "../../assets/symptoms/sore-throat.png";
-import vomiting from "../../assets/symptoms/vomiting.png";
+
 const MainSymptoms = (props) => {
 	const options = [
 		{
-			text: "Headache",
-			handler: props.actionProvider.handleheadache,
+			text: "Cardiology",
+			handler: props.actionProvider.handleCardiology,
 			id: 1,
-			image: headache,
+			image: (
+				<span className="chat-logos">
+					<i className="fa-solid fa-heart-pulse"></i>
+				</span>
+			),
+			array: [
+				"Chest pain or discomfort",
+				"Shortness of breath",
+				"Irregular heartbeat (arrhythmia)",
+				"High blood pressure",
+				"Fatigue",
+			],
+			item: "Heart-related symptoms"
 		},
 		{
-			text: "Backache",
-			handler: props.actionProvider.handlebackache,
+			text: "Dermatology",
+			handler: props.actionProvider.handleDermatology,
 			id: 2,
-			image: backache,
+			image: (
+				<span className="chat-logos">
+					<i className="fa-solid fa-hand-dots"></i>
+				</span>
+			),
+			array: ["Skin rash", "Acne", "Eczema", "Psoriasis", "Skin cancer"],
+			item: "Skin-related symptoms"
 		},
 		{
-			text: "Fever",
-			handler: props.actionProvider.handlefever,
+			text: "Gastroenterology",
+			handler: props.actionProvider.handleGastroenterology,
 			id: 3,
-			image: fever,
+			image: (
+				<span className="chat-logos">
+					{" "}
+					<i className="fa-solid fa-tablets"></i>,
+				</span>
+			),
+			array: [
+				"Abdominal pain or discomfort",
+				"Indigestion",
+				"Heartburn",
+				"Diarrhea or constipation",
+				"Blood in stool",
+			],
+			item: "Stomach-related symptoms"
 		},
 		{
-			text: "Cough",
-			handler: props.actionProvider.handlecough,
+			text: "Neurology",
+			handler: props.actionProvider.handleNeurology,
 			id: 4,
-			image: cough,
+			image: (
+				<span className="chat-logos">
+					<i className="fa-solid fa-brain"></i>
+				</span>
+			),
+			array: [
+				"Headaches",
+				"Seizures",
+				"Numbness or tingling",
+				"Dizziness or vertigo",
+				"Memory loss or confusion",
+			],
+			item: "Brain-related symptoms"
 		},
 		{
-			text: "Heart Pain",
-			handler: props.actionProvider.handleheartpain,
+			text: "Orthopedics",
+			handler: props.actionProvider.handleOrthopedics,
 			id: 5,
-			image: heartPain,
+			image: (
+				<span className="chat-logos">
+					{" "}
+					<i className="fa-solid fa-bone"></i>
+				</span>
+			),
+			array: [
+				"Joint pain or stiffness",
+				"Muscle weakness",
+				"Limited range of motion",
+				"Swelling or tenderness",
+				"Difficulty walking or moving",
+			],
+			item: "Bone-related symptoms"
 		},
 		{
-			text: "Runny Nose",
-			handler: props.actionProvider.handlerunnynose,
+			text: "Physician",
+			handler: props.actionProvider.handlePhysician,
 			id: 6,
-			image: runnyNose,
+			image: (
+				<span className="chat-logos">
+					{" "}
+					<i className="fa-solid fa-user-nurse"></i>
+				</span>
+			),
+			array: ["Fatigue", "Burnout", "Stress", "Sleep disturbances", "Anxiety"],
+			item: "General symptoms"
 		},
-		{
-			text: "Sore Throat",
-			handler: props.actionProvider.handlesorethroat,
-			id: 7,
-			image: soreThroat,
-		},
-		{
-			text: "Vomiting",
-			handler: props.actionProvider.handlevomiting,
-			id: 8,
-			image: vomiting,
-		},
+
 	];
 
 	const buttonsMarkup = options.map((option) => (
 		<button key={option.id} onClick={option.handler} className="option-button">
+			<div className="symptoms">
+				{option.item}
+			</div>
 			<span>{option.text}</span>
-			<img src={option.image} />
+			{option.image}
+			
 		</button>
 	));
 

@@ -1,40 +1,156 @@
 .patient-consultation{
-   /*
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    width: 100%; */
-    margin-left: 66px;
-    box-sizing: border-box;
-    /* border: 2px solid green; */
-    /* background-color: #00AFBB; */
-    
+/*
+justify-content: center;
+align-items: center;
+flex-direction: column;
+position: absolute;
+width: 100%; */
+margin-left: 66px;
+box-sizing: border-box;
+/* border: 2px solid green; */
+/* background-color: #00AFBB; */
+
 }
 
 .react-chatbot-kit-chat-container {
-    /* border: 2px solid black; */
-    width: 80%;
-    margin: auto;
-    /* position: relative; */
+/* border: 2px solid black; */
+width: 80%;
+margin: auto;
+/* position: relative; */
 }
 
 .react-chatbot-kit-chat-message-container::-webkit-scrollbar{
-    display: none;
+display: none;
 
 }
 
 .react-chatbot-kit-chat-bot-message{
-    margin-left: 2px;
-    width: auto;
+margin-left: 2px;
+width: auto;
 }
 
 .avail-docs{
-    width: 100%;
+width: 100%;
 }
 .active-docs{
-    width: 80%;
-    margin: auto;
-    margin-top: 3%;
-    display: none;
+width: 80%;
+margin: auto;
+margin-top: 3%;
+display: none;
 }
+
+.ring-container {
+position: relative;
+}
+
+.circle1 {
+width: 15px;
+height: 15px;
+background-color: #62bd19;
+border-radius: 50%;
+position: absolute;
+top: 4px;
+left: 23px;
+}
+
+.ringring1 {
+border: 3px solid #62bd19;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    left: 18px;
+    top: -1px;
+    -webkit-animation: pulsate 1s ease-out;
+    animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    opacity: 0.0
+}
+
+@keyframes pulsate {
+0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+50% {opacity: 1.0;}
+100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}
+
+
+.circle2 {
+width: 15px;
+height: 15px;
+background-color: purple;
+border-radius: 50%;
+position: absolute;
+top: 4px;
+left: 23px;
+}
+
+.ringring2 {
+border: 3px solid purple;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    left: 18px;
+    top: -1px;
+    -webkit-animation: pulsate 1s ease-out;
+    animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    opacity: 0.0
+}
+
+
+.circle3 {
+width: 15px;
+height: 15px;
+background-color: red;
+border-radius: 50%;
+position: absolute;
+top: 4px;
+left: 23px;
+}
+
+.ringring3 {
+border: 3px solid red;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    left: 18px;
+    top: -1px;
+    -webkit-animation: pulsate 1s ease-out;
+    animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    opacity: 0.0
+}
+
+.circle4 {
+    width: 15px;
+    height: 15px;
+    background-color: yellow;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 23px;
+}
+
+.ringring4 {
+    border: 3px solid yellow;
+        -webkit-border-radius: 30px;
+        border-radius: 30px;
+        height: 25px;
+        width: 25px;
+        position: absolute;
+        left: 18px;
+        top: -1px;
+        -webkit-animation: pulsate 1s ease-out;
+        animation: pulsate 1s ease-out;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+        opacity: 0.0
+    }

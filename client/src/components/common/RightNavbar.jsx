@@ -64,6 +64,8 @@ const RightNavbar = () => {
 							<Typography noWrap component="p" className="rgt-navbar-name">
 								{role !== "hospital" &&
 									state[role].firstName + " " + state[role].lastName}
+								{role === "hospital" &&
+									state[role].hospitalName}
 							</Typography>
 							<Box
 								underline="none"

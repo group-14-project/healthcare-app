@@ -32,7 +32,7 @@ export const makeConnection = (data) => {
                          console.log(res);
                          const data = JSON.parse(res.config.data);
 
-                         // dispatch(doctorActions.updatePastAppointments(data));
+                         dispatch(doctorActions.updatePastAppointments(data));
 
                          return res;
                     })

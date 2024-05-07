@@ -1,5 +1,5 @@
 .outer_div{
-    height: 140vh;
+    /* height: 140vh; */
 }
 .main_box{
     justify-content: space-between;
@@ -68,14 +68,13 @@
 }
 
 .graph{
-    /* margin-top: 5%; */
-    height: 550px;
     width: 100%;
     border-radius: 30px;
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top:5%
 }
 
 /* side-box */
@@ -83,7 +82,7 @@
     display: flex;
     width: 33.33%;
     align-items: center; 
-    justify-content: space-between; 
+    /* justify-content: space-between;  */
     box-sizing: border-box;   
     padding: 20px;
     flex-direction: column; 

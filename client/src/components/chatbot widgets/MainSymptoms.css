@@ -6,14 +6,10 @@
   
 .option-button {
     margin: 5px;
-    border-radius: 25px;
-    padding: 8px;
-    /* border-color: blue; */
+    padding: 4px;
     background: transparent;
-    /* text-align: center !important; */
-    /* height: 8rem;
-    width: 20rem; */
     text-align: left !important;
+    position: relative;
 }
 
 .option-button span{
@@ -25,4 +21,33 @@
   height: auto !important;
   width: auto !important;
 
+}
+
+.chat-logos{
+  display: inline-block;
+  /* margin-bottom: 1rem; */
+  padding: 5px 10px;
+  font-size: 1.5rem;
+  margin-left: 10px;
+  color: var(--primary-color);
+  background-color: var(--primary-color-light);
+  border-radius: 100%;
+  transition: 0.3s;
+}
+
+.symptoms{
+  display: flex;
+  /* height: 30px; */
+  /* width: 103%; */
+  left: -2px;
+  top: -34px;
+  position: absolute;
+  background-color: black;
+  color: white;
+  z-index: 2;
+  display: none;
+}
+
+.option-button:hover .symptoms {
+  display: block !important;
 }

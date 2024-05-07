@@ -17,13 +17,9 @@ import { makeConnection } from "../../Store/consultSlice";
 import { handleGetAllPatients } from "../../Store/doctorSlice";
 import { useStompClient } from "../common/WebSocketContext";
 
-
 function DoctorDashboard() {
-
-	
 	// const [incomingCall, setIncomingCall] = useState(false);
 	// location.reload();
-
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const state = useSelector((state) => state.doctor);
@@ -37,11 +33,10 @@ function DoctorDashboard() {
 	// const [patientName, setPatientName] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [consultState, setConsultState] = useState({});
-	const isFirstRender = useRef(true)
+	const isFirstRender = useRef(true);
 
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
-
 
 	let patientRef = useRef();
 	let doctorRef = useRef();
@@ -53,12 +48,10 @@ function DoctorDashboard() {
 
 	// const stompClient = useRef();
 
-	const patientName = useSelector(state => state.doctor.patientName);
-
+	const patientName = useSelector((state) => state.doctor.patientName);
 
 	useEffect(() => {
 		if (stompClient) {
-
 			stompClient.subscribe("/user/" + localID + "/topic/call", (call) => {
 				// console.log('Received message:', message.body);
 				console.log("call from: " + call.body);
@@ -74,11 +67,10 @@ function DoctorDashboard() {
 
 				dispatch(doctorActions.updateRemoteId(callFrom.localId));
 
-				dispatch(doctorActions.updatePatientName(callFrom.patientName))
+				dispatch(doctorActions.updatePatientName(callFrom.patientName));
 
 				dispatch(doctorActions.updateIncomingCall(true));
 			});
-
 
 			// return () => {
 			// 	console.log("cleanup");
@@ -88,10 +80,8 @@ function DoctorDashboard() {
 	}, [stompClient]);
 
 	useEffect(() => {
-		dispatch(handleGetAllPatients())
+		dispatch(handleGetAllPatients());
 	}, []);
-
-
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -112,9 +102,6 @@ function DoctorDashboard() {
 		};
 		fetchData();
 	}, []);
-
-
-
 
 	return (
 		<>
@@ -151,7 +138,11 @@ function DoctorDashboard() {
 							>
 								Prescription
 							</Box>
-							<Box sx = {{cursor: "pointer"}} className={styles.btn_div} onClick={handleShow}>
+							<Box
+								sx={{ cursor: "pointer" }}
+								className={styles.btn_div}
+								onClick={handleShow}
+							>
 								Template &nbsp;
 								<PrescriptionForm show={show} onHide={() => setShow(false)} />
 							</Box>
@@ -232,11 +223,7 @@ function DoctorDashboard() {
 				{/* <Button variant="success" onClick={handleJoinCall}>Join Call</Button> */}
 			</Box>
 
-			{state.incomingCall ? (
-				<IncomingCall />
-			) : (
-				<></>
-			)}
+			{state.incomingCall ? <IncomingCall /> : <></>}
 			{modalOpen && <CalendarModal onClose={() => setModalOpen(false)} />}
 		</>
 	);
