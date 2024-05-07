@@ -404,12 +404,12 @@ const Room = () => {
                peerConnection1.current.onicecandidate = null;
                peerConnection1.current.oniceconnectionstatechange = null;
                peerConnection1.current.onsignalingstatechange = null;
+               peerConnection1.current.close();
           }
 
           // console.log(remoteVideoRef.current);
 
 
-          peerConnection1.current.close();
 
           stompClient.send("/app/disconnectCall", {}, JSON.stringify({
                "acceptedBy": localID.toString(),
@@ -429,7 +429,7 @@ const Room = () => {
 
           // stompClient.current = null;
 
-          navigate("/endCall");
+          navigate(`${role}/dashboard`);
           // if (role === "doctor") navigate("/doctor/dashboard");
           // else navigate("/patient/dashboard");
 
@@ -527,13 +527,6 @@ const Room = () => {
                                                             <div style={{ backgroundColor: "white", borderRadius: "50%" }}>
                                                                  <MedicationIcon sx={{ margin: "20px" }} />
                                                                  <PrescriptionForm show={show} onHide={() => setShow(false)} />
-                                                            </div>
-                                                       }
-                                                  </IconButton>
-                                                  <IconButton>
-                                                       {
-                                                            <div style={{ backgroundColor: "white", borderRadius: "50%" }}>
-                                                                 <SummarizeIcon sx={{ margin: "20px" }} />
                                                             </div>
                                                        }
                                                   </IconButton>

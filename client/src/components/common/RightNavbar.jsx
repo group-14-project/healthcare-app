@@ -32,7 +32,14 @@ const RightNavbar = () => {
 		navigate("/");
 	};
 	const handleSwitch = () => {
-		dispatch(changeStatus("active"));
+		if(currState == "busy"){
+			setCurrentState("active")
+			dispatch(changeStatus(1));
+		}
+		else{
+			setCurrentState("busy");
+			dispatch(changeStatus(2))
+		}
 	};
 	return (
 		<Box className="right-navbar-parent">

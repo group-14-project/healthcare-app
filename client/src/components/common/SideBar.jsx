@@ -32,7 +32,7 @@ import styles from "./Sidebar.module.css";
 import { useLocation } from "react-router-dom";
 import ShieldIcon from "@mui/icons-material/Shield";
 import { useDispatch, useSelector } from "react-redux";
-import { loginActions,logout } from "../../Store/loginSlice";
+import { GetCookie, loginActions,logout } from "../../Store/loginSlice";
 import sessionStorage from "redux-persist/es/storage/session";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -123,7 +123,7 @@ function SideBar(props) {
 
 	const handleLogout = (e) => {
 		e.preventDefault();
-		dispatch(logout(userType,localStorage.getItem("Authorization")));
+		dispatch(logout(userType,GetCookie()));
 		localStorage.clear();
 		window.sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));

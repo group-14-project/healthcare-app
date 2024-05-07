@@ -211,11 +211,11 @@ export const consentRegistration = (data) => {
 	};
 };
 
-export const changeStatus = () => {
+export const changeStatus = (status) => {
 	return async (dispatch, getState) => {
 		const fetchData = async () => {
 			const response = await axios.get(
-				"https://localhost:9090/doctor/changeStatus",
+				`https://localhost:9090/doctor/changeStatus/${status}`,
 				{
 					headers: {
 						Authorization: GetCookie(),
