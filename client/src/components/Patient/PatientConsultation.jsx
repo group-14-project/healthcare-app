@@ -265,7 +265,7 @@ function PatientConsultation(props) {
 										)}
 									</TableCell>
 									<TableCell align="right">
-										{message.status === "active" || message.status === "onCall" ? <Link
+										{message.status === "active" || message.status === "on Call" ? <Link
 											onClick={() => {
 												handleCall(message.doctorId, message.firstName);
 											}}

@@ -190,7 +190,7 @@ const Room = () => {
 
                     peerConnection.current.close();
 
-                    navigate('/endCall');
+                    navigate(`/${role}/dashboard`,{replace:true});
 
                });
 
@@ -429,7 +429,7 @@ const Room = () => {
 
           // stompClient.current = null;
           console.log("hi")
-          navigate(`${role}/dashboard`, {replace:true});
+          navigate(`/${role}/dashboard`, {replace:true});
           // if (role === "doctor") navigate("/doctor/dashboard");
           // else navigate("/patient/dashboard");
 

@@ -123,8 +123,8 @@ function SideBar(props) {
 
 	const handleLogout = (e) => {
 		e.preventDefault();
-		dispatch(logout(userType,GetCookie()));
-		sessionStorage.clear();
+		dispatch(logout(userType,localStorage.getItem("token")));
+		// sessionStorage.clear();
 		window.sessionStorage.clear();
 		loginActions.updateDetails(dispatch(loginActions.resetState()));
 		navigate("/");
